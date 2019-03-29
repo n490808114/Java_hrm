@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Register</title>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <link href="css/simple_form.css" type="text/css" rel="stylesheet">
+    <script>
+        function register(){
+            var request = new XMLHttpRequest();
+            if(request){
+                request.open("GET","test.txt",true)
+                request.onreadystatechange=function(){
+                    if(request.readyState == 4){
+                        var parent = document.createElement("p");
+                        var text = document.createTextNode(request.responseText);
+                        parent.appendChild(text);
+                        document.body.appendChild(parent);
+                    }
+                };
+                request.send(null);
+            }else{
+                alert("sorry,your browser doesn`t support XMLHttpRequest!");
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <form id="form" method="POST" action="register">
+        <h1>注册账户</h1>
+        <fieldset id="fieldset">
+            <p>
+                <label for="get_loginname">登录名：</label>
+                <input type="text" id="get_loginname" name="loginname"/>
+            </p>
+            <p>
+                <label for="get_username">用户名：</label>
+                <input type="text" id="get_username" name="username"/>
+            </p>
+            <p>
+                <label for="get_email">邮箱：</label>
+                <input type="email" id="get_email" name="email"/>
+            </p>
+            <p>
+                <label for="get_password">密码：</label>
+                <input type="password" id="get_password" name="password"/>
+            </p>
+        </fieldset>
+        <div id="btn1"><input type="submit" value="注册" ></div>
+    </form>
+    <button id="btn2" type="button" onclick="location.href='/loginForm.html'">登录</button>
+</body>
+</html>

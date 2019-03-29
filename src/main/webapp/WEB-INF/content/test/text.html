@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Text</title>
+    <script src="js/json2.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/lib.js"></script>
+    <script>
+        addLoadEvent(displayAbbreviations);
+        addLoadEvent(displayCitations);
+        addLoadEvent(displayAccessKey);
+        addLoadEvent(styleHeaderSiblings);
+        addLoadEvent(stripeTables);
+        function positionNav(){
+            if(!document.getElementById)return false;
+            if(!document.getElementById("nav"))return false;
+            var elem = document.getElementById("nav");
+            elem.style.position = "absolute";
+            elem.style.left = "50px";
+            elem.style.top = "90px";
+            var elem1 = document.getElementById("test");
+            elem1.style.position = "absolute";
+            elem1.style.left = "200px";
+            elem1.style.top = "90px";
+            moveNav("nav",true);
+            moveNav("test",true);
+
+        }
+        function moveNav(elemType,style){
+            if(!document.getElementById)return false;
+            if(!document.getElementById(elemType))return false;
+            var elem = document.getElementById(elemType);
+            var top = parseInt(elem.style.top) ;
+            if(top <100){style = true;}
+            if(top >300){style = false;}
+            if(style){
+                top++;
+            }else{
+                top--;
+            }
+            elem.style.top = top+"px";
+            setTimeout("moveNav('"+ elemType +"',"+ style +")",40);
+        }
+        function moveElement(elemType,left,top,speed){
+            var elem = document.getElementById(elemType);
+            var startLeft = parseInt(elem.style.left);
+            var startTop = parseInt(elem.style.top);
+            var endLeft = Math.round(left);
+            var endTop = Math.round(top);
+            if(elem.moveElement){
+                clearTimeout(elem.moveElement);
+            }
+            if(!elem.style.left){
+                elem.style.left = "0px";
+            }
+            if(!elem.style.top){
+                elem.style.top = "0px";
+            }
+            var dist;
+            if(startLeft < endLeft){
+                dist = Math.ceil((endLeft - startLeft)/10);
+                startLeft += dist;;
+            }else if(startLeft > endLeft){
+                dist = Math.ceil((startLeft - endLeft)/10);
+                startLeft -= dist;
+            }
+            if(startTop < endTop){
+                dist = Math.ceil((endTop - startTop)/10);
+                startTop += dist;
+            }else if(startTop > endTop){
+                dist = Math.ceil((startTop - endTop)/10);
+                startTop -= dist;
+            }
+            elem.style.left = startLeft + "px";
+            elem.style.top = startTop + "px";
+            if(startLeft == endLeft && startTop == endTop){return true}
+            elem.moveElement =  setTimeout("moveElement('"+elemType +"',"+left+","+top+","+speed+")",speed);
+        }
+        function previewSlideShow(){
+            var preview = document.getElementById("preview");
+            preview.style.position = "absolute";
+            preview.style.left = "0px";
+            preview.style.top = "0px";
+            var links = document.getElementById("nav").getElementsByTagName("a");
+            links[0].onmouseover = function(){
+                moveElement("preview",-100,0,10);
+            }
+            links[1].onmouseover = function(){
+                moveElement("preview",-200,0,10);
+            }
+            links[2].onmouseover = function(){
+                moveElement("preview",-300,0,10);
+            }
+        }
+        addLoadEvent(previewSlideShow);
+        function draw(){
+            var canvas = document.getElementById("draw");
+            if(canvas.getContext){
+                var ctx = canvas.getContext("2d");
+                ctx.beginPath();
+                ctx.moveTo(120.0,32.0);
+                ctx.bezierCurveTo(120.0,36.4,116.4,40.0,112.0,40.0);
+                ctx.lineTo(8.0,40.0);
+                ctx.bezierCurveTo(3.6,40.0,0.0,36.4,0.0,32.0);
+                ctx.lineTo(120.0,32.0);
+                ctx.closePath();
+                ctx.fill();
+                ctx.lineWidth = 2.0;
+                ctx.strokeStyle = "rgb(255,255,255)";
+                ctx.stroke();
+            }
+        }
+        addLoadEvent(draw);
+    </script>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt;
+        }
+        abbr{
+            text-decoration: none;
+            border: 0;
+            font-style: normal;
+        }
+        table{
+            margin: auto;
+            border: 1px solid #699;
+        }
+        caption{
+            margin: auto;
+            padding: .2em;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        th{
+            font-weight: normal;
+            font-style: italic;
+            text-align: left;
+            border:1px dotted #699;
+        }
+        th,td{
+            width: 10em;
+            padding: .5em;
+        }
+        tr:hover{
+            font-weight: bold;
+        }
+        #slideshow{
+            width: 100px;
+            height: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>What is the Document Object Model?</h1>
+    <ul id="nav" role="navigation">
+        <li><a href="index.html" accesskey="1">Home</a></li>
+        <li><a href="loginForm.html" accesskey="2">Login</a></li>
+        <li><a href="registerForm.html" accesskey="3">Register</a></li>
+    </ul>
+    <p>
+        The <abbr title="World  Wide Web Consorttium">W3C</abbr> defines the <abbr title="Document Object Model">DOM</abbr> as:
+    </p>
+    <blockquote cite="http://www.w3.org/DOM/">
+    <p>
+        A platform and language-neutral interface thatwill allow programs and scripts to dynamically access and update the content,structrue and style of documents.
+    </p>
+    </blockquote>
+    <h1 id= "test">API</h1>
+    <p>
+        It is an <abbr title="Application Programming Interface">API</abbr> that can be used to navigate <abbr title="HyperText Markup Language">HTML</abbr> and <abbr title="eXtensible Markup Language">XML</abbr> documents.
+    </p>
+    <table>
+        <caption>Title</caption>
+        <thead>
+            <tr>
+                <th>When</th>
+                <th>Where</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>June 9th</td>
+                <td>Portland, <abbr title="Oregon">OR</abbr></td>
+            </tr>
+            <tr>
+                <td>June 10th</td>
+                <td>Seattle, <abbr title="Washington">WA</abbr></td>
+            </tr>
+            <tr>
+                <td>June 12th</td>
+                <td>Sacramento, <abbr title="California">CA</abbr></td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="slideshow">
+        <img src="topics.gif" id="preview">
+    </div>
+    <canvas id="draw" width="200px" height="100px">
+        <p>Powered By HTML5 canvas</p>
+    </canvas>
+</body>
+</html>
