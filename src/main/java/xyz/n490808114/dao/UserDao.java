@@ -15,6 +15,15 @@ public interface UserDao {
 
     //根据id查询员工
     @Select("select * from " + USER_TABLE + " where id = #{id}")
+    @Results({
+            @Result(id = true,column = "id",property = "id"),
+            @Result(column = "loginname",property = "loginName"),
+            @Result(column = "password",property = "password"),
+            @Result(column = "status",property = "status"),
+            @Result(column = "createdate",property = "createDate"),
+            @Result(column = "username",property = "userName"),
+            @Result(column = "email",property = "email")
+    })
     User selectById(int id);
 
     //根据id删除员工

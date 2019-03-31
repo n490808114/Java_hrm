@@ -6,135 +6,13 @@
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/json2.js"></script>
   <script src="js/lib.js"></script>
-  <script>
-    function setTable(json){
-      var data = JSON.parse(json).notices;
-      var table = document.getElementById("main-table");
-      var length = data.length;
-      var titleList = data[0];
-      var tr = document.createElement("tr");
-      table.appendChild(tr);
-      for(i in titleList){
-        var th = document.createElement("th");
-        tr.appendChild(th);
-        var text = document.createTextNode(titleList[i]);
-        th.appendChild(text);
-      }
-      for(var x=1;x<data.length;x++){
-        var childData = data[x];
-        var tr = document.createElement("tr");
-        table.appendChild(tr);
-        for(y in childData){
-          var td = document.createElement("td");
-          tr.appendChild(td);
-          var text = document.createTextNode(childData[y]);
-          tr.appendChild(text);
-        }
-      }
-    }
-    var json = '{"notices":['+
-    '{"id":"序号","content":"内容","createDate":"创建日期"},'+
-    '{"id":"1","content":"毛泽东思想","createDate":"2000-01-01"},'+
-    '{"id":"2","content":"邓小平理论","createDate":""},'+
-    '{"id":"3","content":"三个代表重要思想","createDate":"2010-01-01"}]}';
-    window.onload=setTable(json);
-  </script>
-  <style>
-    header{
-      position: fixed;
-      box-sizing: border-box;
-      top: 0px;
-      left: 0px;
-      height: 100px;
-      width: 100%;
-
-      background-color: rgba(64, 77, 255, 0.486);
-    }
-    header h1{
-      font-size: 40px;
-      font-family: STzhongsong;
-      font-weight: 2000;
-      text-align: center;
-    }
-    main{
-      position:fixed;
-      box-sizing: border-box;
-      top: 100px;
-      left: 20%;
-      right: 0%;
-      bottom: 0%;
-      box-shadow: 5px 5px 10px inset #838383;
-      padding: 10px;
-
-      font-family: Simsun;
-
-      background-color: rgb(255, 255, 255);
-
-    }
-    main footer{
-      background-color: #838383;
-      overflow: hidden;
-
-      position: absolute;
-      left: 10px;
-      right: 90px;
-      bottom: 10px;
-      height: 70px;
-    }
-    #main-table{
-      position: absolute;
-      box-sizing: border-box;
-      top: 10px;
-      bottom: 150px;
-      left: 10px;
-      right: 100px;
-
-      border: 1px solid black;
-    }
-    #main-table td{
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-
-    #main-btn{
-      margin: 0px;
-      border: 2px;
-      width: 70px;
-      height: 70px;
-      color: #f0f0f0;
-      font-size: 25px;
-      font-family:'Courier New', Courier, monospace;
-      background-color: #355282;
-
-      position:fixed;
-      bottom: 10px;
-      right: 10px;
-    }
-
-    aside{
-      position: fixed;
-      box-sizing: border-box;
-      top:100px;
-      right: 80%;
-      left: 0%;
-      bottom: 0%;
-      box-shadow: 3px 3px 5px inset #838383;
-
-      font-family: STzhongsong;
-
-      background-color: rgba(145, 145, 145, 0.466);
-    }
-
-  </style>
+  <link href="css/main_table_page.css" type="text/css" rel="stylesheet">
 </head>
 <header>
   <h1>人事管理系统</h1>
 </header>
 <main>
-  <table id="main-table">
-  </table>
+  <h1 id="main_title">公告管理</h1>
 
   <button id="main-btn" type="button" onclick="location.href='/notice-create'">添加公告</button>
   <footer>
@@ -143,11 +21,11 @@
 </main>
 <aside>
   <ul>
-    <li><a href="/notice">公告管理</a></li>
-    <li><a href="/employee">员工管理</a></li>
-    <li><a href="/dept">部门管理</a></li>
-    <li><a href="/job">职位管理</a></li>
-    <li><a href="/document">文档管理</a></li>
+    <li><a href="notice" onclick="return asideHref(this)">公告管理</a></li>
+    <li><a href="employee" onclick="return asideHref(this)">员工管理</a></li>
+    <li><a href="dept" onclick="return asideHref(this)">部门管理</a></li>
+    <li><a href="job" onclick="return asideHref(this)">职位管理</a></li>
+    <li><a href="document" onclick="return asideHref(this)">文档管理</a></li>
   </ul>
 </aside>
 <body>

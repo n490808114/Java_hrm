@@ -137,4 +137,58 @@ function stripeTables(){
         }
     }
 }
+function setTable(json){
+    var data;
+    if(json instanceof String){
+        data = JSON.parse(json);
+    }else{
+        data = json;
+    }
+    var button = document.getElementById("main-btn");
+    var table = document.createElement("table");
+    button.parentNode.insertBefore(table,button);
+    table.setAttribute("class","main-table");
+    var titleSet=false;
+    for(var childData in data){
+        if (!titleSet){
+            var trth = document.createElement("tr");
+            table.appendChild(trth);
+            for(var childTitle in data[childData]){
+                var th = document.createElement("th");
+                trth.appendChild(th);
+                var thText = document.createTextNode(data[childData][childTitle]);
+                th.appendChild(thText);
+            }
+            titleSetount = true;
+            continue;
+        }
+        var trtd = document.createElement("tr");
+        table.appendChild(trtd);
+        for(var tdData in data[childData]){
+            var td = document.createElement("td");
+            trtd.appendChild(td);
+            var tdText = document.createTextNode(data[childData][tdData]);
+            trtd.appendChild(tdText);
+        }
+    }
+}
+function asideHref(point){
+    var title = document.getElementById("main_title");
+    title.firstChild.nodeValue = point.firstChild.nodeValue;
+    var ajaxUrl = point.getAttribute("href");
+    $.ajax(
+        {
+            url:ajaxUrl,
+            type:"get",
+            asyns:false,
+            success:function(data){
+                setTable(data);
+            },
+            error:function(){
+                alert("获取数据失败");
+            }
+        }
+    )
+    return false;
+}
 

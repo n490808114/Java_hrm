@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java/xyz/n490808114/controller/UserController.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/xyz/n490808114/dao/UserDao.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/xyz/n490808114/interceptor/AuthorizedInterceptor.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/xyz/n490808114/service/HrmService.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/xyz/n490808114/service/HrmServiceImpl.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/src/main/java/xyz/n490808114/test/NoticeTest.java" charset="GBK" />
+  </component>
+</project>

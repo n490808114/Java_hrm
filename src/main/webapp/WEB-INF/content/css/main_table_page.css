@@ -1,0 +1,93 @@
+header{
+    position: fixed;
+    box-sizing: border-box;
+    top: 0px;
+    left: 0px;
+    height: 100px;
+    width: 100%;
+
+    background-color: rgba(64, 77, 255, 0.486);
+  }
+  header h1{
+    font-size: 40px;
+    font-family: STzhongsong;
+    font-weight: 2000;
+    text-align: center;
+  }
+  main{
+    position:fixed;
+    box-sizing: border-box;
+    top: 100px;
+    left: 20%;
+    right: 0%;
+    bottom: 0%;
+    box-shadow: 5px 5px 10px inset #838383;
+    padding: 10px;
+
+    font-family: Simsun;
+
+    background-color: rgb(255, 255, 255);
+  }
+  main h1{
+    position: relative;
+    text-align: center;
+
+    font-size: 30px;
+    font-family: STzhongsong;
+  }
+  main footer{
+    background-color: #83838363;
+    overflow: hidden;
+
+    position: absolute;
+    box-sizing: border-box;
+    left: 10px;
+    right: 90px;
+    bottom: 10px;
+    height: 70px;
+    padding: 10px;
+  }
+  .main-table{
+    position: absolute;
+    box-sizing: border-box;
+    top: 10px;
+    bottom: 150px;
+    left: 10px;
+    right: 100px;
+
+    border: 1px solid black;
+  }
+  .main-table td{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  #main-btn{
+    margin: 0px;
+    border: 2px;
+    box-sizing: border-box;
+    width: 70px;
+    height: 70px;
+    color: #f0f0f0;
+    font-size: 25px;
+    font-family:'Courier New', Courier, monospace;
+    background-color: #355282;
+
+    position:fixed;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  aside{
+    position: fixed;
+    box-sizing: border-box;
+    top:100px;
+    right: 80%;
+    left: 0%;
+    bottom: 0%;
+    box-shadow: 3px 3px 5px inset #838383;
+
+    font-family: STzhongsong;
+
+    background-color: rgba(145, 145, 145, 0.466);
+  }

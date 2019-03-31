@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import xyz.n490808114.domain.Notice;
 import xyz.n490808114.domain.User;
 import xyz.n490808114.service.HrmService;
 import xyz.n490808114.util.HrmConstants;
@@ -15,6 +16,7 @@ import xyz.n490808114.util.HrmConstants;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 
 @Controller
@@ -38,7 +40,7 @@ public class UserController  {
         User user = hrmService.login(loginName,password);
         if(user != null){
             session.setAttribute(HrmConstants.USER_SESSION,user);
-            mv.setViewName("redirect:text.html");
+            mv.setViewName("redirect:main.html");
         }else{
             mv.addObject("message","登录名或密码错误，请重新输入！");
             mv.setViewName("redirect:loginForm.html");
