@@ -5,11 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import xyz.n490808114.dao.SSFactory;
 import xyz.n490808114.dao.UserDao;
-import xyz.n490808114.domain.Notice;
 import xyz.n490808114.domain.User;
 import xyz.n490808114.service.HrmService;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 public class NoticeTest {

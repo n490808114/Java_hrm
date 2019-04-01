@@ -175,6 +175,7 @@ function setTable(json){
 function asideHref(point){
     var title = document.getElementById("main_title");
     title.firstChild.nodeValue = point.firstChild.nodeValue;
+    title.setAttribute("name",point.getAttribute("href"));
     var ajaxUrl = point.getAttribute("href");
     $.ajax(
         {
@@ -191,4 +192,42 @@ function asideHref(point){
     )
     return false;
 }
-
+function addForm(data){
+    if(data instanceof String){
+        data = JSON.parse(data);
+    }
+    var oldForm = document.getElementById("form");
+    if (oldForm != null){
+        oldForm.parentNode.removeChild(oldForm);
+    }
+    var form = document.createElement("form");
+    form.setAttribute("id","form");
+    var main = document.getElementsByTagName("main")[0];
+    main.appendChild(form);
+    var fieldset = document.createElement("fieldset");
+    form.appendChild(fieldset);
+    for(var x in data){
+        var p = document.createElement("p");
+        var input = document.createElement("input");
+        if(x == "content"){
+            input = document.createElement("textarea");
+        }else if(x == "email"){
+            input.setAttribute("type","email");
+        }else if(x == "password"){
+            input.setAttribute("type","password");
+        }else{
+            input.setAttribute("type","text");
+        }
+        fieldset.appendChild(p);
+        p.appendChild(input);
+        input.setAttribute("placeholder",data[x])
+        input.setAttribute("name",x);
+    }
+    var div = document.createElement("div");
+    form.appendChild(div);
+    div.setAttribute("id","form_btn1");
+    var submit = document.createElement("input");
+    div.appendChild(submit);
+    submit.setAttribute("type","submit");
+    submit.setAttribute("value","提交");
+}

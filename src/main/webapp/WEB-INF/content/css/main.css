@@ -1,0 +1,130 @@
+header{
+  position: fixed;
+  box-sizing: border-box;
+  top: 0px;
+  left: 0px;
+  height: 100px;
+  width: 100%;
+
+  background-color: rgba(64, 77, 255, 0.486);
+}
+header h1{
+  font-size: 40px;
+  font-family: STzhongsong;
+  font-weight: 2000;
+  text-align: center;
+}
+main{
+  position:fixed;
+  box-sizing: border-box;
+  top: 100px;
+  left: 20%;
+  right: 0%;
+  bottom: 0%;
+  box-shadow: 5px 5px 10px inset #838383;
+  padding: 10px;
+
+  font-family: Simsun;
+
+  background-color: rgb(255, 255, 255);
+
+  overflow-y: auto;
+}
+main h1{
+  position: relative;
+  text-align: center;
+
+  font-size: 30px;
+  font-family: STzhongsong;
+}
+main footer{
+  background-color: #83838363;
+  overflow: hidden;
+
+  position: absolute;
+  box-sizing: border-box;
+  left: 10px;
+  right: 90px;
+  bottom: 10px;
+  height: 70px;
+  padding: 10px;
+}
+#main-btn{
+  margin: 0px;
+  border: 2px;
+  box-sizing: border-box;
+  width: 70px;
+  height: 70px;
+  color: #f0f0f0;
+  font-size: 25px;
+  font-family:'Courier New', Courier, monospace;
+  background-color: #355282;
+
+  position:fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+aside{
+  position: fixed;
+  box-sizing: border-box;
+  top:100px;
+  right: 80%;
+  left: 0%;
+  bottom: 0%;
+  box-shadow: 3px 3px 5px inset #838383;
+
+  font-family: STzhongsong;
+
+  background-color: rgba(145, 145, 145, 0.466);
+}
+
+#form{
+  width: 60%;
+  background-color: #f0f0f0;
+  font-size: 12px;
+  font-family: Arial,sans-serif;
+  position: fixed;
+  top: 120px;
+  right: 10%;
+  box-shadow: 3px 3px 10px #838383;
+
+  overflow-y: auto;
+}
+#form h1{
+    font-size: 20px;
+    font-family:'Times New Roman', Times, serif;
+    margin: 0px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+
+    background-color: #4a74b6;
+}
+#form fieldset{
+    background-color: #e2e2e2;
+    margin: 0px;
+    border: 0px;
+}
+#form fieldset p input{
+    width: 100%;
+    border:0px;
+    padding: 0px;
+    height: 25px;
+}
+#form fieldset p textarea{
+  width: 100%;
+  border: 0px;
+  padding: 0px;
+  height: 300px;
+  resize: none;
+}
+#form_btn1{
+    text-align: center;
+}
+#form_btn1 input{
+    height: 30px;
+    width: 100px;
+    margin: 2px;
+    border: 0px;
+}

@@ -8,15 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import xyz.n490808114.domain.Notice;
 import xyz.n490808114.domain.TableTitle;
 import xyz.n490808114.domain.User;
 import xyz.n490808114.service.HrmService;
+import xyz.n490808114.util.HrmConstants;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @Controller
 public class NoticeController {
@@ -26,7 +28,7 @@ public class NoticeController {
 
     @ResponseBody
     @RequestMapping(value = "/notice",produces = "application/json;charset=utf-8")
-    public String getNoticesTest(){
+    public String getLast10Notices(){
         Notice notice1 = hrmService.findNoticeById(1);
         Notice notice2 = hrmService.findNoticeById(2);
         Notice notice3 = hrmService.findNoticeById(3);
@@ -37,15 +39,51 @@ public class NoticeController {
         notices.add(notice2);
         notices.add(notice3);
 
-        ValueFilter filter = new ValueFilter() {
-            @Override
-            public Object process(Object o, String s, Object o1) {
-                if("user".equals(s)){
+        ValueFilter filter = (Object o, String s, Object o1)->{
+            if("user".equals(s)){
+                try{
                     return ((User) o1).getUserName();
+                }catch(ClassCastException ex){
+                    return o1;
                 }
-                return o1;
             }
+            return o1;
         };
+
         return JSON.toJSONString(notices,filter);
+    }
+
+    @RequestMapping(value = "/noticeCreate",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String noticeCreate(){
+        Map<String,String> map = new HashMap<>();
+        map.put("title","标题");
+        map.put("content","公告内容");
+        return JSON.toJSONString(map);
+    }
+    @RequestMapping(value = "/noticeCreate",method = RequestMethod.POST)
+    @ResponseBody
+    public String noticeCreate(@RequestParam("content") String content,
+                               @RequestParam("title") String title,
+                               HttpSession session){
+        if(title == null || "".equals(title)){return null;}
+        Notice notice = new Notice();
+        notice.setTitle(title);
+        notice.setContent(content);
+        notice.setCreateDate(new Date());
+        notice.setUser((User) session.getAttribute(HrmConstants.USER_SESSION));
+        hrmService.addNotice(notice);
+
+        ValueFilter filter = (Object o, String s, Object o1)->{
+            if("user".equals(s)){
+                try{
+                    return ((User) o1).getUserName();
+                }catch(ClassCastException ex){
+                    return o1;
+                }
+            }
+            return o1;
+        };
+        return JSON.toJSONString(notice,filter);
     }
 }

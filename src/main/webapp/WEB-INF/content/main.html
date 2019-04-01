@@ -6,15 +6,31 @@
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/json2.js"></script>
   <script src="js/lib.js"></script>
-  <link href="css/main_table_page.css" type="text/css" rel="stylesheet">
+  <script>
+    function add(){
+      var ajaxUrl = document.getElementById("main_title").getAttribute("name");
+      $.ajax({
+          url:ajaxUrl+"Create",
+          type:"get",
+          asyns:false,
+          success:function(data){
+              addForm(data);
+          },
+          error:function(){
+              alert("数据获取失败");
+          }
+      })
+  }
+  </script>
+  <link href="css/main.css" type="text/css" rel="stylesheet">
 </head>
 <header>
   <h1>人事管理系统</h1>
 </header>
 <main>
-  <h1 id="main_title">公告管理</h1>
+  <h1 id="main_title" name="notice">公告管理</h1>
 
-  <button id="main-btn" type="button" onclick="location.href='/notice-create'">添加公告</button>
+  <button id="main-btn" type="button" onclick="add()">添加公告</button>
   <footer>
       注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer注释：这里是footer
   </footer>

@@ -5,7 +5,7 @@
     <title>Login</title>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/json2.js"></script>
-    <link href="css/simple_form.css" type="text/css" rel="stylesheet">
+    <link href="css/login.css" type="text/css" rel="stylesheet">
     <script>
     function setStyle(point){
         var labels = document.getElementsByTagName("label");
@@ -47,7 +47,7 @@
                 <input type="radio" name="login" value="loginname" checked> 登录名登录
                 <input type="radio" name="login" value="email"> 邮箱登录
             </div>
-            <fieldset id="fieldset">
+            <fieldset>
                 <p>
                     <label for="get_account">登录名：</label>
                     <input type="text" id="get_account" name="loginname"/>
@@ -57,8 +57,8 @@
                     <input type="password" id="get_password" name="password"/>
                 </p>
             </fieldset>
-            <div id="btn1" ><input type="submit" ></div>
+            <div id="form_btn1" ><input type="submit" ></div>
         </form>
-        <button id="btn2" type="button" onclick="location.href='registerForm.html'">注册</button>
+        <button id="main_btn" type="button" onclick="location.href='registerForm.html'">注册</button>
 </body>
 </html>

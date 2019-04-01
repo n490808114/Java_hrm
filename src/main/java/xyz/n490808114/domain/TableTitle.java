@@ -1,9 +1,21 @@
 package xyz.n490808114.domain;
 
-import java.util.List;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TableTitle {
-    public static String[] NoticeTile(){
-        return new String[]{"åºå·","æ ‡é¢˜","å†…å®¹","æ—¥æœŸ","åˆ›å»ºè€…"};
+
+    private static final Map<String,String> noticeTitle = new HashMap<>();
+    static {
+        noticeTitle.put("id","ĞòºÅ");
+        noticeTitle.put("title","±êÌâ");
+        noticeTitle.put("content","¹«¸æÄÚÈİ");
+        noticeTitle.put("createDate","´´½¨ÈÕÆÚ");
+        noticeTitle.put("user","´´½¨Õß");
+    }
+    public static Map<String, String> NoticeTile(){
+        return noticeTitle;
+
     }
 }
