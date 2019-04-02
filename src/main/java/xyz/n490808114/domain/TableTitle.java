@@ -1,12 +1,11 @@
 package xyz.n490808114.domain;
 
-
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TableTitle {
 
-    private static final Map<String,String> noticeTitle = new HashMap<>();
+    private static final Map<String,String> noticeTitle = new LinkedHashMap<>();
     static {
         noticeTitle.put("id","–Ú∫≈");
         noticeTitle.put("title","±ÍÃ‚");

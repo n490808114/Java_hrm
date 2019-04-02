@@ -24,7 +24,7 @@ main{
   box-shadow: 5px 5px 10px inset #838383;
   padding: 10px;
 
-  font-family: Simsun;
+  font-family: STheiti;
 
   background-color: rgb(255, 255, 255);
 
@@ -127,4 +127,49 @@ aside{
     width: 100px;
     margin: 2px;
     border: 0px;
+}
+
+#main_table{
+  table-layout: fixed;
+  width: 100%;
+}
+#main_table>tr>td{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid rgba(64, 77, 255, 0.486);
+}
+#main_table>tr>th{
+  background-color: rgba(64, 77, 255, 0.486);
+}
+#detail{
+  position: fixed;
+  top: 120px;
+  right: 5%;
+  left: 25%;
+  bottom: 20px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 3px 3px 10px rgba(64, 77, 255, 0.486);
+  padding: 20px;
+  border: 2px solid rgba(64, 77, 255, 0.486);
+  overflow-y: auto;
+
+  font-family: STheiti;
+  font-size: 80%;
+}
+#detail>p>label{
+  font-weight: bold;
+}
+#detail>p>p{
+  background-color: #eaeaea;
+  border:1px solid rgba(64, 77, 255, 0.486);
+}
+#divCover{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  background-color: rgba(128, 128, 128, 0.425);
 }

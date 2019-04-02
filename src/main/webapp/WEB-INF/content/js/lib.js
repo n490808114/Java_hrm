@@ -137,29 +137,39 @@ function stripeTables(){
         }
     }
 }
-function setTable(json){
+function setMainTable(json){
     var data;
     if(json instanceof String){
         data = JSON.parse(json);
     }else{
         data = json;
     }
+    var list = getTableWidthList();
     var button = document.getElementById("main-btn");
-    var table = document.createElement("table");
+    var table = document.getElementById("main_table");
+    if(table != null){
+        table.remove();
+    }
+    table = document.createElement("table");
     button.parentNode.insertBefore(table,button);
-    table.setAttribute("class","main-table");
+    table.setAttribute("id","main_table");
     var titleSet=false;
     for(var childData in data){
         if (!titleSet){
             var trth = document.createElement("tr");
             table.appendChild(trth);
+            var a = 0;
             for(var childTitle in data[childData]){
                 var th = document.createElement("th");
                 trth.appendChild(th);
+                th.setAttribute("name",childTitle);
                 var thText = document.createTextNode(data[childData][childTitle]);
                 th.appendChild(thText);
+
+                th.style.width=list[a];
+                a ++;
             }
-            titleSetount = true;
+            titleSet = true;
             continue;
         }
         var trtd = document.createElement("tr");
@@ -168,7 +178,10 @@ function setTable(json){
             var td = document.createElement("td");
             trtd.appendChild(td);
             var tdText = document.createTextNode(data[childData][tdData]);
-            trtd.appendChild(tdText);
+            td.appendChild(tdText);
+            td.setAttribute("title",data[childData][tdData])
+            td.setAttribute("name",tdData);
+            td.setAttribute("onclick","openDetail(this)");
         }
     }
 }
@@ -183,7 +196,7 @@ function asideHref(point){
             type:"get",
             asyns:false,
             success:function(data){
-                setTable(data);
+                setMainTable(data);
             },
             error:function(){
                 alert("获取数据失败");
@@ -192,18 +205,28 @@ function asideHref(point){
     )
     return false;
 }
-function addForm(data){
+function addCreateForm(data){
     if(data instanceof String){
         data = JSON.parse(data);
     }
+    addCoverDiv();
     var oldForm = document.getElementById("form");
+    var name = document.getElementById("main_title").getAttribute("name");
     if (oldForm != null){
-        oldForm.parentNode.removeChild(oldForm);
+        if(oldForm.getAttribute("name") == name){
+            oldForm.style.removeProperty("display");
+            insertAfter(oldForm,document.getElementById("divCover"));
+            return false;
+        }else{
+            oldForm.remove();
+        }
     }
     var form = document.createElement("form");
     form.setAttribute("id","form");
-    var main = document.getElementsByTagName("main")[0];
-    main.appendChild(form);
+    form.setAttribute("name",document.getElementById("main_title").getAttribute("name"));
+    var body = document.getElementsByTagName("body")[0];
+
+    body.appendChild(form);
     var fieldset = document.createElement("fieldset");
     form.appendChild(fieldset);
     for(var x in data){
@@ -230,4 +253,104 @@ function addForm(data){
     div.appendChild(submit);
     submit.setAttribute("type","submit");
     submit.setAttribute("value","提交");
+    return true;
 }
+
+function openCreator(){
+    var ajaxUrl = document.getElementById("main_title").getAttribute("name");
+    $.ajax({
+        url:ajaxUrl+"Create",
+        type:"get",
+        asyns:false,
+        success:function(data){
+            addCreateForm(data);
+        },
+        error:function(){
+            alert("数据获取失败");
+        }
+    })
+}
+
+function getTableWidthList(){
+    var name = document.getElementById("main_title").getAttribute("name");
+    if(name == "notice"){
+        return ["5%","10%","65%","10%","10%"];
+    }
+}
+function getTableTitleList(){
+    var table = document.getElementById("main_table");
+    var thtr = table.firstChild;
+    var map = new Array;
+    for(var a=0;a<thtr.childNodes.length;a++){
+        map[thtr.childNodes[a].getAttribute("name")]=thtr.childNodes[a].firstChild.nodeValue;
+    }
+    return map;
+}
+function openDetail(point){
+    var oldDetail = document.getElementById("detail");
+    if(oldDetail != null){
+        oldDetail.remove();
+    }
+    var childNodes = point.parentNode.childNodes;
+    var map = new Array;
+    for(var a=0;a<childNodes.length;a++){
+        map[childNodes[a].getAttribute("name")] = childNodes[a].firstChild.nodeValue;
+    }
+    addCoverDiv();
+    var body = document.getElementsByTagName("body")[0];
+    var div = document.createElement("div");
+    body.appendChild(div);
+    div.setAttribute("id","detail");
+
+    var titleList = getTableTitleList();
+    for(var b in map){
+        var label = document.createElement("label");
+        label.setAttribute("name",b);
+        var text = document.createTextNode(titleList[b]+":");
+        label.appendChild(text);
+
+        var detailP = document.createElement("p");
+        var detailText = document.createTextNode(map[b]);
+        detailP.appendChild(detailText);
+        if((b != "id") &&( b != "createDate") && (b != "user")){
+            detailP.setAttribute("contenteditable","true");
+        }else{
+            detailP.setAttribute("title","不能修改这项内容");
+        }
+
+        var p = document.createElement("p");
+        p.appendChild(label);
+        p.appendChild(detailP);
+        div.appendChild(p);
+    }
+    var buttonDiv = document.createElement("div");
+    var button = document.createElement("button");
+    button.setAttribute("onclick","changeDetail(this)");
+    button.setAttribute("type","button");
+    button.setAttribute("value","提交更改");
+    var buttonText = document.createTextNode("提交更改");
+    button.appendChild(buttonText);
+    buttonDiv.appendChild(button);
+    div.appendChild(buttonDiv);
+}
+function addCoverDiv(){
+    var body = document.getElementsByTagName("body")[0];
+
+    var divCover = document.createElement("div");
+    body.appendChild(divCover);
+    divCover.setAttribute("id","divCover");
+    divCover.setAttribute("onclick","closePopUp()");
+}
+function closePopUp(){
+    var detail = document.getElementById("detail");
+    var form = document.getElementById("form");
+    if(detail != null){detail.remove()}
+    if(form != null){form.style.display = "none";}
+    while(true){
+        var divCover = document.getElementById("divCover");
+        if(divCover == null){break};
+        divCover.remove();
+    }
+
+}
+
