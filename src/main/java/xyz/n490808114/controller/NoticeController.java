@@ -19,6 +19,7 @@ import xyz.n490808114.util.HrmConstants;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class NoticeController {
@@ -66,24 +67,17 @@ public class NoticeController {
     public String noticeCreate(@RequestParam("content") String content,
                                @RequestParam("title") String title,
                                HttpSession session){
-        if(title == null || "".equals(title)){return null;}
         Notice notice = new Notice();
         notice.setTitle(title);
         notice.setContent(content);
         notice.setCreateDate(new Date());
         notice.setUser((User) session.getAttribute(HrmConstants.USER_SESSION));
-        hrmService.addNotice(notice);
-
-        ValueFilter filter = (Object o, String s, Object o1)->{
-            if("user".equals(s)){
-                try{
-                    return ((User) o1).getUserName();
-                }catch(ClassCastException ex){
-                    return o1;
-                }
-            }
-            return o1;
-        };
-        return JSON.toJSONString(notice,filter);
+        if(!"".equals(title.trim())) {
+            hrmService.addNotice(notice);
+            return JSON.toJSONString(true);
+        }else {
+            return JSON.toJSONString(false);
+        }
     }
+
 }

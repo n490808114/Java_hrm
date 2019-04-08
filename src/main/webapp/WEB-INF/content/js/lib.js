@@ -181,7 +181,7 @@ function setMainTable(json){
             td.appendChild(tdText);
             td.setAttribute("title",data[childData][tdData])
             td.setAttribute("name",tdData);
-            td.setAttribute("onclick","openDetail(this)");
+            td.setAttribute("onclick","openDetail(getTdDetail(this))");
         }
     }
 }
@@ -222,8 +222,12 @@ function addCreateForm(data){
         }
     }
     var form = document.createElement("form");
+    var title = document.getElementById("main_title").getAttribute("name");
     form.setAttribute("id","form");
-    form.setAttribute("name",document.getElementById("main_title").getAttribute("name"));
+    form.setAttribute("name",title);
+    form.setAttribute("method","post");
+    form.setAttribute("action",title+"Creator");
+    form.setAttribute("onsubmit","return submitCreate(this)");
     var body = document.getElementsByTagName("body")[0];
 
     body.appendChild(form);
@@ -254,6 +258,16 @@ function addCreateForm(data){
     submit.setAttribute("type","submit");
     submit.setAttribute("value","提交");
     return true;
+}
+function submitCreate(point){
+    $("#from").ajaxSubmit(function(message){
+        if(message == "true"){
+            alert("公告创建成功");
+        }else if(message == "false"){
+            alert("公告创建失败");
+        }
+    })
+    return false;
 }
 
 function openCreator(){
@@ -286,15 +300,18 @@ function getTableTitleList(){
     }
     return map;
 }
-function openDetail(point){
-    var oldDetail = document.getElementById("detail");
-    if(oldDetail != null){
-        oldDetail.remove();
-    }
+function getTdDetail(point){
     var childNodes = point.parentNode.childNodes;
     var map = new Array;
     for(var a=0;a<childNodes.length;a++){
         map[childNodes[a].getAttribute("name")] = childNodes[a].firstChild.nodeValue;
+    }
+    return map;
+}
+function openDetail(map){
+    var oldDetail = document.getElementById("detail");
+    if(oldDetail != null){
+        oldDetail.remove();
     }
     addCoverDiv();
     var body = document.getElementsByTagName("body")[0];
