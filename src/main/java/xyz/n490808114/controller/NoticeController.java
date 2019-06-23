@@ -7,6 +7,7 @@ import com.alibaba.fastjson.serializer.ValueFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,10 @@ import xyz.n490808114.domain.User;
 import xyz.n490808114.service.HrmService;
 import xyz.n490808114.util.HrmConstants;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.net.http.HttpRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -78,21 +82,26 @@ public class NoticeController {
             return JSON.toJSONString(false);
         }
     }
-
     @RequestMapping(value = "/noticeUpdate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String noticeUpdate(@RequestParam("content") String content, @RequestParam("title") String title,
-            HttpSession session) {
+    public String noticeUpdate(@RequestParam Map<String,String> map,HttpSession session){
         Notice notice = new Notice();
-        notice.setTitle(title);
-        notice.setContent(content);
+        notice.setId(Integer.parseInt(map.get("id")));
+        notice.setTitle(map.get("title"));
+        notice.setContent(map.get("content"));
         notice.setCreateDate(new Date());
         notice.setUser((User) session.getAttribute(HrmConstants.USER_SESSION));
-        if (!"".equals(title.trim())) {
+        if(!"".equals(notice.getTitle().trim())){
             hrmService.modifyNotice(notice);
             return JSON.toJSONString(true);
-        } else {
+        }else{
             return JSON.toJSONString(false);
         }
+    }
+    @RequestMapping(value = "/noticeDelete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String noticeDelete(@RequestParam Map<String,String> map,HttpSession session){
+        hrmService.removeNotice(Integer.parseInt(map.get("id")));
+        return JSON.toJSONString(true);
     }
 }

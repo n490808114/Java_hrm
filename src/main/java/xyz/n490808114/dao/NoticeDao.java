@@ -8,21 +8,18 @@ import java.util.List;
 
 public interface NoticeDao {
 
-        @Select("SELECT * FROM notice_inf")
-        @Results({ @Result(id = true, column = "id", property = "id"), @Result(column = "title", property = "title"),
-                        @Result(column = "content", property = "content"),
-                        @Result(column = "create_date", property = "createDate"),
-                        @Result(column = "user_id", property = "user", one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
-        List<Notice> selectAll();
-
         @Select("SELECT * FROM notice_inf WHERE id = #{id}")
-        @Results({ @Result(id = true, column = "id", property = "id"), @Result(column = "title", property = "title"),
+        @Results(id = "noticeResult",value = { @Result(id = true, column = "id", property = "id"), @Result(column = "title", property = "title"),
                         @Result(column = "content", property = "content"),
                         @Result(column = "create_date", property = "createDate"),
                         @Result(column = "user_id", property = "user", one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
         Notice selectById(int id);
 
-        @Delete("DELETE * FROM notice_inf WHERE id = #{id}")
+        @Select("SELECT * FROM notice_inf")
+        @ResultMap("noticeResult")
+        List<Notice> selectAll();
+
+        @Delete("DELETE FROM notice_inf WHERE id = #{id}")
         void deleteById(int id);
 
         @Insert("INSERT INTO notice_inf(id,title,content,create_date,user_id) "

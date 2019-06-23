@@ -351,6 +351,9 @@ function openDetail(map){
     var body = document.getElementsByTagName("body")[0];
     var form = document.createElement("form");
     body.appendChild(form);
+    var ajaxUrl = document.getElementById("main_title").getAttribute("name")+"Change";
+    form.setAttribute("action",ajaxUrl);
+    form.setAttribute("method","post");
     form.setAttribute("id","detail");
     var titleList = getTableTitleList();
     for(var b in map){
@@ -374,17 +377,21 @@ function openDetail(map){
         form.appendChild(p1);
         form.appendChild(p2);
     }
-    var inputButton = document.createElement("input");
-    inputButton.setAttribute("type","submit");
-    inputButton.setAttribute("value","提交更改");
-    var ajaxUrl = document.getElementById("main_title").getAttribute("name")+"Update";
-    form.setAttribute("action",ajaxUrl);
-    form.setAttribute("method","post");
-    form.appendChild(inputButton);
-    updateDetail();
+    var updateButton = document.createElement("input");
+    updateButton.setAttribute("id","detailUpdate");
+    updateButton.setAttribute("type","submit");
+    updateButton.setAttribute("value","提交更改");
+    var deleteButton = document.createElement("input");
+    deleteButton.setAttribute("id","detailDelete");
+    deleteButton.setAttribute("type","submit");
+    deleteButton.setAttribute("value","删除");
+
+    form.appendChild(updateButton);
+    form.appendChild(deleteButton);
+    changeDetail();
 }
 
-function updateDetail(){
+function changeDetail(){
     var options = {
         asyns :false,
         success : function(data){
@@ -404,6 +411,12 @@ function updateDetail(){
     $("#detail").submit(function(){
         $(this).ajaxSubmit(options);
         return false;
+    });
+    $("#detailUpdate").click(function(){
+        $("#detail").attr("action",$("#main_title").attr("name") + "Update");
+    });
+    $("#detailDelete").click(function(){
+        $("#detail").attr("action",$("#main_title").attr("name") + "Delete");
     });
 }
 

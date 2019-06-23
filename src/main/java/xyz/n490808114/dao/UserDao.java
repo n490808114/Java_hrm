@@ -9,41 +9,35 @@ import java.util.Map;
 import static xyz.n490808114.util.HrmConstants.USER_TABLE;
 
 public interface UserDao {
-    //¸ù¾ÝµÇÂ¼ÃûºÍÃÜÂë²éÑ¯Ô±¹¤
+    // ï¿½ï¿½ï¿½Ýµï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯Ô±ï¿½ï¿½
     @Select("select * from " + USER_TABLE + " where loginname = #{loginName} and password = #{password}")
     User selectByLoginNameAndPassword(@Param("loginName") String loginName, @Param("password") String password);
 
-    //¸ù¾Ýid²éÑ¯Ô±¹¤
+    // ï¿½ï¿½ï¿½ï¿½idï¿½ï¿½Ñ¯Ô±ï¿½ï¿½
     @Select("select * from " + USER_TABLE + " where id = #{id}")
-    @Results({
-            @Result(id = true,column = "id",property = "id"),
-            @Result(column = "loginname",property = "loginName"),
-            @Result(column = "password",property = "password"),
-            @Result(column = "status",property = "status"),
-            @Result(column = "createdate",property = "createDate"),
-            @Result(column = "username",property = "userName"),
-            @Result(column = "email",property = "email")
-    })
+    @Results(id = "userResult",value = { @Result(id = true, column = "id", property = "id"),
+            @Result(column = "loginname", property = "loginName"), @Result(column = "password", property = "password"),
+            @Result(column = "status", property = "status"), @Result(column = "createdate", property = "createDate"),
+            @Result(column = "username", property = "userName"), @Result(column = "email", property = "email") })
     User selectById(int id);
 
-    //¸ù¾ÝidÉ¾³ýÔ±¹¤
+    // ï¿½ï¿½ï¿½ï¿½idÉ¾ï¿½ï¿½Ô±ï¿½ï¿½
     @Delete("delete from " + USER_TABLE + " where id = #{id}")
     void deleteById(int id);
 
-    //¶¯Ì¬ÐÞ¸ÄÓÃ»§
-    @SelectProvider(type = UserDynaSqlProvider.class,method = "updateUser")
+    // ï¿½ï¿½Ì¬ï¿½Þ¸ï¿½ï¿½Ã»ï¿½
+    @SelectProvider(type = UserDynaSqlProvider.class, method = "updateUser")
     void update(User user);
 
-    //¶¯Ì¬²éÑ¯
-    @SelectProvider(type = UserDynaSqlProvider.class,method = "selectWithParam")
-    List<User> selectByPage(Map<String,Object> params);
+    // ï¿½ï¿½Ì¬ï¿½ï¿½Ñ¯
+    @SelectProvider(type = UserDynaSqlProvider.class, method = "selectWithParam")
+    List<User> selectByPage(Map<String, Object> params);
 
-    //¸ù¾Ý²ÎÊý²éÑ¯ÓÃ»§×ÜÊý
-    @SelectProvider(type = UserDynaSqlProvider.class,method = "count")
-    int count(Map<String,Object> params);
+    // ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
+    @SelectProvider(type = UserDynaSqlProvider.class, method = "count")
+    int count(Map<String, Object> params);
 
-    //¶¯Ì¬²åÈëÓÃ»§
-    @SelectProvider(type = UserDynaSqlProvider.class,method = "insertUser")
+    // ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½
+    @SelectProvider(type = UserDynaSqlProvider.class, method = "insertUser")
     void save(User user);
 }
-
