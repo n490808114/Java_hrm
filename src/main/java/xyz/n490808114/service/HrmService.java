@@ -7,183 +7,183 @@ import java.util.List;
 
 public interface HrmService {
     /**
-     * ÓÃ»§µÇÂ¼
+     * ç”¨æˆ·ç™»å½•
      * @param loginName
      * @param password
-     * @return User¶ÔÏó
+     * @return Userå¯¹è±¡
      */
     User login(String loginName,String password);
 
     /**
-     * ¸ù¾İid²éÑ¯ÓÃ»§
+     * æ ¹æ®idæŸ¥è¯¢ç”¨æˆ·
      * @param id
-     * @return User¶ÔÏó
+     * @return Userå¯¹è±¡
      */
     User findUserById(int id);
 
     /**
-     * ¸ù¾İidÉ¾³ıÓÃ»§
+     * æ ¹æ®idåˆ é™¤ç”¨æˆ·
      * @param id
      */
     void removeUserById(int id);
 
     /**
-     * ĞŞ¸ÄÓÃ»§
+     * ä¿®æ”¹ç”¨æˆ·
      * @param user
      */
     void modifyUser(User user);
 
     /**
-     * Ìí¼ÓÓÃ»§
+     * æ·»åŠ ç”¨æˆ·
      * @param user
      */
     void addUser(User user);
 
     /**
-     * ¸ù¾İid²éÑ¯Ô±¹¤
+     * æ ¹æ®idæŸ¥è¯¢å‘˜å·¥
      * @param id
      * @return
      */
     Employee findEmployeeById(int id);
 
     /**
-     * ¸ù¾İidÉ¾³ıÔ±¹¤
+     * æ ¹æ®idåˆ é™¤å‘˜å·¥
      * @param id
      */
     void removeEmployeeById(int id);
 
     /**
-     * Ìí¼ÓÔ±¹¤
+     * æ·»åŠ å‘˜å·¥
      * @param employee
      */
     void addEmployee(Employee employee);
 
     /**
-     * ĞŞ¸ÄÔ±¹¤
+     * ä¿®æ”¹å‘˜å·¥
      * @param employee
      */
     void modifyEmployee(Employee employee);
 
     /**
-     * »ñÈ¡ËùÓĞ²¿ÃÅ
+     * è·å–æ‰€æœ‰éƒ¨é—¨
      * @return Dept List
      */
     List<Dept> findAllDept();
 
     /**
-     * ¸ù¾İid²éÑ¯²¿ÃÅ
+     * æ ¹æ®idæŸ¥è¯¢éƒ¨é—¨
      * @param id
      * @return
      */
     Dept findDeptById(int id);
 
     /**
-     * ¸ù¾İidÉ¾³ı²¿ÃÅ
+     * æ ¹æ®idåˆ é™¤éƒ¨é—¨
      * @param id
      */
     void removeDeptById(int id);
 
     /**
-     * Ìí¼Ó²¿ÃÅ
+     * æ·»åŠ éƒ¨é—¨
      * @param dept
      */
     void addDept(Dept dept);
 
     /**
-     * ĞŞ¸Ä²¿ÃÅ
+     * ä¿®æ”¹éƒ¨é—¨
      * @param dept
      */
     void modifyDept(Dept dept);
 
     /**
-     * »ñÈ¡ËùÓĞÖ°Î»
+     * è·å–æ‰€æœ‰èŒä½
      * @return Job List
      */
     List<Job> findAllJob();
 
     /**
-     * ¸ù¾İid²éÑ¯Ö°Î»
+     * æ ¹æ®idæŸ¥è¯¢èŒä½
      * @param id
      * @return
      */
     Job findJobById(int id);
 
     /**
-     * Ìí¼ÓÖ°Î»
+     * æ·»åŠ èŒä½
      * @param job
      */
     void addJob(Job job);
 
     /**
-     * ¸ù¾İidÉ¾³ıÖ°Î»
+     * æ ¹æ®idåˆ é™¤èŒä½
      * @param id
      */
     void removeJob(int id);
 
     /**
-     * ĞŞ¸ÄÖ°Î»
+     * ä¿®æ”¹èŒä½
      * @param job
      */
     void modifyJob(Job job);
 
     /**
-     * »ñÈ¡ËùÓĞÎÄµµ
+     * è·å–æ‰€æœ‰æ–‡æ¡£
      * @return Document List
      */
     List<Document> findAllDocument();
 
     /**
-     * ¸ù¾İid²éÑ¯ÎÄµµ
+     * æ ¹æ®idæŸ¥è¯¢æ–‡æ¡£
      * @param id
-     * @return Document ¶ÔÏó
+     * @return Document å¯¹è±¡
      */
     Document findDocumentById(int id);
 
     /**
-     * ¸ù¾İidÉ¾³ıÎÄµµ
+     * æ ¹æ®idåˆ é™¤æ–‡æ¡£
      * @param id
      */
     void removeDocument(int id);
 
     /**
-     * Ìí¼ÓÎÄµµ
+     * æ·»åŠ æ–‡æ¡£
      * @param document
      */
     void addDocument(Document document);
 
     /**
-     * ĞŞ¸ÄÎÄµµ
+     * ä¿®æ”¹æ–‡æ¡£
      * @param document
      */
     void modifyDocument(Document document);
 
     /**
-     * »ñÈ¡ËùÓĞ¹«¸æ
+     * è·å–æ‰€æœ‰å…¬å‘Š
      * @return Notice List
      */
     List<Notice> findAllNotice();
 
     /**
-     * ¸ù¾İid²éÑ¯¹«¸æ
+     * æ ¹æ®idæŸ¥è¯¢å…¬å‘Š
      * @param id
-     * @return Notice¶ÔÏó
+     * @return Noticeå¯¹è±¡
      */
     Notice findNoticeById(int id);
 
     /**
-     * ¸ù¾İidÉ¾³ı¹«¸æ
+     * æ ¹æ®idåˆ é™¤å…¬å‘Š
      * @param id
      */
     void removeNotice(int id);
 
     /**
-     * Ìí¼Ó¹«¸æ
+     * æ·»åŠ å…¬å‘Š
      * @param notice
      */
     void addNotice(Notice notice);
 
     /**
-     * ĞŞ¸Ä¹«¸æ
+     * ä¿®æ”¹å…¬å‘Š
      * @param notice
      */
     void modifyNotice(Notice notice);

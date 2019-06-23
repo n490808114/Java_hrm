@@ -18,41 +18,40 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 
-
 @Controller
-public class UserController  {
+public class UserController {
     @Autowired
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
 
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public String login(){
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
         return "redirect:loginForm.html";
     }
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ModelAndView login(@RequestParam(value = "email",required = false ) String email,
-                              @RequestParam(value = "loginname",required = false) String loginName,
-                              @RequestParam("password") String password,
-                              HttpSession session,
-                              ModelAndView mv){
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ModelAndView login(@RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "loginname", required = false) String loginName,
+            @RequestParam("password") String password, HttpSession session, ModelAndView mv) {
 
-        User user = hrmService.login(loginName,password);
-        if(user != null){
-            session.setAttribute(HrmConstants.USER_SESSION,user);
+        User user = hrmService.login(loginName, password);
+        if (user != null) {
+            session.setAttribute(HrmConstants.USER_SESSION, user);
             mv.setViewName("redirect:main.html");
-        }else{
-            mv.addObject("message","µÇÂ¼Ãû»òÃÜÂë´íÎó£¬ÇëÖØÐÂÊäÈë£¡");
+        } else {
+            mv.addObject("message", "ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¡");
             mv.setViewName("redirect:loginForm.html");
         }
         return mv;
     }
-    @RequestMapping(value = "/register",method = RequestMethod.GET)
-    public String register(){
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register() {
         return "redirect:registerForm.html";
     }
-    @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public String register(@RequestBody User user){
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String register(@RequestBody User user) {
         return null;
     }
 }

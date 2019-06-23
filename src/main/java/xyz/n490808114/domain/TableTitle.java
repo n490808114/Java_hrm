@@ -7,13 +7,13 @@ public class TableTitle {
 
     private static final Map<String,String> noticeTitle = new LinkedHashMap<>();
     static {
-        noticeTitle.put("id","ĞòºÅ");
-        noticeTitle.put("title","±êÌâ");
-        noticeTitle.put("content","¹«¸æÄÚÈİ");
-        noticeTitle.put("createDate","´´½¨ÈÕÆÚ");
-        noticeTitle.put("user","´´½¨Õß");
+        noticeTitle.put("id","åºå·");
+        noticeTitle.put("title","æ ‡é¢˜");
+        noticeTitle.put("content","å…¬å‘Šå†…å®¹");
+        noticeTitle.put("createDate","åˆ›å»ºæ—¥æœŸ");
+        noticeTitle.put("user","åˆ›å»ºè€…");
     }
-    public static Map<String, String> NoticeTile(){
+    public static Map<String, String> NoticeTitle(){
         return noticeTitle;
 
     }

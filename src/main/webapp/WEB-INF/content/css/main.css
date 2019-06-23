@@ -41,28 +41,30 @@ main footer{
   background-color: #83838363;
   overflow: hidden;
 
-  position: absolute;
+  position: fixed;
   box-sizing: border-box;
-  left: 10px;
-  right: 90px;
-  bottom: 10px;
-  height: 70px;
-  padding: 10px;
+  left: 20%;
+  right: 0%;
+  bottom: 1%;
+  height: 8%;
+  padding: 0% 5% 0% 5%
 }
 #main-btn{
   margin: 0px;
-  border: 2px;
+  border: 1%;
   box-sizing: border-box;
-  width: 70px;
-  height: 70px;
+
+  height: 30px;
+  width: 100px;
+
   color: #f0f0f0;
-  font-size: 25px;
+  font-size: 80%;
   font-family:'Courier New', Courier, monospace;
   background-color: #355282;
 
-  position:fixed;
-  bottom: 10px;
-  right: 10px;
+  position:absolute;
+  top: 2%;
+  right: 2%;
 }
 
 aside{
@@ -157,13 +159,7 @@ aside{
   font-family: STheiti;
   font-size: 80%;
 }
-#detail>p>label{
-  font-weight: bold;
-}
-#detail>p>p{
-  background-color: #eaeaea;
-  border:1px solid rgba(64, 77, 255, 0.486);
-}
+
 #divCover{
   position: absolute;
   top: 0px;

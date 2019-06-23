@@ -186,23 +186,23 @@ function setMainTable(json){
     }
 }
 function asideHref(point){
-    var title = document.getElementById("main_title");
-    title.firstChild.nodeValue = point.firstChild.nodeValue;
-    title.setAttribute("name",point.getAttribute("href"));
+    $("#main_title").text(point.firstChild.nodeValue);
     var ajaxUrl = point.getAttribute("href");
-    $.ajax(
-        {
-            url:ajaxUrl,
-            type:"get",
-            asyns:false,
-            success:function(data){
-                setMainTable(data);
-            },
-            error:function(){
-                alert("获取数据失败");
-            }
+    $("#main_title").attr("name",ajaxUrl);
+    return getMainList();
+}
+function getMainList(){
+    $.ajax({
+        url:$("#main_title").attr("name"),
+        type:"get",
+        asyns:false,
+        success:function(data){
+            setMainTable(data);
+        },
+        error:function(){
+            alert("获取数据失败");
         }
-    )
+    })
     return false;
 }
 function addCreateForm(data){
@@ -226,8 +226,7 @@ function addCreateForm(data){
     form.setAttribute("id","form");
     form.setAttribute("name",title);
     form.setAttribute("method","post");
-    form.setAttribute("action",title+"Creator");
-    form.setAttribute("onsubmit","return submitCreate(this)");
+    form.setAttribute("action",title+"Create");
     var body = document.getElementsByTagName("body")[0];
 
     body.appendChild(form);
@@ -257,17 +256,29 @@ function addCreateForm(data){
     div.appendChild(submit);
     submit.setAttribute("type","submit");
     submit.setAttribute("value","提交");
-    return true;
+    submitCreate();
 }
 function submitCreate(point){
-    $("#from").ajaxSubmit(function(message){
-        if(message == "true"){
-            alert("公告创建成功");
-        }else if(message == "false"){
-            alert("公告创建失败");
+    var options = {
+        asyns:false,
+        success:function(data){
+            var message = JSON.stringify(data);
+            if(message == "true"){
+                alert("创建成功！");
+                closePopUp();
+                getMainList();
+            }else if(message == "false"){
+                alert("创建失败");
+            }
+        },
+        error:function(){
+            alert("上传失败！");
         }
-    })
-    return false;
+    }
+    $("#form").submit(function(){
+        $(this).ajaxSubmit(options);
+        return false;
+    });
 }
 
 function openCreator(){
@@ -308,48 +319,8 @@ function getTdDetail(point){
     }
     return map;
 }
-function openDetail(map){
-    var oldDetail = document.getElementById("detail");
-    if(oldDetail != null){
-        oldDetail.remove();
-    }
-    addCoverDiv();
-    var body = document.getElementsByTagName("body")[0];
-    var div = document.createElement("div");
-    body.appendChild(div);
-    div.setAttribute("id","detail");
 
-    var titleList = getTableTitleList();
-    for(var b in map){
-        var label = document.createElement("label");
-        label.setAttribute("name",b);
-        var text = document.createTextNode(titleList[b]+":");
-        label.appendChild(text);
-
-        var detailP = document.createElement("p");
-        var detailText = document.createTextNode(map[b]);
-        detailP.appendChild(detailText);
-        if((b != "id") &&( b != "createDate") && (b != "user")){
-            detailP.setAttribute("contenteditable","true");
-        }else{
-            detailP.setAttribute("title","不能修改这项内容");
-        }
-
-        var p = document.createElement("p");
-        p.appendChild(label);
-        p.appendChild(detailP);
-        div.appendChild(p);
-    }
-    var buttonDiv = document.createElement("div");
-    var button = document.createElement("button");
-    button.setAttribute("onclick","changeDetail(this)");
-    button.setAttribute("type","button");
-    button.setAttribute("value","提交更改");
-    var buttonText = document.createTextNode("提交更改");
-    button.appendChild(buttonText);
-    buttonDiv.appendChild(button);
-    div.appendChild(buttonDiv);
-}
+//添加背景灰色遮挡
 function addCoverDiv(){
     var body = document.getElementsByTagName("body")[0];
 
@@ -358,6 +329,7 @@ function addCoverDiv(){
     divCover.setAttribute("id","divCover");
     divCover.setAttribute("onclick","closePopUp()");
 }
+//隐藏弹出的窗口
 function closePopUp(){
     var detail = document.getElementById("detail");
     var form = document.getElementById("form");
@@ -370,4 +342,69 @@ function closePopUp(){
     }
 
 }
+function openDetail(map){
+    var oldDetail = document.getElementById("detail");
+    if(oldDetail != null){
+        oldDetail.remove();
+    }
+    addCoverDiv();
+    var body = document.getElementsByTagName("body")[0];
+    var form = document.createElement("form");
+    body.appendChild(form);
+    form.setAttribute("id","detail");
+    var titleList = getTableTitleList();
+    for(var b in map){
+        var label = document.createElement("label");
+        var text = document.createTextNode(titleList[b]+":");
+        label.appendChild(text);
+
+        var textArea = document.createElement("textarea");
+        textArea.setAttribute("name",b);
+        var textDetail = document.createTextNode(map[b]);
+        textArea.appendChild(textDetail);
+        if((b != "id") &&( b != "createDate") && (b != "user")){
+            textArea.setAttribute("contenteditable","true");
+        }else{
+            textArea.setAttribute("title","不能修改这项内容");
+        }
+        var p1 = document.createElement("p");
+        var p2 = document.createElement("p");
+        p1.appendChild(label);
+        p2.appendChild(textArea);
+        form.appendChild(p1);
+        form.appendChild(p2);
+    }
+    var inputButton = document.createElement("input");
+    inputButton.setAttribute("type","submit");
+    inputButton.setAttribute("value","提交更改");
+    var ajaxUrl = document.getElementById("main_title").getAttribute("name")+"Update";
+    form.setAttribute("action",ajaxUrl);
+    form.setAttribute("method","post");
+    form.appendChild(inputButton);
+    updateDetail();
+}
+
+function updateDetail(){
+    var options = {
+        asyns :false,
+        success : function(data){
+            var message = JSON.stringify(data);
+            if(message == "true"){
+                alert("修改成功！");
+                closePopUp();
+                getMainList();
+            }else{
+                alert("修改失败："+message);
+            }
+        },
+        error : function(){
+            alert("上传失败");
+        }
+    };
+    $("#detail").submit(function(){
+        $(this).ajaxSubmit(options);
+        return false;
+    });
+}
+
 
