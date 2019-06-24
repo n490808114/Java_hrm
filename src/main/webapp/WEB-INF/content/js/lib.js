@@ -351,7 +351,8 @@ function closePopUp(){
     }
 
 }
-function openDetail(map){
+function openDetail(data){
+    var map = $.parseJSON(data);
     var oldDetail = document.getElementById("detail");
     if(oldDetail != null){
         oldDetail.remove();
@@ -362,15 +363,14 @@ function openDetail(map){
     body.appendChild(form);
     form.setAttribute("method","post");
     form.setAttribute("id","detail");
-    var titleList = getTableTitleList();
     for(var b in map){
         var label = document.createElement("label");
-        var text = document.createTextNode(titleList[b]+":");
+        var text = document.createTextNode(map[0][b]+":");
         label.appendChild(text);
 
         var textArea = document.createElement("textarea");
         textArea.setAttribute("name",b);
-        var textDetail = document.createTextNode(map[b]);
+        var textDetail = document.createTextNode(map[1][b]);
         textArea.appendChild(textDetail);
         if((b != "id") &&( b != "createDate") && (b != "user")){
             textArea.setAttribute("contenteditable","true");
