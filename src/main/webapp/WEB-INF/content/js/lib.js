@@ -397,7 +397,7 @@ function openDetail(data){
     changeDetail();
 
     //将textarea的高度设置成滚动条的高度从而自适应文本并取消滚动条
-    $.each($("textarea"), function(i, n){
+    $.each($("#detail textarea"), function(i, n){
         $(n).css("height", n.scrollHeight + "px");
     })
 }
