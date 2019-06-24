@@ -18,7 +18,7 @@ main{
   position:fixed;
   box-sizing: border-box;
   top: 100px;
-  left: 20%;
+  left: 15%;
   right: 0%;
   bottom: 0%;
   box-shadow: 5px 5px 10px inset #838383;
@@ -43,7 +43,7 @@ main footer{
 
   position: fixed;
   box-sizing: border-box;
-  left: 20%;
+  left: 15%;
   right: 0%;
   bottom: 1%;
   height: 8%;
@@ -71,7 +71,7 @@ aside{
   position: fixed;
   box-sizing: border-box;
   top:100px;
-  right: 80%;
+  right: 85%;
   left: 0%;
   bottom: 0%;
   box-shadow: 3px 3px 5px inset #838383;
@@ -82,13 +82,13 @@ aside{
 }
 
 #form{
-  width: 60%;
   background-color: #f0f0f0;
   font-size: 12px;
   font-family: Arial,sans-serif;
   position: fixed;
   top: 120px;
   right: 10%;
+  left:25%;
   box-shadow: 3px 3px 10px #838383;
 
   overflow-y: auto;
@@ -148,14 +148,13 @@ aside{
   position: fixed;
   top: 120px;
   right: 5%;
-  left: 25%;
+  left: 20%;
   bottom: 20px;
   background-color: rgb(255, 255, 255);
   box-shadow: 3px 3px 10px rgba(64, 77, 255, 0.486);
   padding: 20px;
   border: 2px solid rgba(64, 77, 255, 0.486);
   overflow-y: auto;
-
   font-family: STheiti;
   font-size: 80%;
 }
@@ -168,4 +167,8 @@ aside{
   bottom: 0px;
 
   background-color: rgba(128, 128, 128, 0.425);
+}
+textarea{
+  width: 100%;
+  resize: none;
 }

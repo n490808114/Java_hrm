@@ -352,7 +352,6 @@ function closePopUp(){
 
 }
 function openDetail(data){
-    var map = $.parseJSON(data);
     var oldDetail = document.getElementById("detail");
     if(oldDetail != null){
         oldDetail.remove();
@@ -363,14 +362,14 @@ function openDetail(data){
     body.appendChild(form);
     form.setAttribute("method","post");
     form.setAttribute("id","detail");
-    for(var b in map){
+    for(var b in data[0]){
         var label = document.createElement("label");
-        var text = document.createTextNode(map[0][b]+":");
+        var text = document.createTextNode(data[0][b]+":");
         label.appendChild(text);
 
         var textArea = document.createElement("textarea");
         textArea.setAttribute("name",b);
-        var textDetail = document.createTextNode(map[1][b]);
+        var textDetail = document.createTextNode(data[1][b]);
         textArea.appendChild(textDetail);
         if((b != "id") &&( b != "createDate") && (b != "user")){
             textArea.setAttribute("contenteditable","true");
@@ -396,6 +395,11 @@ function openDetail(data){
     form.appendChild(updateButton);
     form.appendChild(deleteButton);
     changeDetail();
+
+    //将textarea的高度设置成滚动条的高度从而自适应文本并取消滚动条
+    $.each($("textarea"), function(i, n){
+        $(n).css("height", n.scrollHeight + "px");
+    })
 }
 
 function changeDetail(){

@@ -1,13 +1,10 @@
 package xyz.n490808114.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PropertyFilter;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ValueFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,11 +15,9 @@ import xyz.n490808114.domain.User;
 import xyz.n490808114.service.HrmService;
 import xyz.n490808114.util.HrmConstants;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 public class NoticeController {
@@ -30,12 +25,20 @@ public class NoticeController {
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
 
+    /**
+     * 主页左侧aside默认获取第一页Notice
+     * @return 第一页的Notice
+     */
     @ResponseBody
     @RequestMapping(value = "/notice", produces = "application/json;charset=utf-8")
-    public String getLast10Notices() {
+    public String getNewestNotices() {
         return getNoticeList("1");
     }
 
+    /**
+     * 新建Notice可供前台填写的内容
+     * @return 可填写的内容String
+     */
     @RequestMapping(value = "/noticeCreate", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String noticeCreate() {
@@ -44,8 +47,35 @@ public class NoticeController {
         map.put("content", "公告内容");
         return JSON.toJSONString(map);
     }
+    /**
+     * 收到前台填写的内容，并获取客户的User,使用当前日期，Mysql中id是自动递增的,所以不指定id
+     * @param content 获取到的文本
+     * @param title 获取到的标题
+     * @param session 会话，从中获取客户的User
+     * @return 标题不为空，返回true,否则返回false
+     */
+    @RequestMapping(value = "/noticeCreate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String noticeCreate(@RequestParam("content") String content, @RequestParam("title") String title,
+            HttpSession session) {
+        Notice notice = new Notice();
+        notice.setTitle(title);
+        notice.setContent(content);
+        notice.setCreateDate(new Date());
+        notice.setUser((User) session.getAttribute(HrmConstants.USER_SESSION));
+        if (!"".equals(title.trim())) {
+            hrmService.addNotice(notice);
+            return JSON.toJSONString(true);
+        } else {
+            return JSON.toJSONString(false);
+        }
+    }
 
-
+    /**
+     * 获取单页数据
+     * @param page 获取第几页数据
+     * @return 单页Notice数据
+     */
     @RequestMapping(value = "/noticeList", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getNoticeList(@RequestParam("page") String page){
@@ -69,6 +99,12 @@ public class NoticeController {
         };
         return JSON.toJSONString(notices, filter);
     }
+
+    /**
+     * 获取指定id 的 Notice 的全部内容
+     * @param id 指定id
+     * @return 指定id 的 Notice 转换为JSON字符串
+     */
     @RequestMapping(value = "/noticeDetail", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getNoticeDetail(@RequestParam("id") String id){
@@ -88,23 +124,13 @@ public class NoticeController {
         return JSON.toJSONString(list, filter);
     }
 
-    @RequestMapping(value = "/noticeCreate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String noticeCreate(@RequestParam("content") String content, @RequestParam("title") String title,
-            HttpSession session) {
-        Notice notice = new Notice();
-        notice.setTitle(title);
-        notice.setContent(content);
-        notice.setCreateDate(new Date());
-        notice.setUser((User) session.getAttribute(HrmConstants.USER_SESSION));
-        if (!"".equals(title.trim())) {
-            hrmService.addNotice(notice);
-            return JSON.toJSONString(true);
-        } else {
-            return JSON.toJSONString(false);
-        }
-    }
 
+    /**
+     * 获取在详情Detail页修改后的所有内容，使用其中的id,title,content;使用当天的new Date();使用会话session中的用户User
+     * @param map 详情Detail页修改后的所有内容
+     * @param session 会话session,用于获取User
+     * @return 标题不为空，返回true,否则返回false
+     */
     @RequestMapping(value = "/noticeUpdate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String noticeUpdate(@RequestParam Map<String,String> map,HttpSession session){
@@ -121,9 +147,15 @@ public class NoticeController {
             return JSON.toJSONString(false);
         }
     }
+    
+    /**
+     * 获取在详情Detail页修改后的所有内容，使用其中的id去删除该项
+     * @param map 详情Detail页修改后的所有内容
+     * @return 提交删除指定,返回给前台true
+     */
     @RequestMapping(value = "/noticeDelete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String noticeDelete(@RequestParam Map<String,String> map,HttpSession session){
+    public String noticeDelete(@RequestParam Map<String,String> map){
         hrmService.removeNotice(Integer.parseInt(map.get("id")));
         return JSON.toJSONString(true);
     }
