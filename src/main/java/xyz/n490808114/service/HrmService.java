@@ -163,6 +163,8 @@ public interface HrmService {
      */
     List<Notice> findAllNotice();
 
+    List<Notice> getNoticeList();
+
     /**
      * 根据id查询公告
      * @param id
@@ -187,5 +189,7 @@ public interface HrmService {
      * @param notice
      */
     void modifyNotice(Notice notice);
+
+
 }
 

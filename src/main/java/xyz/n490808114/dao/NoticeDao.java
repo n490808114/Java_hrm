@@ -9,15 +9,25 @@ import java.util.List;
 public interface NoticeDao {
 
         @Select("SELECT * FROM notice_inf WHERE id = #{id}")
-        @Results(id = "noticeResult",value = { @Result(id = true, column = "id", property = "id"), @Result(column = "title", property = "title"),
-                        @Result(column = "content", property = "content"),
-                        @Result(column = "create_date", property = "createDate"),
-                        @Result(column = "user_id", property = "user", one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
+        @Results(id = "noticeResult",value = { @Result(id = true, column = "id", property = "id"), 
+                                                @Result(column = "title", property = "title"),
+                                                @Result(column = "content", property = "content"),
+                                                @Result(column = "create_date", property = "createDate"),
+                                                @Result(column = "user_id", property = "user", 
+                                                one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
         Notice selectById(int id);
 
         @Select("SELECT * FROM notice_inf")
         @ResultMap("noticeResult")
         List<Notice> selectAll();
+
+        @Select("SELECT id,title,create_date,user_id FROM notice_inf")
+        @Results(id = "noticeList",value = { @Result(id = true, column = "id", property = "id"), 
+                                                @Result(column = "title", property = "title"),
+                                                @Result(column = "create_date", property = "createDate"),
+                                                @Result(column = "user_id", property = "user", 
+                                                one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
+        List<Notice> getNoticeList();
 
         @Delete("DELETE FROM notice_inf WHERE id = #{id}")
         void deleteById(int id);

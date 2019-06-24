@@ -11,7 +11,7 @@ import xyz.n490808114.domain.*;
 import java.util.List;
 
 /**
- * 人事管理系统服务层接口实现类
+ * 锟斤拷锟铰癸拷锟斤拷系统锟斤拷锟斤拷锟接匡拷实锟斤拷锟斤拷
  */
 @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT)
 @Service("hrmServiceImpl")
@@ -177,6 +177,12 @@ public class HrmServiceImpl implements HrmService {
     @Override
     public List<Notice> findAllNotice(){
         return noticeDao.selectAll();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Notice> getNoticeList(){
+        return noticeDao.getNoticeList();
     }
 
     @Transactional(readOnly = true)

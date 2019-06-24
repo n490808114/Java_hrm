@@ -181,7 +181,7 @@ function setMainTable(json){
             td.appendChild(tdText);
             td.setAttribute("title",data[childData][tdData])
             td.setAttribute("name",tdData);
-            td.setAttribute("onclick","openDetail(getTdDetail(this))");
+            td.setAttribute("onclick","getDetail(this)");
         }
     }
 }
@@ -299,7 +299,7 @@ function openCreator(){
 function getTableWidthList(){
     var name = document.getElementById("main_title").getAttribute("name");
     if(name == "notice"){
-        return ["5%","10%","65%","10%","10%"];
+        return ["5%","65%","15%","15%"];
     }
 }
 function getTableTitleList(){
@@ -311,13 +311,22 @@ function getTableTitleList(){
     }
     return map;
 }
-function getTdDetail(point){
-    var childNodes = point.parentNode.childNodes;
-    var map = new Array;
-    for(var a=0;a<childNodes.length;a++){
-        map[childNodes[a].getAttribute("name")] = childNodes[a].firstChild.nodeValue;
-    }
-    return map;
+function getDetail(point){
+    var id = point.parentNode.firstChild.getAttribute("title");
+    var ajaxUrl = $("#main_title").attr("name")+"Detail";
+    $.ajax({
+        url:ajaxUrl,
+        asyns:false,
+        type:"GET",
+        data:{"id":id},
+        success:function(data){
+            openDetail(data);
+        },
+        error:function(){
+            alert("获取更多......失败");
+        },
+    });
+    return false;
 }
 
 //添加背景灰色遮挡
@@ -351,8 +360,6 @@ function openDetail(map){
     var body = document.getElementsByTagName("body")[0];
     var form = document.createElement("form");
     body.appendChild(form);
-    var ajaxUrl = document.getElementById("main_title").getAttribute("name")+"Change";
-    form.setAttribute("action",ajaxUrl);
     form.setAttribute("method","post");
     form.setAttribute("id","detail");
     var titleList = getTableTitleList();

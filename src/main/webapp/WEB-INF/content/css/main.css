@@ -54,16 +54,16 @@ main footer{
   border: 1%;
   box-sizing: border-box;
 
-  height: 30px;
-  width: 100px;
+  height: 50px;
+  width: 50px;
 
   color: #f0f0f0;
   font-size: 80%;
   font-family:'Courier New', Courier, monospace;
   background-color: #355282;
 
-  position:absolute;
-  top: 2%;
+  position:fixed;
+  bottom: 10%;
   right: 2%;
 }
 

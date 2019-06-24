@@ -1,5 +1,6 @@
 package xyz.n490808114.domain;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,7 +15,9 @@ public class TableTitle {
         noticeTitle.put("user","创建者");
     }
     public static Map<String, String> NoticeTitle(){
-        return noticeTitle;
+        HashMap<String,String> r = new HashMap<>();
+        r.putAll(noticeTitle);
+        return r;
 
     }
 }
