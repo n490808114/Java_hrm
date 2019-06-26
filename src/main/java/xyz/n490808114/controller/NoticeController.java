@@ -56,8 +56,11 @@ public class NoticeController {
         }
         session.setAttribute("pageSize", pageSize);
 
+        Map<String,Object> param = new HashMap<>();
+        param.put("pageNo",1);
+        param.put("pageSize",20);
 
-        List<Notice> noticeList = hrmService.getNoticeList("1","20");
+        List<Notice> noticeList = hrmService.getNoticeList(param);
         List<Object> notices = new ArrayList<>();
         Map<String,String> map = TableTitle.NoticeTitle();
         map.remove("content");

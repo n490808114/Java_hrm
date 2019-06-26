@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 import xyz.n490808114.domain.Notice;
 
-import java.util.List;
+import java.util.*;
 
 public interface NoticeDao {
 
@@ -27,7 +27,7 @@ public interface NoticeDao {
                                                 @Result(column = "create_date", property = "createDate"),
                                                 @Result(column = "user_id", property = "user", 
                                                 one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
-        List<Notice> getNoticeList(String pageNo,String pageSize);
+        List<Notice> getNoticeList(Map<String,Object> param);
 
         @Delete("DELETE FROM notice_inf WHERE id = #{id}")
         void deleteById(int id);

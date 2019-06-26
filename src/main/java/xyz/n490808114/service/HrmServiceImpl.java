@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.n490808114.dao.*;
 import xyz.n490808114.domain.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * ���¹���ϵͳ�����ӿ�ʵ����
@@ -179,10 +179,11 @@ public class HrmServiceImpl implements HrmService {
         return noticeDao.selectAll();
     }
 
+
     @Transactional(readOnly = true)
     @Override
-    public List<Notice> getNoticeList(String pageNo,String pageSizze){
-        return noticeDao.getNoticeList(pageNo,pageSizze);
+    public List<Notice> getNoticeList(Map<String,Object> param){
+        return noticeDao.getNoticeList(param);
     }
 
     @Transactional(readOnly = true)

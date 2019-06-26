@@ -3,7 +3,7 @@ package xyz.n490808114.service;
 
 import xyz.n490808114.domain.*;
 
-import java.util.List;
+import java.util.*;
 
 public interface HrmService {
     /**
@@ -163,7 +163,10 @@ public interface HrmService {
      */
     List<Notice> findAllNotice();
 
-    List<Notice> getNoticeList(String pageNo,String pageSize);
+    /**
+     * 需要提供key 为 pageNo 和 pageSize 的数据
+     */
+    List<Notice> getNoticeList(Map<String,Object> param);
 
     /**
      * 根据id查询公告
@@ -192,4 +195,3 @@ public interface HrmService {
 
 
 }
-
