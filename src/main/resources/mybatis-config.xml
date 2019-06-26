@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <configuration>
+        <settings>
+            <setting name="useGeneratedKeys" value="true"/>
+            <setting name="logImpl" value="LOG4J"/>
+        </settings>
+        <typeAliases>
+            <package name="xyz.n490808114.domain"/>
+        </typeAliases>
+        <environments default="mysql">
+            <environment id="mysql">
+                <transactionManager type="JDBC"/>
+                <dataSource type="POOLED">
+                    <property name="driver" value="${dataSource.driveClass}" />
+                    <property name="url" value="${dataSource.jdbcUrl}" />
+                    <property name="username" value="${dataSource.user}" />
+                    <property name="password" value="${dataSource.password}" />
+                </dataSource>
+            </environment>
+        </environments>
+        <mappers>
+            <package name="xyz.n490808114.dao"/>
+        </mappers>
+    </configuration>

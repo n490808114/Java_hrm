@@ -21,13 +21,13 @@ public interface NoticeDao {
         @ResultMap("noticeResult")
         List<Notice> selectAll();
 
-        @Select("SELECT id,title,create_date,user_id FROM notice_inf")
+        @SelectProvider(type = NoticeDynaSqlProvider.class,method = "getNoticeListByPageNoAndPageSize")
         @Results(id = "noticeList",value = { @Result(id = true, column = "id", property = "id"), 
                                                 @Result(column = "title", property = "title"),
                                                 @Result(column = "create_date", property = "createDate"),
                                                 @Result(column = "user_id", property = "user", 
                                                 one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
-        List<Notice> getNoticeList();
+        List<Notice> getNoticeList(String pageNo,String pageSize);
 
         @Delete("DELETE FROM notice_inf WHERE id = #{id}")
         void deleteById(int id);
@@ -39,4 +39,5 @@ public interface NoticeDao {
         @Update("UPDATE notice_inf SET title = #{title}," + "content = #{content}," + "create_date = #{createDate},"
                         + "user_id = #{user.id} " + "WHERE id = #{id}")
         void modify(Notice notice);
+
 }

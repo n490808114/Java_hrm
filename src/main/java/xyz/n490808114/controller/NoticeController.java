@@ -31,9 +31,53 @@ public class NoticeController {
      */
     @ResponseBody
     @RequestMapping(value = "/notice", produces = "application/json;charset=utf-8")
-    public String getNewestNotices() {
-        return getNoticeList("1");
+    public String getNewestNotices(HttpSession session) {
+        return getNoticeList("1","",session);
     }
+
+    /**
+     * 获取单页数据
+     * @param page 获取第几页数据
+     * @return 单页Notice数据
+     */
+    @RequestMapping(value = "/noticeList", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getNoticeList(@RequestParam("pageNo") String pageNo,@RequestParam("pageSize")String pageSize,HttpSession session){
+        
+        //如果没有指定pageSize,那么从session中获取pageSize,
+        //如果session没有pageSize,使用默认常数DEFAULT_PAGESIZE
+        //之后将pageSize存进session
+        if("".equals(pageSize)){
+            if(session.getAttribute("pageSize") == null){
+                pageSize = HrmConstants.DEFAULT_PAGESIZE;
+            }else{
+                pageSize =(String) session.getAttribute("pageSize");
+            }
+        }
+        session.setAttribute("pageSize", pageSize);
+
+
+        List<Notice> noticeList = hrmService.getNoticeList("1","20");
+        List<Object> notices = new ArrayList<>();
+        Map<String,String> map = TableTitle.NoticeTitle();
+        map.remove("content");
+        notices.add(map);
+        for(Notice notice:noticeList){
+            notices.add(notice);
+        }
+        ValueFilter filter = (Object o, String s, Object o1) -> {
+            if ("user".equals(s)) {
+                try {
+                    return ((User) o1).getUserName();
+                } catch (ClassCastException ex) {
+                    return o1;
+                }
+            }
+            return o1;
+        };
+        return JSON.toJSONString(notices, filter);
+    }
+
 
     /**
      * 新建Notice可供前台填写的内容
@@ -69,35 +113,6 @@ public class NoticeController {
         } else {
             return JSON.toJSONString(false);
         }
-    }
-
-    /**
-     * 获取单页数据
-     * @param page 获取第几页数据
-     * @return 单页Notice数据
-     */
-    @RequestMapping(value = "/noticeList", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String getNoticeList(@RequestParam("page") String page){
-        List<Notice> noticeList = hrmService.getNoticeList();
-        List<Object> notices = new ArrayList<>();
-        Map<String,String> map = TableTitle.NoticeTitle();
-        map.remove("content");
-        notices.add(map);
-        for(Notice notice:noticeList){
-            notices.add(notice);
-        }
-        ValueFilter filter = (Object o, String s, Object o1) -> {
-            if ("user".equals(s)) {
-                try {
-                    return ((User) o1).getUserName();
-                } catch (ClassCastException ex) {
-                    return o1;
-                }
-            }
-            return o1;
-        };
-        return JSON.toJSONString(notices, filter);
     }
 
     /**

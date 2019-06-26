@@ -163,7 +163,7 @@ public interface HrmService {
      */
     List<Notice> findAllNotice();
 
-    List<Notice> getNoticeList();
+    List<Notice> getNoticeList(String pageNo,String pageSize);
 
     /**
      * 根据id查询公告

@@ -181,8 +181,8 @@ public class HrmServiceImpl implements HrmService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Notice> getNoticeList(){
-        return noticeDao.getNoticeList();
+    public List<Notice> getNoticeList(String pageNo,String pageSizze){
+        return noticeDao.getNoticeList(pageNo,pageSizze);
     }
 
     @Transactional(readOnly = true)
