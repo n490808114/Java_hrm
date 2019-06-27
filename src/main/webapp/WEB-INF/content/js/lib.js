@@ -295,8 +295,8 @@ function setPageChooseBar(count,page_no,page_size){
         maxPageNo.appendChild(maxPageNoText);
         pageNoBar.appendChild(maxPageNo);
     }
-    $("#page_number_bar>a").click(function(){
-        $("main_title").attr("page_no",$(this).attr("value"));
+    $("#page_number_bar > a").click(function(){
+        pageNoBar.setAttribute("value",$(this).attr("value"));
         getMainList();
         
     });
@@ -310,7 +310,6 @@ function asideHref(point){
     $("#main_title").text(point.firstChild.nodeValue);
     var ajaxUrl = point.getAttribute("href");
     $("#main_title").attr("name",ajaxUrl);
-    $("#main_title").attr("page_no",1);
     return getMainList();
 }
 /**
@@ -326,11 +325,22 @@ function getMainList(){
     }else{
         page_size = pageSizeBar.value;
     }
-    var page_no = $("#main_title").attr("page_no");
+
+    var pageNoBar = document.getElementById("page_number_bar");
+    var page_no;
+    if(pageNoBar == null){
+        page_no = 1;
+    }else{
+        page_no = pageNoBar.getAttribute("value");
+        if(page_no == null){page_no = 1;}
+    }
+
+    var map = {pageNo:page_no,pageSize:page_size};
+
     $.ajax({
         url:$("#main_title").attr("name"),
         type:"get",
-        data:{"pageSize":page_size,"pageNo":page_no},
+        data:map,
         asyns:false,
         success:function(data){
             setMainTable(data);

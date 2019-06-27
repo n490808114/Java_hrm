@@ -32,23 +32,17 @@ public class NoticeController {
      */
     @RequestMapping(value = "/notice", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String getNoticeList(@RequestParam("pageNo") String pageNo,@RequestParam("pageSize")String pageSize,HttpSession session){
+    public String getNoticeList(@RequestParam("pageNo") String pageNo,@RequestParam("pageSize") String pageSize,HttpSession session){
         
         //如果没有指定pageSize,那么从session中获取pageSize,
         //如果session没有pageSize,使用默认常数DEFAULT_PAGESIZE
         //之后将pageSize存进session
-        if("".equals(pageSize)){
-            if(session.getAttribute("pageSize") == null){
-                pageSize = HrmConstants.DEFAULT_PAGESIZE;
-            }else{
-                pageSize =(String) session.getAttribute("pageSize");
-            }
-        }
-        session.setAttribute("pageSize", pageSize);
+        int pageSizeInt = Integer.parseInt(pageSize);
+        int pageNoInt = Integer.parseInt(pageNo);
 
         Map<String,Object> param = new HashMap<>();
-        param.put("pageNo",1);
-        param.put("pageSize",20);
+        param.put("pageNo",pageNoInt);
+        param.put("pageSize",pageSizeInt);
         List<Notice> noticeList = hrmService.getNoticeList(param);
 
         int noticesCount = hrmService.getNoticesCount();
@@ -64,8 +58,8 @@ public class NoticeController {
 
         Map<String,Object> json = new HashMap<>();
         json.put("count", noticesCount);
-        json.put("pageSize", pageSize);
-        json.put("pageNo", pageNo);
+        json.put("pageSize", pageSizeInt);
+        json.put("pageNo", pageNoInt);
         json.put("data", data);
 
         ValueFilter filter = (Object o, String s, Object o1) -> {
