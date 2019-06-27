@@ -179,6 +179,10 @@ public class HrmServiceImpl implements HrmService {
         return noticeDao.selectAll();
     }
 
+    @Override
+    public int getNoticesCount() {
+        return noticeDao.getNoticeCount();
+    }
 
     @Transactional(readOnly = true)
     @Override

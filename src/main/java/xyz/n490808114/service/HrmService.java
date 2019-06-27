@@ -157,12 +157,18 @@ public interface HrmService {
      */
     void modifyDocument(Document document);
 
+
     /**
      * 获取所有公告
      * @return Notice List
      */
     List<Notice> findAllNotice();
 
+    /**
+     * 获取Notice的条目数
+     * @return Notice的条目数
+     */
+    int getNoticesCount();
     /**
      * 需要提供key 为 pageNo 和 pageSize 的数据
      */

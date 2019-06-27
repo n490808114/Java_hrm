@@ -138,12 +138,11 @@ function stripeTables(){
     }
 }
 function setMainTable(json){
-    var data;
-    if(json instanceof String){
-        data = JSON.parse(json);
-    }else{
-        data = json;
-    }
+    var count = json.count;
+    var page_no = json.pageNo;
+    var page_size = json.pageSize;
+    var data = json.data;
+    
     var list = getTableWidthList();
     var button = document.getElementById("main-btn");
     var table = document.getElementById("main_table");
@@ -184,17 +183,154 @@ function setMainTable(json){
             td.setAttribute("onclick","getDetail(this)");
         }
     }
+
+    setPageChooseBar(count,parseInt(page_no),parseInt(page_size));
 }
+function setPageChooseBar(count,page_no,page_size){
+    
+    var pageChooseBar = document.getElementById("main_page_choose_bar");
+    var mainBtn = document.getElementById("main-btn");
+    if(pageChooseBar != null){
+        pageChooseBar.remove();
+    }
+    pageChooseBar = document.createElement("div");
+    mainBtn.parentNode.insertBefore(pageChooseBar,mainBtn);
+    pageChooseBar.setAttribute("id","main_page_choose_bar");
+
+    var countBar = document.createElement("div");
+    countBar.setAttribute("id","count_bar");
+    var pageNoBar= document.createElement("div");
+    pageNoBar.setAttribute("id","page_number_bar");
+
+    pageChooseBar.appendChild(countBar);
+    pageChooseBar.appendChild(pageNoBar);
+
+    //总条数bar
+    var countText0 = document.createTextNode("共"+count+"条,当前每页");
+    var pageSizeChooser = document.createElement("select");
+    pageSizeChooser.setAttribute("id","page_size");
+    var option10 = document.createElement("option");
+    option10.setAttribute("value","10");
+    var option10Text = document.createTextNode("10");
+    option10.appendChild(option10Text);
+    var option20 = document.createElement("option");
+    option20.setAttribute("value","20");
+    var option20Text = document.createTextNode("20");
+    option20.appendChild(option20Text);
+    var option30 = document.createElement("option");
+    option30.setAttribute("value","30");
+    var option30Text = document.createTextNode("30");
+    option30.appendChild(option30Text);
+    var option40 = document.createElement("option");
+    option40.setAttribute("value","40");
+    var option40Text = document.createTextNode("40");
+    option40.appendChild(option40Text);
+    var option50 = document.createElement("option");
+    option50.setAttribute("value","50");
+    var option50Text = document.createTextNode("50");
+    option50.appendChild(option50Text);
+    pageSizeChooser.appendChild(option10);
+    pageSizeChooser.appendChild(option20);
+    pageSizeChooser.appendChild(option30);
+    pageSizeChooser.appendChild(option40);
+    pageSizeChooser.appendChild(option50);
+    var countText1 = document.createTextNode("条");
+
+    countBar.appendChild(countText0);
+    countBar.appendChild(pageSizeChooser);
+    countBar.appendChild(countText1);
+    //设置每页条数
+    pageSizeChooser.value = page_size;
+
+    //页码bar
+    var max_page_no;
+    if(count % page_size == 0){
+        max_page_no = count / page_size;
+    }else{
+        max_page_no = (count-(count % page_size)) / page_size + 1;
+    }
+    var firstPageNo = document.createElement("a");
+    firstPageNo.setAttribute("value","1");
+    var firstPageNoText = document.createTextNode("首页");
+    firstPageNo.appendChild(firstPageNoText);
+
+    pageNoBar.appendChild(firstPageNo);
+    if(max_page_no >1){
+        for(var x=1;x<3;x++){
+            var left_page_no = page_no - x;
+            if(left_page_no <= 1){break;}
+            var leftPageNo = document.createElement("a");
+            leftPageNo.setAttribute("value",left_page_no);
+            var leftPageNoText = document.createTextNode(left_page_no);
+            leftPageNo.appendChild(leftPageNoText);
+            pageNoBar.appendChild(leftPageNo);
+        }
+        if((page_no - 3)>1){
+            var left_dots = document.createTextNode("...");
+            pageNoBar.appendChild(left_dots);
+        }
+        if(page_no != 1 && page_no != max_page_no){
+            var thisPageNo = document.createElement("a");
+            thisPageNo.setAttribute("value",page_no);
+            var thisPageNoText = document.createTextNode(page_no);
+            thisPageNo.appendChild(thisPageNoText);
+            pageNoBar.appendChild(thisPageNo);
+        }
+        for(var x=1;x<3;x++){
+            var right_page_no = page_no + x;
+            if(right_page_no >= max_page_no){break;}
+            var rightPageNo = document.createElement("a");
+            rightPageNo.setAttribute("value",right_page_no);
+            var rightPageNoText = document.createTextNode(right_page_no);
+            rightPageNo.appendChild(rightPageNoText);
+            pageNoBar.appendChild(rightPageNo);
+        }
+        if((page_no +3)<max_page_no){
+            var right_dots = document.createTextNode("...");
+            pageNoBar.appendChild(right_dots);
+        }    
+        var maxPageNo = document.createElement("a");
+        maxPageNo.setAttribute("value",max_page_no);
+        var maxPageNoText = document.createTextNode(max_page_no);
+        maxPageNo.appendChild(maxPageNoText);
+        pageNoBar.appendChild(maxPageNo);
+    }
+    $("#page_number_bar>a").click(function(){
+        $("main_title").attr("page_no",$(this).attr("value"));
+        getMainList();
+        
+    });
+}
+
+/**
+ * 从左侧点击各项，修改主标题，并调用获取列表的请求
+ * @param {左侧aside点击的链接} point 
+ */
 function asideHref(point){
     $("#main_title").text(point.firstChild.nodeValue);
     var ajaxUrl = point.getAttribute("href");
     $("#main_title").attr("name",ajaxUrl);
+    $("#main_title").attr("page_no",1);
     return getMainList();
 }
+/**
+ * 获取列表的请求，根据主标题的name判断调用哪一类
+ * 请求成功：调用创建main_table的函数
+ * 请求失败：alert提醒获取数据失败
+ */
 function getMainList(){
+    var pageSizeBar = document.getElementById("page_size");
+    var page_size;
+    if(pageSizeBar == null){
+        page_size = 20;
+    }else{
+        page_size = pageSizeBar.value;
+    }
+    var page_no = $("#main_title").attr("page_no");
     $.ajax({
         url:$("#main_title").attr("name"),
         type:"get",
+        data:{"pageSize":page_size,"pageNo":page_no},
         asyns:false,
         success:function(data){
             setMainTable(data);
@@ -205,6 +341,11 @@ function getMainList(){
     })
     return false;
 }
+
+/**
+ * 创建新增数据的窗口
+ * @param {*} data 
+ */
 function addCreateForm(data){
     if(data instanceof String){
         data = JSON.parse(data);

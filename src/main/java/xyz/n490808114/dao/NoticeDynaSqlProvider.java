@@ -11,7 +11,7 @@ public class NoticeDynaSqlProvider{
         
         return new SQL(){
             {
-                SELECT("*");
+                SELECT("id,title,create_date,user_id");
                 FROM("notice_inf");
                 WHERE("id>=(SELECT id FROM notice_inf LIMIT  "+start +",1)");
                 

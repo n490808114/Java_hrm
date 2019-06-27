@@ -26,21 +26,11 @@ public class NoticeController {
     private HrmService hrmService;
 
     /**
-     * 主页左侧aside默认获取第一页Notice
-     * @return 第一页的Notice
-     */
-    @ResponseBody
-    @RequestMapping(value = "/notice", produces = "application/json;charset=utf-8")
-    public String getNewestNotices(HttpSession session) {
-        return getNoticeList("1","",session);
-    }
-
-    /**
      * 获取单页数据
      * @param page 获取第几页数据
      * @return 单页Notice数据
      */
-    @RequestMapping(value = "/noticeList", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/notice", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getNoticeList(@RequestParam("pageNo") String pageNo,@RequestParam("pageSize")String pageSize,HttpSession session){
         
@@ -59,15 +49,25 @@ public class NoticeController {
         Map<String,Object> param = new HashMap<>();
         param.put("pageNo",1);
         param.put("pageSize",20);
-
         List<Notice> noticeList = hrmService.getNoticeList(param);
-        List<Object> notices = new ArrayList<>();
-        Map<String,String> map = TableTitle.NoticeTitle();
-        map.remove("content");
-        notices.add(map);
+
+        int noticesCount = hrmService.getNoticesCount();
+
+        Map<String,String> titleMap = TableTitle.NoticeTitle();
+        titleMap.remove("content");
+
+        List<Object> data = new ArrayList<>();
+        data.add(titleMap);
         for(Notice notice:noticeList){
-            notices.add(notice);
+            data.add(notice);
         }
+
+        Map<String,Object> json = new HashMap<>();
+        json.put("count", noticesCount);
+        json.put("pageSize", pageSize);
+        json.put("pageNo", pageNo);
+        json.put("data", data);
+
         ValueFilter filter = (Object o, String s, Object o1) -> {
             if ("user".equals(s)) {
                 try {
@@ -78,7 +78,7 @@ public class NoticeController {
             }
             return o1;
         };
-        return JSON.toJSONString(notices, filter);
+        return JSON.toJSONString(json, filter);
     }
 
 

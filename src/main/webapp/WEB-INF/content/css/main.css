@@ -172,3 +172,25 @@ textarea{
   width: 100%;
   resize: none;
 }
+
+#main_page_choose_bar div{
+  float:left;
+}
+#page_number_bar{
+  position:absolute;
+  margin:0 10px 0 0;
+  right:0%;
+}
+
+#page_number_bar a{
+  height: 23px;
+  margin: 0 5px;
+  padding: 1px 4px 1px 4px;
+  border: solid 1px #666;
+  font-weight: bold;
+  text-decoration: none;
+  overflow: hidden;
+  background-position: 0 -74px;
+  background-color:rgba(64, 77, 255, 0.486);
+  cursor: default;
+}

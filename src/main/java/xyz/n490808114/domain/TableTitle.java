@@ -11,8 +11,8 @@ public class TableTitle {
         noticeTitle.put("id","序号");
         noticeTitle.put("title","标题");
         noticeTitle.put("content","公告内容");
-        noticeTitle.put("createDate","创建日期");
-        noticeTitle.put("user","创建者");
+        noticeTitle.put("createDate","最后更改日期");
+        noticeTitle.put("user","创建人");
     }
     public static Map<String, String> NoticeTitle(){
         HashMap<String,String> r = new HashMap<>();

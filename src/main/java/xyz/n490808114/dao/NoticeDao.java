@@ -40,4 +40,7 @@ public interface NoticeDao {
                         + "user_id = #{user.id} " + "WHERE id = #{id}")
         void modify(Notice notice);
 
+        @Select("SELECT COUNT(id) from notice_inf")
+        int getNoticeCount();
+
 }
