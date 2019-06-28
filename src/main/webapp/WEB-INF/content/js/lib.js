@@ -256,18 +256,20 @@ function setPageChooseBar(count,page_no,page_size){
 
     pageNoBar.appendChild(firstPageNo);
     if(max_page_no >1){
-        for(var x=1;x<3;x++){
+        if((page_no - 3)>1){
+            var left_span = document.createElement("span");
+            var left_dots = document.createTextNode("...");
+            left_span.appendChild(left_dots);
+            pageNoBar.appendChild(left_span);
+        }
+        for(var x=2;x>0;x--){
             var left_page_no = page_no - x;
-            if(left_page_no <= 1){break;}
+            if(left_page_no <= 1){continue;}
             var leftPageNo = document.createElement("a");
             leftPageNo.setAttribute("value",left_page_no);
             var leftPageNoText = document.createTextNode(left_page_no);
             leftPageNo.appendChild(leftPageNoText);
             pageNoBar.appendChild(leftPageNo);
-        }
-        if((page_no - 3)>1){
-            var left_dots = document.createTextNode("...");
-            pageNoBar.appendChild(left_dots);
         }
         if(page_no != 1 && page_no != max_page_no){
             var thisPageNo = document.createElement("a");
@@ -286,14 +288,25 @@ function setPageChooseBar(count,page_no,page_size){
             pageNoBar.appendChild(rightPageNo);
         }
         if((page_no +3)<max_page_no){
+            var right_span = document.createElement("span");
             var right_dots = document.createTextNode("...");
-            pageNoBar.appendChild(right_dots);
+            right_span.appendChild(right_dots);
+            pageNoBar.appendChild(right_span);
         }    
         var maxPageNo = document.createElement("a");
         maxPageNo.setAttribute("value",max_page_no);
         var maxPageNoText = document.createTextNode(max_page_no);
         maxPageNo.appendChild(maxPageNoText);
         pageNoBar.appendChild(maxPageNo);
+    }
+
+    var list = pageNoBar.childNodes;
+    for(var x = 0;x<list.length;x++){
+        if(list[x].getAttribute("value") == page_no){
+            list[x].style.backgroundColor = "white";
+            list[x].style.color = "rgba(64, 77, 255, 0.486)";
+            break;
+        }
     }
     $("#page_number_bar > a").click(function(){
         pageNoBar.setAttribute("value",$(this).attr("value"));
