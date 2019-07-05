@@ -67,4 +67,17 @@ public class EmployeeDynaSqlProvider {
             }
         }.toString();
     }
+    public String getEmployeeListByPageNoAndPageSize(Map<String,Object> param){
+        int pageSize = (Integer) param.get("pageSize");
+        int start =pageSize * ((Integer) param.get("pageNo") - 1);
+        
+        return new SQL(){
+            {
+                SELECT("id,name,dept_id,job_id,phone");
+                FROM("employee_inf");
+                WHERE("id>=(SELECT id FROM notice_inf LIMIT  "+start +",1)");
+                
+            }
+        }.toString() + " limit " + pageSize;
+    }
 }

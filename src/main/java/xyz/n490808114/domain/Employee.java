@@ -17,7 +17,7 @@ public class Employee implements Serializable {
     private String phone;
     private String qqNum;
     private String email;
-    private int sex;
+    private Integer sex;
     private String party;
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private Date birthday;
@@ -28,7 +28,6 @@ public class Employee implements Serializable {
     private String remark;
     private Date createDate;
     public Employee(){
-        createDate = new Date();
     }
     public Employee(int id,Dept dept,Job job,String name,String cardId,String address,String postCode,String tel,
                     String phone,String qqNum, String email,int sex,String party,Date birthday,String race,
@@ -120,9 +119,6 @@ public class Employee implements Serializable {
         this.hobby = hobby;
     }
 
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
 
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
@@ -156,9 +152,6 @@ public class Employee implements Serializable {
         return remark;
     }
 
-    public int getSex() {
-        return sex;
-    }
 
     public String getAddress() {
         return address;
@@ -214,6 +207,18 @@ public class Employee implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+    /**
+     * @param sex the sex to set
+     */
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+    /**
+     * @return the sex
+     */
+    public Integer getSex() {
+        return sex;
     }
 
     @Override

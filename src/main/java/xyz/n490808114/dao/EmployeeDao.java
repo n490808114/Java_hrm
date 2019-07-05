@@ -27,21 +27,27 @@ public interface EmployeeDao {
         void modify(Employee employee);
 
         @Select("SELECT * FROM employee_inf WHERE id = #{id}")
-        @Results(id = "employeeResult",value = {@Result(id = true, column = "id", property = "id"), @Result(column = "name", property = "name"),
+        @Results(id = "employeeResult",value = {
+                        @Result(id = true, column = "id", property = "id"), 
+                        @Result(column = "name", property = "name"),
                         @Result(column = "card_id", property = "cardId"),
                         @Result(column = "address", property = "address"),
-                        @Result(column = "post_code", property = "postCode"), @Result(column = "tel", property = "tel"),
-                        @Result(column = "phone", property = "phone"), @Result(column = "qq_num", property = "qqNum"),
-                        @Result(column = "email", property = "email"), @Result(column = "sex", property = "sex"),
+                        @Result(column = "post_code", property = "postCode"), 
+                        @Result(column = "tel", property = "tel"),
+                        @Result(column = "phone", property = "phone"), 
+                        @Result(column = "qq_num", property = "qqNum"),
+                        @Result(column = "email", property = "email"), 
+                        @Result(column = "sex", property = "sex"),
                         @Result(column = "party", property = "party"),
                         @Result(column = "birthday", property = "birthday"),
                         @Result(column = "race", property = "race"),
                         @Result(column = "education", property = "education"),
                         @Result(column = "speciality", property = "speciality"),
-                        @Result(column = "hobby", property = "hobby"), @Result(column = "remark", property = "remark"),
+                        @Result(column = "hobby", property = "hobby"), 
+                        @Result(column = "remark", property = "remark"),
                         @Result(column = "create_date", property = "createDate"),
-                        @Result(column = "dept_id", property = "dept", one = @One(select = "xyz.n490808114.dao.DeptDao.selectDeptById", fetchType = FetchType.EAGER)),
-                        @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.dao.JobDao.selectJobById", fetchType = FetchType.EAGER)) })
+                        @Result(column = "dept_id", property = "dept", one = @One(select = "xyz.n490808114.dao.DeptDao.selectById", fetchType = FetchType.EAGER)),
+                        @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.dao.JobDao.selectById", fetchType = FetchType.EAGER)) })
         Employee selectById(int id);
 
         @Select("SELECT * FROM employee_inf")
@@ -58,4 +64,18 @@ public interface EmployeeDao {
         @SelectProvider(type = EmployeeDynaSqlProvider.class, method = "selectWithParam")
         @ResultMap("employeeResult")
         List<Employee> selectEmployeesWithParam(Map<String, Object> param);
+
+        @SelectProvider(type = EmployeeDynaSqlProvider.class,method = "getEmployeeListByPageNoAndPageSize")
+        @Results(id="employeeList",value = {
+                @Result(id=true,column = "id",property = "id"),
+                @Result(column = "name", property = "name"),
+                @Result(column = "dept_id", property = "dept", one = @One(select = "xyz.n490808114.dao.DeptDao.selectById", fetchType = FetchType.EAGER)),
+                @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.dao.JobDao.selectById", fetchType = FetchType.EAGER)),
+                @Result(column = "phone", property = "phone")
+        })
+        List<Employee> selectEmployeeListWithParam(Map<String,Object> param);
+
+        @Select("SELECT COUNT(id) FROM employee_inf")
+        int getCount();
+
 }

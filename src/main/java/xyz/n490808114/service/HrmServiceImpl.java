@@ -65,6 +65,15 @@ public class HrmServiceImpl implements HrmService {
         return employeeDao.selectById(id);
     }
 
+    @Override
+    public List<Employee> getEmployeeList(Map<String,Object> param){
+        return employeeDao.selectEmployeeListWithParam(param);
+    }
+
+    @Override
+    public int getEmployeeCount() {
+        return employeeDao.getCount();
+    }
 
     @Override
     public void removeEmployeeById(int id){
@@ -181,7 +190,7 @@ public class HrmServiceImpl implements HrmService {
 
     @Override
     public int getNoticesCount() {
-        return noticeDao.getNoticeCount();
+        return noticeDao.getCount();
     }
 
     @Transactional(readOnly = true)

@@ -6,7 +6,7 @@ header{
   height: 100px;
   width: 100%;
 
-  background-color: rgba(64, 77, 255, 0.486);
+  background-color: rgba(0, 76, 255, 0.575);
 }
 header h1{
   font-size: 40px;
@@ -45,12 +45,12 @@ main footer{
   box-sizing: border-box;
   top:5px;
   width:100%;
-  border:solid 1px rgba(64, 77, 255, 0.486);
+  border:solid 1px rgba(0, 78, 255, 0.65);
   padding:5px 5px 0px 5px;
 
  
 }
-#main-btn{
+#main_btn{
   margin: 0px;
   border: 1%;
   box-sizing: border-box;
@@ -81,18 +81,49 @@ aside{
 
   background-color: rgba(145, 145, 145, 0.466);
 }
+ul{
+  padding:0px 0px 0px 0px;
+  text-align:center;
+}
+li{
+  list-style-type:none;
+  margin:10px 0px 10px 0px;
+}
+
+a{
+  padding:2px 2px 2px 2px;
+}
+a:link{
+  color:rgb(0, 76, 255);
+  border:2px solid rgb(0, 76, 255);
+  text-decoration:none;
+}
+a:visited{
+  color:rgb(0, 76, 255);
+  border:2px solid rgb(0, 76, 255);
+  text-decoration:none;
+}
+a:hover{
+  color:rgba(0, 76, 255, 0.37);
+  border:2px solid rgba(0, 76, 255, 0.575);
+  text-decoration:none;
+}
+a:active{
+  color:rgb(0, 76, 255);
+  text-decoration:none;
+}
 
 #form{
   background-color: #f0f0f0;
   font-size: 12px;
   font-family: Arial,sans-serif;
   position: fixed;
-  top: 120px;
+  top:50px;
   right: 10%;
-  left:25%;
+  left:10%;
+  bottom:10px;
+  overflow-y:scroll;
   box-shadow: 3px 3px 10px #838383;
-
-  overflow-y: auto;
 }
 #form h1{
     font-size: 20px;
@@ -140,25 +171,23 @@ aside{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: 1px solid rgba(64, 77, 255, 0.486);
+  border: 1px solid rgba(0, 78, 255, 0.65);
 }
 #main_table>tr>th{
-  background-color: rgba(64, 77, 255, 0.486);
+  background-color: rgba(0, 78, 255, 0.65);
 }
 #detail{
-  position: relative;
-  top: 120px;
-  left:10%;
-  width:80%;
-  background-color: rgb(255, 255, 255);
-  box-shadow: 3px 3px 10px rgba(64, 77, 255, 0.486);
-  padding: 20px;
-  border: 2px solid rgba(64, 77, 255, 0.486);
-  overflow-y: auto;
-
-  background-color: #f0f0f0;
+  background-color: #e2e2e2;
   font-size: 12px;
   font-family: Arial,sans-serif;
+  position: fixed;
+  top:50px;
+  right: 10%;
+  left:10%;
+  bottom:10px;
+  overflow-y:scroll;
+  padding:20px;
+  box-shadow: 3px 3px 10px #838383;
 }
 
 #divCover{
@@ -174,6 +203,7 @@ aside{
 textarea{
   width: 100%;
   resize: none;
+  border:0px;
 }
 
 #main_page_choose_bar div{
@@ -195,6 +225,6 @@ textarea{
   text-decoration: none;
   overflow: hidden;
   background-position: 0 -74px;
-  background-color:rgba(64, 77, 255, 0.486);
+  background-color:rgba(0, 78, 255, 0.65);
   cursor: default;
 }

@@ -59,6 +59,18 @@ public interface HrmService {
     void addEmployee(Employee employee);
 
     /**
+     * 获得员工列表
+     * @return employeeList
+     */
+    List<Employee> getEmployeeList(Map<String,Object> param);
+
+    /**
+     * 获得Employee总数
+     * @return 总数
+     */
+    int getEmployeeCount();
+
+    /**
      * 修改员工
      * @param employee
      */

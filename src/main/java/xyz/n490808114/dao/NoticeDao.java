@@ -41,6 +41,6 @@ public interface NoticeDao {
         void modify(Notice notice);
 
         @Select("SELECT COUNT(id) from notice_inf")
-        int getNoticeCount();
+        int getCount();
 
 }
