@@ -77,6 +77,11 @@ public interface HrmService {
     void modifyEmployee(Employee employee);
 
     /**
+     * 根据Map修改员工,确定包含id
+     * @param param
+     */
+    void modifyEmployee(Map<String,String> param);
+    /**
      * 获取所有部门
      * @return Dept List
      */
@@ -89,6 +94,12 @@ public interface HrmService {
      */
     Dept findDeptById(int id);
 
+    /**
+     * 根据名字查询部门
+     * @param name
+     * @return
+     */
+    Dept findDeptByName(String name);
     /**
      * 根据id删除部门
      * @param id
@@ -120,6 +131,12 @@ public interface HrmService {
      */
     Job findJobById(int id);
 
+    /**
+     * 根据name查询职位
+     * @param name
+     * @return
+     */
+    Job findJobByName(String name);
     /**
      * 添加职位
      * @param job

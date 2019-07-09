@@ -17,6 +17,9 @@ public interface JobDao {
         @ResultMap("jobResult")
         Job selectById(int id);
 
+        @Select("SELECT * FROM job_inf WHERE name = #{name}")
+        Job selectByName(String name);
+
         @Insert("INSERT INTO job_inf(id,name,remark) VALUES(#{id},#{name},#{remark})")
         void save(Job job);
 

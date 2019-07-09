@@ -76,7 +76,6 @@ public class TableTitle {
         employeeCreateTitle.put("speciality","特长");
         employeeCreateTitle.put("hobby","爱好");
         employeeCreateTitle.put("remark","备注");
-    
     }
     public static Map<String, String> noticeTitle(){return noticeTitle;}
     public static Map<String,String> noticeListTitle(){return noticeListTitle;}

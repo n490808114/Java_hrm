@@ -19,7 +19,7 @@ import xyz.n490808114.service.HrmService;
 class EmployeeController {
     @Autowired
     @Qualifier("hrmServiceImpl")
-    HrmService HrmService;
+    HrmService hrmService;
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -31,11 +31,11 @@ class EmployeeController {
         param.put("pageSize", Integer.parseInt(pageSizeString));
 
         Map<String, Object> json = new HashMap<>();
-        json.put("count", HrmService.getEmployeeCount());
+        json.put("count", hrmService.getEmployeeCount());
         json.put("pageNo", pageNoString);
         json.put("pageSize", pageSizeString);
         json.put("title", TableTitle.employeeListTitle());
-        json.put("data", HrmService.getEmployeeList(param));
+        json.put("data", hrmService.getEmployeeList(param));
 
         ValueFilter filter = (Object object, String name, Object value) -> {
             if ("dept".equals(name)) {
@@ -62,7 +62,7 @@ class EmployeeController {
     public String getDetail(@RequestParam("id") String id){
         List<Object> list = new LinkedList<>();
         list.add(TableTitle.employeeTitle());
-        list.add(HrmService.findEmployeeById(Integer.parseInt(id)));
+        list.add(hrmService.findEmployeeById(Integer.parseInt(id)));
         ValueFilter filter = (Object object, String name, Object value) -> {
             if ("dept".equals(name)) {
                 try {
@@ -96,7 +96,9 @@ class EmployeeController {
     @RequestMapping(value = "/employeeUpdate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String update(@RequestParam Map<String,String> map){
-        return "";
+        if(map.get("name") == null){return "false";}
+        hrmService.modifyEmployee(map);
+        return "true";
     }
 
 }

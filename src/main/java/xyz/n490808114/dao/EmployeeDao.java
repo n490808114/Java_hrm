@@ -19,12 +19,15 @@ public interface EmployeeDao {
         int deleteById(@Param("id") int id);
 
         @Update("UPDATE employee_inf SET dept_id = #{dept.id}," + "job_id = #{job.id}," + "name = #{name},"
-                        + "card_id = #{cardId}," + "address = #{address}," + "post_code = #{postCard},"
+                        + "card_id = #{cardId}," + "address = #{address}," + "post_code = #{postCode},"
                         + "tel = #{tel}," + "phone = #{phone}," + "qq_num = #{qqNum}," + "email = #{email},"
                         + "sex = #{sex}," + "party = #{party}," + "birthday = #{birthday}," + "race = #{race},"
                         + "education = #{education}," + "speciality = #{speciality}," + "hobby = #{hobby},"
                         + "remark = #{remark}," + "create_date = #{createDate} " + "WHERE id = #{id}")
         void modify(Employee employee);
+
+        @UpdateProvider(type = EmployeeDynaSqlProvider.class,method = "modify")
+        void modify(Map<String,String> param);
 
         @Select("SELECT * FROM employee_inf WHERE id = #{id}")
         @Results(id = "employeeResult",value = {

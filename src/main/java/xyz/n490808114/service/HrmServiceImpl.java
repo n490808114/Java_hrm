@@ -91,6 +91,10 @@ public class HrmServiceImpl implements HrmService {
     public void modifyEmployee(Employee employee){
         employeeDao.modify(employee);
     }
+    @Override
+    public void modifyEmployee(Map<String, String> param) {
+        employeeDao.modify(param);
+    }
 
     @Transactional(readOnly = true)
     @Override
@@ -103,7 +107,10 @@ public class HrmServiceImpl implements HrmService {
     public Dept findDeptById(int id){
         return deptDao.selectById(id);
     }
-
+    @Override
+    public Dept findDeptByName(String name){
+        return deptDao.selectByName(name);
+    }
 
     @Override
     public void removeDeptById(int id){
@@ -133,7 +140,10 @@ public class HrmServiceImpl implements HrmService {
     public Job findJobById(int id){
         return jobDao.selectById(id);
     }
-
+    @Override
+    public Job findJobByName(String name){
+        return jobDao.selectByName(name);
+    }
 
     @Override
     public void addJob(Job job){

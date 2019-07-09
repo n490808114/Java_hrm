@@ -18,6 +18,9 @@ public interface DeptDao {
         @ResultMap("deptResult")
         Dept selectById(int id);
 
+        @Select("SELECT * FROM dept_inf WHERE name =#{name}")
+        Dept selectByName(String name);
+
         @Delete("DELETE FROM dept_inf WHERE id = #{id}")
         void deleteById(int id);
 
