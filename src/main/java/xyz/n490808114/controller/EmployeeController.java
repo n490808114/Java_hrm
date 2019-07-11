@@ -76,10 +76,20 @@ class EmployeeController {
                 } catch (ClassCastException ex) {
                     return value;
                 }
-            }else if("createDate".equals(name)){
+            }else if("createDate".equals(name) || "birthday".equals(name)){
                 try{
-                    return new SimpleDateFormat("YYYY-MM-DD").format((Timestamp) value);
+                    return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
                 }catch(ClassCastException ex){
+                    return value;
+                }
+            }else if("sex".equals(name)){
+                try{
+                    int a = Integer.parseInt("" + value);
+                    for(Sex s : Sex.values()){
+                        if(s.getIndex() == a ){return s.getData();}
+                    }
+                    return Sex.UNKNOW.getData();
+                }catch(NumberFormatException ex){
                     return value;
                 }
             }

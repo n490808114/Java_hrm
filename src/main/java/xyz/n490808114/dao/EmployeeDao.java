@@ -27,7 +27,7 @@ public interface EmployeeDao {
         void modify(Employee employee);
 
         @UpdateProvider(type = EmployeeDynaSqlProvider.class,method = "modify")
-        void modify(Map<String,String> param);
+        void modifyByParam(Map<String,String> param);
 
         @Select("SELECT * FROM employee_inf WHERE id = #{id}")
         @Results(id = "employeeResult",value = {

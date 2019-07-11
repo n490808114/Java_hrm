@@ -62,7 +62,7 @@ public class NoticeController {
                 }
             }else if("createDate".equals(name)){
                 try{
-                    return new SimpleDateFormat("YYYY-MM-DD").format((Date) value);
+                    return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
                 }catch(ClassCastException ex){
                     return value;
                 }
@@ -129,7 +129,7 @@ public class NoticeController {
                 }
             }else if("createDate".equals(name)){
                 try{
-                    return new SimpleDateFormat("YYYY-MM-DD").format((Date) value);
+                    return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
                 }catch(ClassCastException ex){
                     return value;
                 }

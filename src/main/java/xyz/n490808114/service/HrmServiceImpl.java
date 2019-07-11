@@ -93,7 +93,7 @@ public class HrmServiceImpl implements HrmService {
     }
     @Override
     public void modifyEmployee(Map<String, String> param) {
-        employeeDao.modify(param);
+        employeeDao.modifyByParam(param);
     }
 
     @Transactional(readOnly = true)
