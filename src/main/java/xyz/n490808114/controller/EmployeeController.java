@@ -1,6 +1,5 @@
 package xyz.n490808114.controller;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -17,10 +16,39 @@ import xyz.n490808114.service.HrmService;
 
 @Controller
 class EmployeeController {
-    @Autowired
-    @Qualifier("hrmServiceImpl")
     HrmService hrmService;
 
+    private static List<String> deptList = new ArrayList<>(10);
+    private static List<String> jobList = new ArrayList<>(10);
+
+    @Autowired
+    EmployeeController(@Qualifier("hrmServiceImpl") HrmService hrmService){
+        this.hrmService = hrmService;
+        
+        List<Dept> depts = hrmService.findAllDept();
+        for(Dept dept : depts){
+            while(true){
+                try{
+                    deptList.set(dept.getId(), dept.getName());
+                    break;
+                }catch(Exception ex){
+                    deptList.add("");
+                }
+            }
+            
+        }
+        List<Job> jobs = hrmService.findAllJob();
+        for(Job job : jobs){
+            while(true){
+                try{
+                    jobList.set(job.getId(),job.getName());
+                    break;
+                }catch(Exception ex){
+                    deptList.add("");
+                }
+            }
+        }
+    }
     @RequestMapping(value = "/employee", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getList(@RequestParam("pageNo") String pageNoString,
@@ -78,6 +106,7 @@ class EmployeeController {
                 }
             }else if("createDate".equals(name) || "birthday".equals(name)){
                 try{
+                    if(value == null){throw new ClassCastException();}
                     return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
                 }catch(ClassCastException ex){
                     return value;
@@ -101,7 +130,12 @@ class EmployeeController {
     @RequestMapping(value = "/employeeCreate",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String create(){
-        return JSON.toJSONString(TableTitle.employeeCreateTitle());
+        Map<String, Object> json = new LinkedHashMap<>();
+        json.putAll(TableTitle.employeeCreateTitle());
+        json.put("sexData", TableTitle.sexList());
+        json.put("deptData",deptList);
+        json.put("jobData",jobList);
+        return JSON.toJSONString(json);
     }
     @RequestMapping(value = "/employeeUpdate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody

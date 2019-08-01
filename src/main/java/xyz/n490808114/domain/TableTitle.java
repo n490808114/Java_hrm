@@ -1,9 +1,6 @@
 package xyz.n490808114.domain;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import java.util.*;
 public class TableTitle {
 
     private static final Map<String,String> noticeTitle = new LinkedHashMap<>();
@@ -13,6 +10,8 @@ public class TableTitle {
     private static final Map<String,String> employeeTitle = new LinkedHashMap<>();
     private static final Map<String,String> employeeListTitle = new LinkedHashMap<>();
     private static final Map<String,String> employeeCreateTitle = new LinkedHashMap<>();
+    private static final List<String> sexList = new ArrayList<>();
+    
 
     static {
         noticeTitle.put("id","序号");
@@ -76,6 +75,10 @@ public class TableTitle {
         employeeCreateTitle.put("speciality","特长");
         employeeCreateTitle.put("hobby","爱好");
         employeeCreateTitle.put("remark","备注");
+
+        sexList.add("女");
+        sexList.add( "男");
+        sexList.add("未知");
     }
     public static Map<String, String> noticeTitle(){return noticeTitle;}
     public static Map<String,String> noticeListTitle(){return noticeListTitle;}
@@ -84,4 +87,5 @@ public class TableTitle {
     public static Map<String,String> employeeTitle(){return employeeTitle;}
     public static Map<String,String> employeeListTitle(){return employeeListTitle;}
     public static Map<String,String> employeeCreateTitle(){return employeeCreateTitle;}
+    public static List<String> sexList(){return sexList;}
 }
