@@ -408,7 +408,21 @@ function addCreateForm(data) {
     form.appendChild(fieldset);
     for (var x in data) {
         var p = document.createElement("p");
-        var input = document.createElement("input");
+        var input;
+        if(x.includes("Data")){continue;}
+        if(data[x+"Data"] != undefined){
+            input = document.createElement("select");
+            xData = data[x+"Data"];
+            for(var y in xData){
+                var option = document.createElement("option");
+                var yText = document.createTextNode(xData[y]);
+                option.appendChild(yText);
+                option.setAttribute("value",y);
+                input.appendChild(option);
+            }
+        }else{
+            input = document.createElement("input");
+        }
         if (x == "content") {
             input = document.createElement("textarea");
         } else if (x == "email") {
@@ -558,6 +572,7 @@ function openDetail(data) {
         p2.appendChild(textArea);
         form.appendChild(p1);
         form.appendChild(p2);
+        textArea.style.height= textArea.scrollHeight+"px";
     }
     var updateButton = document.createElement("input");
     updateButton.setAttribute("id", "detailUpdate");
@@ -571,11 +586,6 @@ function openDetail(data) {
     form.appendChild(updateButton);
     form.appendChild(deleteButton);
     changeDetail();
-
-    //将textarea的高度设置成滚动条的高度从而自适应文本并取消滚动条
-    $.each($("#detail textarea"), function (i, n) {
-        $(n).css("height", n.scrollHeight + "px");
-    })
 }
 
 function changeDetail() {

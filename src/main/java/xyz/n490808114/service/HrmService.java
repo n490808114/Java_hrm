@@ -58,6 +58,8 @@ public interface HrmService {
      */
     void addEmployee(Employee employee);
 
+    void addEmployee(Map<String,String> param);
+
     /**
      * 获得员工列表
      * @return employeeList

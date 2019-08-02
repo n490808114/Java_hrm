@@ -86,6 +86,10 @@ public class HrmServiceImpl implements HrmService {
         employeeDao.save(employee);
     }
 
+    public void addEmployee(Map<String,String> param){
+        employeeDao.insert(param);
+    }
+
 
     @Override
     public void modifyEmployee(Employee employee){

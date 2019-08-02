@@ -3,7 +3,7 @@ package xyz.n490808114.domain;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 public class Employee implements Serializable {
     private int id;
@@ -27,6 +27,29 @@ public class Employee implements Serializable {
     private String hobby;
     private String remark;
     private Date createDate;
+    private static Map<String,String> sqlMapping = new HashMap<>();
+    static{
+        sqlMapping.put("id", "id");
+        sqlMapping.put("dept", "dept_id");
+        sqlMapping.put("job", "job_id");
+        sqlMapping.put("name", "name");
+        sqlMapping.put("cardId", "card_id");
+        sqlMapping.put("address", "address");
+        sqlMapping.put("postCode", "post_code");
+        sqlMapping.put("tel", "tel");
+        sqlMapping.put("phone", "phone");
+        sqlMapping.put("qqNum", "qq_num");
+        sqlMapping.put("email", "email");
+        sqlMapping.put("sex", "sex");
+        sqlMapping.put("party", "party");
+        sqlMapping.put("birthday", "birthday");
+        sqlMapping.put("race", "race");
+        sqlMapping.put("education", "education");
+        sqlMapping.put("speciality", "speciality");
+        sqlMapping.put("hobby", "hobby");
+        sqlMapping.put("remark", "remark");
+        sqlMapping.put("createDate", "create_date");
+    }
     public Employee(){
     }
     public Employee(int id,Dept dept,Job job,String name,String cardId,String address,String postCode,String tel,
@@ -52,7 +75,6 @@ public class Employee implements Serializable {
         this.hobby=hobby;
         this.remark=remark;
         this.createDate=createDate;
-
     }
 
     public void setName(String name) {
@@ -126,6 +148,13 @@ public class Employee implements Serializable {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    /**
+     * @param sqlMapping the sqlMapping to set
+     */
+    public static void setSqlMapping(Map<String, String> sqlMapping) {
+        Employee.sqlMapping = sqlMapping;
     }
 
     public String getName() {
@@ -220,6 +249,12 @@ public class Employee implements Serializable {
     public Integer getSex() {
         return sex;
     }
+    /**
+     * @return the sqlMapping
+     */
+    public static Map<String, String> getSqlMapping() {
+        return sqlMapping;
+    }
 
     @Override
     public String toString() {
@@ -244,4 +279,5 @@ public class Employee implements Serializable {
                 ",remark="+remark+
                 ",createDate="+createDate +"]";
     }
+
 }

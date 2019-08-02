@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.ValueFilter;
+import com.alibaba.fastjson.serializer.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,39 +16,14 @@ import xyz.n490808114.service.HrmService;
 
 @Controller
 class EmployeeController {
+    @Autowired
+    @Qualifier("hrmServiceImpl")
     HrmService hrmService;
 
-    private static List<String> deptList = new ArrayList<>(10);
-    private static List<String> jobList = new ArrayList<>(10);
+    private static Map<String,String> deptMap = new HashMap<>();
+    private static Map<String,String> jobMap = new HashMap<>();
+    private static Boolean isLoadedMaps = false;
 
-    @Autowired
-    EmployeeController(@Qualifier("hrmServiceImpl") HrmService hrmService){
-        this.hrmService = hrmService;
-        
-        List<Dept> depts = hrmService.findAllDept();
-        for(Dept dept : depts){
-            while(true){
-                try{
-                    deptList.set(dept.getId(), dept.getName());
-                    break;
-                }catch(Exception ex){
-                    deptList.add("");
-                }
-            }
-            
-        }
-        List<Job> jobs = hrmService.findAllJob();
-        for(Job job : jobs){
-            while(true){
-                try{
-                    jobList.set(job.getId(),job.getName());
-                    break;
-                }catch(Exception ex){
-                    deptList.add("");
-                }
-            }
-        }
-    }
     @RequestMapping(value = "/employee", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getList(@RequestParam("pageNo") String pageNoString,
@@ -130,13 +105,41 @@ class EmployeeController {
     @RequestMapping(value = "/employeeCreate",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String create(){
+        if(isLoadedMaps == false){
+            synchronized(isLoadedMaps){
+                if(isLoadedMaps == false){
+                    synchronized(EmployeeController.class){
+                        load();
+                    }
+                    isLoadedMaps = true;
+                }
+            }
+        }
         Map<String, Object> json = new LinkedHashMap<>();
         json.putAll(TableTitle.employeeCreateTitle());
         json.put("sexData", TableTitle.sexList());
-        json.put("deptData",deptList);
-        json.put("jobData",jobList);
-        return JSON.toJSONString(json);
+        json.put("deptData",deptMap);
+        json.put("jobData",jobMap);
+        PropertyFilter filter = (Object object, String name, Object value) ->{
+            if("".equals(value)){
+                try{
+                    ((Map<String,String>) object).remove(Integer.parseInt(name));
+                }catch(ClassCastException ex){
+                    return false;
+                }
+            }
+            return true;
+        };
+        return JSON.toJSONString(json,filter);
     }
+
+    @RequestMapping(value = "/employeeCreate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String create(@RequestParam Map<String,String> map){
+        hrmService.addEmployee(map);
+        return "true";
+    }
+
     @RequestMapping(value = "/employeeUpdate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String update(@RequestParam Map<String,String> map){
@@ -145,4 +148,26 @@ class EmployeeController {
         return "true";
     }
 
+
+    public void load(){
+        List<Dept> depts = hrmService.findAllDept();
+        for(Dept dept : depts){
+            while(true){
+                try{
+                    deptMap.put(""+dept.getId(), dept.getName());
+                    break;
+                }catch(Exception ex){}
+            }
+            
+        }
+        List<Job> jobs = hrmService.findAllJob();
+        for(Job job : jobs){
+            while(true){
+                try{
+                    jobMap.put(""+job.getId(),job.getName());
+                    break;
+                }catch(Exception ex){}
+            }
+        }
+    }
 }

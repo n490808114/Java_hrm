@@ -3,14 +3,63 @@ package xyz.n490808114.dao;
 import org.apache.ibatis.jdbc.SQL;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import xyz.n490808114.domain.Employee;
 import xyz.n490808114.service.HrmService;
-import xyz.n490808114.util.HrmConstants;
 
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class EmployeeDynaSqlProvider {
     @Qualifier("hrmServiceImpl")
     HrmService hrmService;
+
+    public String insertByParam(Map<String,String> param){
+        Map<String,String> sqlMapping = Employee.getSqlMapping();
+        /*
+        String head = "INSERT INTO employee_inf";
+        Stack<String> columns = new Stack<>();
+        Stack<String> values = new Stack<>();
+        for(String s : param.keySet()){
+            if(!"id".equals(s) && !param.get(s).equals("")){
+                columns.push(sqlMapping.get(s));
+                values.push(param.get(s));
+            }
+        }
+        StringBuilder columnsSb = new StringBuilder();
+        StringBuilder valuesSb = new StringBuilder();
+        while(true){
+            columnsSb.append(columns.pop());
+            valuesSb.append(values.pop());
+            if(!columns.empty()){
+                columnsSb.append(",");
+                valuesSb.append(",");
+            }else{break;}
+        }
+        System.out.println(head + "  ( " + columnsSb.toString() +" ) VALUES ( "+valuesSb.toString() + " );");
+        return head + "  ( " + columnsSb.toString() +" ) VALUES ( "+valuesSb.toString() + " );";
+        */
+        
+        return new SQL(){
+            {
+                INSERT_INTO("employee_inf");
+                for(String s : param.keySet()){
+                    System.out.println("K:"+sqlMapping.get(s)+" Value:"+param.get(s)+"  "+"id".equals(s)+"  "+param.get(s).equals(""));
+
+                    if(!"id".equals(s) && !param.get(s).equals("")){
+                        VALUES(sqlMapping.get(s), param.get(s));
+                        System.out.println("K:"+sqlMapping.get(s)+" Value:"+param.get(s));
+                    }else{
+                        System.out.println("XXXX K:"+sqlMapping.get(s)+" Value:"+param.get(s));
+                    }
+                }
+                System.out.println("in");
+                VALUES("create_date", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                System.out.println("out");
+            }
+        }.toString();
+        
+    }
+
     public String selectWithParam(Map<String,Object> param){
         return new SQL(){
             {
@@ -73,6 +122,7 @@ public class EmployeeDynaSqlProvider {
             }
         }.toString();
     }
+
     public String modify(Map<String,String> param){
         int deptId = hrmService.findDeptByName(param.get("dept")).getId();
         int jobId = hrmService.findJobByName(param.get("job")).getId();

@@ -126,9 +126,10 @@ a:active{
   top:50px;
   right: 10%;
   left:10%;
-  bottom:10px;
+  bottom:auto;
   overflow-y:scroll;
   box-shadow: 3px 3px 10px #838383;
+  max-height:80%;
 }
 #form h1{
     font-size: 20px;
@@ -140,22 +141,23 @@ a:active{
 
     background-color: #4a74b6;
 }
+
 #form fieldset{
     background-color: #e2e2e2;
     margin: 0px;
     border: 0px;
 }
-#form fieldset p input{
-    width: 100%;
-    border:0px;
-    padding: 0px;
-    height: 25px;
+#form textarea{
+  height:350px;
+  width:100%;
+  overflow-y:aaaauto;
+  
 }
-#form fieldset p textarea{
+#form select,input{
   width: 100%;
   border: 0px;
   padding: 0px;
-  height: 300px;
+  height: 30px;
   resize: none;
 }
 #form_btn1{
@@ -190,13 +192,18 @@ input[type="submit"]:hover{
   font-size: 12px;
   font-family: Arial,sans-serif;
   position: fixed;
-  top:50px;
+  top: 10%;
   right: 10%;
   left:10%;
-  bottom:10px;
+  bottom:auto;
   overflow-y:scroll;
   padding:20px;
   box-shadow: 3px 3px 10px #838383;
+  max-height: 80%;
+}
+#detail textarea{
+  width:100%;
+  height:auto;
 }
 
 #divCover{
@@ -209,11 +216,7 @@ input[type="submit"]:hover{
 
   background-color: rgba(128, 128, 128, 0.425);
 }
-textarea{
-  width: 100%;
-  resize: none;
-  border:0px;
-}
+
 
 #main_page_choose_bar div{
 

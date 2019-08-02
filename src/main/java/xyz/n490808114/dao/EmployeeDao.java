@@ -15,6 +15,9 @@ public interface EmployeeDao {
         @Options(useGeneratedKeys = true, keyProperty = "id")
         int save(Employee employee);
 
+        @InsertProvider(type = EmployeeDynaSqlProvider.class,method = "insertByParam")
+        int insert(Map<String,String> param);
+
         @Delete("DELETE FROM employee_inf WHERE id =#{id}")
         int deleteById(@Param("id") int id);
 
