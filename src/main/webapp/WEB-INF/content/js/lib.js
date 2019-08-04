@@ -552,27 +552,51 @@ function openDetail(data) {
     body.appendChild(form);
     form.setAttribute("method", "post");
     form.setAttribute("id", "detail");
-    for (var b in data[0]) {
+    for (var b in data["title"]) {
+        if(b.includes("Data")){continue;}
         var label = document.createElement("label");
-        var text = document.createTextNode(data[0][b] + ":");
+        var text = document.createTextNode(data["title"][b] + ":");
         label.appendChild(text);
-
-        var textArea = document.createElement("textarea");
-        textArea.setAttribute("name", b);
-        var textDetail = document.createTextNode(data[1][b]);
-        textArea.appendChild(textDetail);
-        if ((b != "id") && (b != "createDate") && (b != "user")) {
-            textArea.setAttribute("contenteditable", "true");
-        } else {
-            textArea.setAttribute("title", "不能修改这项内容");
+        
+        var textArea
+        if(data[b+"Data"] == undefined){
+            textArea = document.createElement("textarea");
+            var textDetail;
+            if(data["data"][b] == undefined){
+                textDetail = document.createTextNode("");
+            }else{
+                textDetail = document.createTextNode(data["data"][b]);
+            }
+            textArea.appendChild(textDetail);
+        }else{
+            textArea = document.createElement("select");
+            for(var c in data[b+"Data"]){
+                var option = document.createElement("option");
+                var optionText =document.createTextNode(data[b+"Data"][c]);
+                option.setAttribute("value",c);
+                option.appendChild(optionText);
+                if(data[b+"Data"][c] == data["data"][b]){
+                    option.setAttribute("selected","selected");
+                }
+                textArea.appendChild(option);
+            }
         }
+        textArea.setAttribute("name", b);
+        textArea.setAttribute("class","content");
+        
         var p1 = document.createElement("p");
-        var p2 = document.createElement("p");
-        p1.appendChild(label);
-        p2.appendChild(textArea);
+        var titleDiv = document.createElement("div");
+        titleDiv.appendChild(label);
+        titleDiv.setAttribute("class","title");
+        p1.appendChild(titleDiv);
+        p1.appendChild(textArea);
         form.appendChild(p1);
-        form.appendChild(p2);
-        textArea.style.height= textArea.scrollHeight+"px";
+        if(textArea.scrollHeight > 50){
+            textArea.style.height= textArea.scrollHeight+"px";
+        }else{
+            textArea.style.height= "25px";
+        }
+        
     }
     var updateButton = document.createElement("input");
     updateButton.setAttribute("id", "detailUpdate");

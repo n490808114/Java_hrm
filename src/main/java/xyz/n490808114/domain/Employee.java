@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Employee implements Serializable {
-    private int id;
+    private Integer id;
     private Dept dept;
     private Job job;
     private String name;

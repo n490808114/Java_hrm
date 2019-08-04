@@ -15,7 +15,7 @@ import xyz.n490808114.domain.*;
 import xyz.n490808114.service.HrmService;
 
 @Controller
-class EmployeeController {
+public class EmployeeController {
     @Autowired
     @Qualifier("hrmServiceImpl")
     HrmService hrmService;
@@ -63,9 +63,13 @@ class EmployeeController {
     @RequestMapping(value = "/employeeDetail",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getDetail(@RequestParam("id") String id){
-        List<Object> list = new LinkedList<>();
-        list.add(TableTitle.employeeTitle());
-        list.add(hrmService.findEmployeeById(Integer.parseInt(id)));
+        load();
+        Map<String,Object> map = new HashMap<>();
+        map.put("title",TableTitle.employeeTitle());
+        map.put("data",hrmService.findEmployeeById(Integer.parseInt(id)));
+        map.put("deptData",deptMap);
+        map.put("jobData",jobMap);
+        map.put("sexData", TableTitle.sexMap());
         ValueFilter filter = (Object object, String name, Object value) -> {
             if ("dept".equals(name)) {
                 try {
@@ -99,27 +103,20 @@ class EmployeeController {
             }
             return value;
         };
-        return JSON.toJSONString(list,filter);
+        return JSON.toJSONString(map,filter);
     }
 
     @RequestMapping(value = "/employeeCreate",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String create(){
-        if(isLoadedMaps == false){
-            synchronized(isLoadedMaps){
-                if(isLoadedMaps == false){
-                    synchronized(EmployeeController.class){
-                        load();
-                    }
-                    isLoadedMaps = true;
-                }
-            }
-        }
+        load();
         Map<String, Object> json = new LinkedHashMap<>();
         json.putAll(TableTitle.employeeCreateTitle());
-        json.put("sexData", TableTitle.sexList());
+        json.put("sexData", TableTitle.sexMap());
         json.put("deptData",deptMap);
         json.put("jobData",jobMap);
+
+        /*
         PropertyFilter filter = (Object object, String name, Object value) ->{
             if("".equals(value)){
                 try{
@@ -129,8 +126,8 @@ class EmployeeController {
                 }
             }
             return true;
-        };
-        return JSON.toJSONString(json,filter);
+        };*/
+        return JSON.toJSONString(json);
     }
 
     @RequestMapping(value = "/employeeCreate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
@@ -148,8 +145,26 @@ class EmployeeController {
         return "true";
     }
 
+    @RequestMapping(value = "/employeeDelete",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String delete(@RequestParam("id") String id){
+        hrmService.removeEmployeeById(Integer.parseInt(id));
+        return "true";
+    }
 
     public void load(){
+        if(isLoadedMaps == false){
+            synchronized(isLoadedMaps){
+                if(isLoadedMaps == false){
+                    synchronized(EmployeeController.class){
+                        loadMaps();
+                    }
+                    isLoadedMaps = true;
+                }
+            }
+        }
+    }
+    public void loadMaps(){
         List<Dept> depts = hrmService.findAllDept();
         for(Dept dept : depts){
             while(true){

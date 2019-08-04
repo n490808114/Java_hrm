@@ -201,8 +201,20 @@ input[type="submit"]:hover{
   box-shadow: 3px 3px 10px #838383;
   max-height: 80%;
 }
-#detail textarea{
+#detail p{
+
   width:100%;
+  float:right;
+  text-align:right;
+}
+#detail .title{
+  position:absolute;
+  width:12%;
+  height:auto;
+}
+#detail .content{
+  border:0px;
+  width:85%;
   height:auto;
 }
 

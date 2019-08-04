@@ -10,7 +10,7 @@ public class TableTitle {
     private static final Map<String,String> employeeTitle = new LinkedHashMap<>();
     private static final Map<String,String> employeeListTitle = new LinkedHashMap<>();
     private static final Map<String,String> employeeCreateTitle = new LinkedHashMap<>();
-    private static final List<String> sexList = new ArrayList<>();
+    private static final Map<String,String> sexMap = new LinkedHashMap<>();
     
 
     static {
@@ -76,9 +76,9 @@ public class TableTitle {
         employeeCreateTitle.put("hobby","爱好");
         employeeCreateTitle.put("remark","备注");
 
-        sexList.add("女");
-        sexList.add( "男");
-        sexList.add("未知");
+        sexMap.put("0","女");
+        sexMap.put("1", "男");
+        sexMap.put("2","未知");
     }
     public static Map<String, String> noticeTitle(){return noticeTitle;}
     public static Map<String,String> noticeListTitle(){return noticeListTitle;}
@@ -87,5 +87,5 @@ public class TableTitle {
     public static Map<String,String> employeeTitle(){return employeeTitle;}
     public static Map<String,String> employeeListTitle(){return employeeListTitle;}
     public static Map<String,String> employeeCreateTitle(){return employeeCreateTitle;}
-    public static List<String> sexList(){return sexList;}
+    public static Map<String,String> sexMap(){return sexMap;}
 }

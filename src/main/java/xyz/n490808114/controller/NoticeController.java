@@ -117,9 +117,9 @@ public class NoticeController {
     @RequestMapping(value = "/noticeDetail", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getDetail(@RequestParam("id") String id) {
-        List<Object> list = new ArrayList<>();
-        list.add(TableTitle.noticeTitle());
-        list.add(hrmService.findNoticeById(Integer.parseInt(id)));
+        Map<String,Object> map = new HashMap<>();
+        map.put("title",TableTitle.noticeTitle());
+        map.put("data",hrmService.findNoticeById(Integer.parseInt(id)));
         ValueFilter filter = (Object object, String name, Object value) -> {
             if ("user".equals(name)) {
                 try {
@@ -136,7 +136,7 @@ public class NoticeController {
             }
             return value;
         };
-        return JSON.toJSONString(list, filter);
+        return JSON.toJSONString(map, filter);
     }
 
     /**
