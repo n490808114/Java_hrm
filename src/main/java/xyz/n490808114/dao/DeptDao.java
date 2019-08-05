@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 import xyz.n490808114.domain.Dept;
 
-import java.util.List;
+import java.util.*;
 
 public interface DeptDao {
 
@@ -17,6 +17,10 @@ public interface DeptDao {
         @Select("SELECT * FROM dept_inf WHERE id = #{id}")
         @ResultMap("deptResult")
         Dept selectById(int id);
+
+        @SelectProvider(type = DeptDynaSqlProvider.class,method = "getDeptListByPageNoAndPageSize")
+        @ResultMap("deptResult")
+        List<Dept> getDeptList(String pageNo,String pageSize);
 
         @Select("SELECT * FROM dept_inf WHERE name =#{name}")
         Dept selectByName(String name);

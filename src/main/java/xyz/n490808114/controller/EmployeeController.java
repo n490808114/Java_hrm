@@ -91,14 +91,8 @@ public class EmployeeController {
                     return value;
                 }
             }else if("sex".equals(name)){
-                try{
-                    int a = Integer.parseInt("" + value);
-                    for(Sex s : Sex.values()){
-                        if(s.getIndex() == a ){return s.getData();}
-                    }
-                    return Sex.UNKNOW.getData();
-                }catch(NumberFormatException ex){
-                    return value;
+                if(value instanceof Integer){
+                    return TableTitle.sexMap().get(value);
                 }
             }
             return value;

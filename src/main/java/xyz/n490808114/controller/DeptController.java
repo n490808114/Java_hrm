@@ -1,5 +1,8 @@
 package xyz.n490808114.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ public class DeptController{
     @RequestMapping(value = "/dept",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getList(){
+        Map<String,Object> json = new HashMap<>();
+        json.put(, value)
         return JSON.toJSONString(hrmService.findAllDept());
     }
 }

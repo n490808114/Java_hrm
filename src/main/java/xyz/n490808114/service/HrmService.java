@@ -89,6 +89,8 @@ public interface HrmService {
      */
     List<Dept> findAllDept();
 
+    List<Dept> getDeptList(String pageNo,String pageSize);
+
     /**
      * 根据id查询部门
      * @param id
