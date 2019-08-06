@@ -111,6 +111,11 @@ public class HrmServiceImpl implements HrmService {
         return deptDao.getDeptList(pageNo,pageSize);
     }
 
+    @Override
+    public int getDeptCount() {
+        return deptDao.getCount();
+    }
+
     @Transactional(readOnly = true)
     @Override
     public Dept findDeptById(int id){

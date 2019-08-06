@@ -96,4 +96,6 @@ public class TableTitle {
     public static Map<String,String> employeeListTitle(){return employeeListTitle;}
     public static Map<String,String> employeeCreateTitle(){return employeeCreateTitle;}
     public static Map<Integer,String> sexMap(){return sexMap;}
+
+    public static Map<String,String> deptListTitle(){return deptListTitle;}
 }

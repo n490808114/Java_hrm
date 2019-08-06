@@ -9,11 +9,12 @@ public class DeptDynaSqlProvider {
 
         return new SQL(){
             {
-                SELECT("id,name,dept_id,job_id,phone");
+                SELECT("id,name,remark");
                 FROM("dept_inf");
-                WHERE("id>=(SELECT id FROM notice_inf LIMIT  "+start +",1)");
+                WHERE("id>=(SELECT id FROM dept_inf LIMIT  "+start +",1)");
                 
             }
         }.toString() + " limit " + pageSize;
     }
+    
 }

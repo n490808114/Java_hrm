@@ -14,6 +14,9 @@ public interface DeptDao {
                         @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.dao.EmployeeDao.selectEmployeesByDeptId", fetchType = FetchType.LAZY)) })
         List<Dept> selectAll();
 
+        @Select("SELECT COUNT(id) FROM dept_inf")
+        int getCount();
+
         @Select("SELECT * FROM dept_inf WHERE id = #{id}")
         @ResultMap("deptResult")
         Dept selectById(int id);

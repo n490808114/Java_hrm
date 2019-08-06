@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - BigDecimalTest",
+            "request": "launch",
+            "mainClass": "xyz.n490808114.test.BigDecimalTest",
+            "projectName": "hrm"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Test",
             "request": "launch",
             "mainClass": "xyz.n490808114.controller.Test",
