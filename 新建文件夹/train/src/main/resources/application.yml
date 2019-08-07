@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hrm_db
+    username: root
+    password: admin
+  jackson:
+    date-format: yyyy-mm-dd
+    time-zone: GMT+8
+mybatis:
+  type-aliases-package: xyz.n490808114.train.dao
