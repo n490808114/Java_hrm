@@ -1,6 +1,8 @@
 package xyz.n490808114.train.controller;
 
 
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,27 +20,25 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
+@RequestMapping("/notice")
 public class NoticeController {
     @Autowired
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
 
-    /**
-     *
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
     @GetMapping
-    public Map<String, Object> getList(@RequestParam("pageNo") String pageNo, @RequestParam("pageSize") String pageSize) {
+    public Map<String, Object> getList(@RequestParam Map<String,String> map) {
 
         // 如果没有指定pageSize,那么从session中获取pageSize,
         // 如果session没有pageSize,使用默认常数DEFAULT_PAGESIZE
         // 之后将pageSize存进session
-
+        String pageNo = map.get("pageNo");
+        String pageSize = map.get("pageSize");
+        System.out.println(pageNo);
+        System.out.println(pageSize);
         Map<String, Object> param = new HashMap<>();
-        param.put("pageNo", Integer.parseInt(pageNo));
-        param.put("pageSize", Integer.parseInt(pageSize));
+        param.put("pageNo", pageNo);
+        param.put("pageSize", pageSize);
 
         List<Notice> data = hrmService.getNoticeList(param);
 
