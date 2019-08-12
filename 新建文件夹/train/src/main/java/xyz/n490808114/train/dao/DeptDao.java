@@ -9,7 +9,6 @@ import xyz.n490808114.train.domain.Dept;
 
 import java.util.*;
 
-
 public interface DeptDao {
 
         @Select("SELECT * FROM dept_inf")

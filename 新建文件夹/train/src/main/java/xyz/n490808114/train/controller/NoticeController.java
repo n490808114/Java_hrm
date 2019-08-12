@@ -1,6 +1,8 @@
 package xyz.n490808114.train.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.ValueFilter;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +29,9 @@ public class NoticeController {
     private HrmService hrmService;
 
     @GetMapping
-    public Map<String, Object> getList(@RequestParam Map<String,String> map) {
-
-        // 如果没有指定pageSize,那么从session中获取pageSize,
-        // 如果session没有pageSize,使用默认常数DEFAULT_PAGESIZE
-        // 之后将pageSize存进session
-        String pageNo = map.get("pageNo");
-        String pageSize = map.get("pageSize");
-        System.out.println(pageNo);
-        System.out.println(pageSize);
+    public String getList(@RequestParam(value = "pageSize",defaultValue = "20") int pageSize,
+                          @RequestParam(value = "pageNo",defaultValue = "1") int pageNo)
+    {
         Map<String, Object> param = new HashMap<>();
         param.put("pageNo", pageNo);
         param.put("pageSize", pageSize);
@@ -49,32 +45,24 @@ public class NoticeController {
         json.put("title", TableTitle.noticeListTitle());
         json.put("data", data);
 
-/*        ValueFilter filter = (Object object, String name, Object value) -> {
+        ValueFilter filter = (Object object, String name, Object value) -> {
             if ("user".equals(name)) {
                 try {
                     return ((User) value).getUserName();
                 } catch (ClassCastException ex) {
                     return value;
                 }
-            }else if("createDate".equals(name)){
-                try{
-                    return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
-                }catch(ClassCastException ex){
-                    return value;
-                }
             }
             return value;
-        };*/
-        return json;
+        };
+        return JSON.toJSONString(json,filter);
     }
 
     /**
      * 新建Notice可供前台填写的内容
-     * 
      * @return 可填写的内容String
      */
-    @RequestMapping(value = "/noticeCreate", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    @ResponseBody
+    @GetMapping("/create")
     public Map<String, String> create() {
         return TableTitle.noticeCreateTitle();
     }
@@ -87,8 +75,7 @@ public class NoticeController {
      * @param session 会话，从中获取客户的User
      * @return 标题不为空，返回true,否则返回false
      */
-    @RequestMapping(value = "/noticeCreate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
+    @PostMapping
     public boolean create(@RequestParam("content") String content, @RequestParam("title") String title,
             HttpSession session) {
         Notice notice = new Notice();

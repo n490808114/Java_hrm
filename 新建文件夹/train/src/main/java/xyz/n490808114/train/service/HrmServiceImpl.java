@@ -1,5 +1,6 @@
 package xyz.n490808114.train.service;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,7 @@
 package xyz.n490808114.train.dao;
 
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.type.Alias;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;

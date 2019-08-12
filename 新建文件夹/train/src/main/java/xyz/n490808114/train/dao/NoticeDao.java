@@ -2,6 +2,7 @@ package xyz.n490808114.train.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
+import org.apache.ibatis.type.Alias;
 import org.springframework.stereotype.Service;
 import xyz.n490808114.train.domain.Notice;
 
@@ -16,7 +17,7 @@ public interface NoticeDao {
                                                 @Result(column = "content", property = "content"),
                                                 @Result(column = "create_date", property = "createDate"),
                                                 @Result(column = "user_id", property = "user", 
-                                                one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
+                                                one = @One(select = "xyz.n490808114.train.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
         Notice selectById(int id);
 
         @Select("SELECT * FROM notice_inf")
@@ -28,7 +29,7 @@ public interface NoticeDao {
                                                 @Result(column = "title", property = "title"),
                                                 @Result(column = "create_date", property = "createDate"),
                                                 @Result(column = "user_id", property = "user", 
-                                                one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
+                                                one = @One(select = "xyz.n490808114.train.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
         List<Notice> getNoticeList(Map<String,Object> param);
 
         @Delete("DELETE FROM notice_inf WHERE id = #{id}")

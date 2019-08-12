@@ -7,7 +7,7 @@ public class NoticeDynaSqlProvider{
 
     public String  getNoticeListByPageNoAndPageSize(Map<String,Object> param){
         int pageSize = (Integer) param.get("pageSize");
-        int start =pageSize * ((Integer) param.get("pageNo") - 1);
+        int start =pageSize * (((Integer) param.get("pageNo"))- 1);
         
         return new SQL(){
             {
