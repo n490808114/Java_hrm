@@ -48,7 +48,7 @@ public class NoticeController {
         ValueFilter filter = (Object object, String name, Object value) -> {
             if ("user".equals(name)) {
                 try {
-                    return ((User) value).getUserName();
+                    return value == null?"None":((User) value).getUserName();
                 } catch (ClassCastException ex) {
                     return value;
                 }
@@ -97,9 +97,8 @@ public class NoticeController {
      * @param id 指定id
      * @return 指定id 的 Notice 转换为JSON字符串
      */
-    @RequestMapping(value = "/noticeDetail", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public Map<String,Object> getDetail(@RequestParam("id") String id) {
+    @GetMapping("/{id}")
+    public Map<String,Object> getDetail(@PathVariable("id") String id) {
         Map<String,Object> map = new HashMap<>();
         map.put("title",TableTitle.noticeTitle());
         map.put("data",hrmService.findNoticeById(Integer.parseInt(id)));
@@ -130,9 +129,8 @@ public class NoticeController {
      * @param session 会话session,用于获取User
      * @return 标题不为空，返回true,否则返回false
      */
-    @RequestMapping(value = "/noticeUpdate", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public boolean update(@RequestParam Map<String, String> map, HttpSession session) {
+    @PutMapping("/{id}")
+    public boolean update(@PathVariable("id") int id,@RequestParam Map<String, String> map, HttpSession session) {
         Notice notice = new Notice();
         notice.setId(Integer.parseInt(map.get("id")));
         notice.setTitle(map.get("title"));
@@ -149,14 +147,11 @@ public class NoticeController {
 
     /**
      * 获取在详情Detail页修改后的所有内容，使用其中的id去删除该项
-     * 
-     * @param map 详情Detail页修改后的所有内容
      * @return 提交删除指定,返回给前台true
      */
-    @RequestMapping(value = "/noticeDelete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public boolean delete(@RequestParam Map<String, String> map) {
-        hrmService.removeNotice(Integer.parseInt(map.get("id")));
+    @DeleteMapping("/{id}")
+    public boolean delete(@PathVariable("id") int id) {
+        hrmService.removeNotice(id);
         return true;
     }
 }

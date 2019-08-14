@@ -12,7 +12,8 @@ import xyz.n490808114.train.domain.*;
 import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.util.TableTitle;
 
-@Controller
+@RestController
+@RequestMapping("/employee")
 public class EmployeeController {
     @Autowired
     @Qualifier("hrmServiceImpl")
@@ -22,8 +23,7 @@ public class EmployeeController {
     private static Map<String,String> jobMap = new HashMap<>();
     private static Boolean isLoadedMaps = false;
 
-    @RequestMapping(value = "/employee", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    @ResponseBody
+    @GetMapping
     public Map<String, Object> getList(@RequestParam("pageNo") String pageNoString,
             @RequestParam("pageSize") String pageSizeString) {
 
@@ -58,9 +58,8 @@ public class EmployeeController {
     }
 
 
-    @RequestMapping(value = "/employeeDetail",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public Map<String,Object> getDetail(@RequestParam("id") String id){
+    @GetMapping("/{id}")
+    public Map<String,Object> getDetail(@PathVariable("id") String id){
         load();
         Map<String,Object> map = new HashMap<>();
         map.put("title",TableTitle.employeeTitle());
@@ -99,8 +98,7 @@ public class EmployeeController {
         return map;
     }
 
-    @RequestMapping(value = "/employeeCreate",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    @ResponseBody
+    @GetMapping("/create")
     public Map<String, Object> create(){
         load();
         Map<String, Object> json = new LinkedHashMap<>();
@@ -123,32 +121,29 @@ public class EmployeeController {
         return json;
     }
 
-    @RequestMapping(value = "/employeeCreate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    @ResponseBody
+    @PostMapping
     public String create(@RequestParam Map<String,String> map){
         hrmService.addEmployee(map);
         return "true";
     }
 
-    @RequestMapping(value = "/employeeUpdate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String update(@RequestParam Map<String,String> map){
+    @PutMapping("/{id}")
+    public String update(@PathVariable("id") int id,@RequestParam Map<String,String> map){
         if(map.get("name") == null){return "false";}
         hrmService.modifyEmployee(map);
         return "true";
     }
 
-    @RequestMapping(value = "/employeeDelete",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String delete(@RequestParam("id") String id){
-        hrmService.removeEmployeeById(Integer.parseInt(id));
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id){
+        hrmService.removeEmployeeById(id);
         return "true";
     }
 
     public void load(){
-        if(isLoadedMaps == false){
+        if(!isLoadedMaps){
             synchronized(isLoadedMaps){
-                if(isLoadedMaps == false){
+                if(!isLoadedMaps){
                     synchronized(EmployeeController.class){
                         loadMaps();
                     }

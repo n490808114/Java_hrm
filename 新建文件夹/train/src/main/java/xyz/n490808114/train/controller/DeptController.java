@@ -6,22 +6,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.util.TableTitle;
 import xyz.n490808114.train.service.HrmService;
 
-@Controller
+@RestController
 public class DeptController{
     @Autowired
     @Qualifier("hrmServiceImpl")
     HrmService hrmService;
 
-    @RequestMapping(value = "/dept",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    @ResponseBody
+    @GetMapping
     public Map<String,Object> getList(@RequestParam("pageNo")String pageNo,@RequestParam("pageSize")String pageSize){
         Map<String,Object> json = new HashMap<>();
         json.put("count", hrmService.getDeptCount());
