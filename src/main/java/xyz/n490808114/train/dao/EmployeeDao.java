@@ -54,8 +54,8 @@ public interface EmployeeDao {
                         @Result(column = "hobby", property = "hobby"), 
                         @Result(column = "remark", property = "remark"),
                         @Result(column = "create_date", property = "createDate"),
-                        @Result(column = "dept_id", property = "dept", one = @One(select = "xyz.n490808114.dao.DeptDao.selectById", fetchType = FetchType.EAGER)),
-                        @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.dao.JobDao.selectById", fetchType = FetchType.EAGER)) })
+                        @Result(column = "dept_id", property = "dept", one = @One(select = "xyz.n490808114.train.dao.DeptDao.selectById", fetchType = FetchType.EAGER)),
+                        @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.train.dao.JobDao.selectById", fetchType = FetchType.EAGER)) })
         Employee selectById(int id);
 
         @Select("SELECT * FROM employee_inf")
@@ -77,8 +77,8 @@ public interface EmployeeDao {
         @Results(id="employeeList",value = {
                 @Result(id=true,column = "id",property = "id"),
                 @Result(column = "name", property = "name"),
-                @Result(column = "dept_id", property = "dept", one = @One(select = "xyz.n490808114.dao.DeptDao.selectById", fetchType = FetchType.EAGER)),
-                @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.dao.JobDao.selectById", fetchType = FetchType.EAGER)),
+                @Result(column = "dept_id", property = "dept", one = @One(select = "xyz.n490808114.train.dao.DeptDao.selectById", fetchType = FetchType.EAGER)),
+                @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.train.dao.JobDao.selectById", fetchType = FetchType.EAGER)),
                 @Result(column = "phone", property = "phone")
         })
         List<Employee> selectEmployeeListWithParam(Map<String,Object> param);

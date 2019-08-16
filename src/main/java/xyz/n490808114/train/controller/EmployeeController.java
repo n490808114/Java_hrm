@@ -3,6 +3,9 @@ package xyz.n490808114.train.controller;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.PropertyFilter;
+import com.alibaba.fastjson.serializer.ValueFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -24,20 +27,21 @@ public class EmployeeController {
     private static Boolean isLoadedMaps = false;
 
     @GetMapping
-    public Map<String, Object> getList(@RequestParam("pageNo") String pageNoString,
-            @RequestParam("pageSize") String pageSizeString) {
+    public String getList(@RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
+                                    @RequestParam(value = "pageSize",defaultValue = "20") int pageSize) {
 
         Map<String, Object> param = new HashMap<>();
-        param.put("pageNo", Integer.parseInt(pageNoString));
-        param.put("pageSize", Integer.parseInt(pageSizeString));
+        param.put("pageNo", pageNo);
+        param.put("pageSize", pageSize);
 
         Map<String, Object> json = new HashMap<>();
+        json.put("title","employee");
         json.put("count", hrmService.getEmployeeCount());
-        json.put("pageNo", pageNoString);
-        json.put("pageSize", pageSizeString);
-        json.put("title", TableTitle.employeeListTitle());
+        json.put("pageNo", pageNo);
+        json.put("pageSize", pageSize);
+        json.put("dataTitle", TableTitle.employeeListTitle());
         json.put("data", hrmService.getEmployeeList(param));
-        /*
+
         ValueFilter filter = (Object object, String name, Object value) -> {
             if ("dept".equals(name)) {
                 try {
@@ -53,22 +57,22 @@ public class EmployeeController {
                 }
             }
             return value;
-        };*/
-        return json;
+        };
+        return JSON.toJSONString(json,filter);
     }
 
 
     @GetMapping("/{id}")
-    public Map<String,Object> getDetail(@PathVariable("id") String id){
+    public String getDetail(@PathVariable("id") String id){
         load();
         Map<String,Object> map = new HashMap<>();
-        map.put("title",TableTitle.employeeTitle());
+        map.put("dataTitle",TableTitle.employeeTitle());
         map.put("data",hrmService.findEmployeeById(Integer.parseInt(id)));
         map.put("deptData",deptMap);
         map.put("jobData",jobMap);
         map.put("sexData", TableTitle.sexMap());
 
-/*        ValueFilter filter = (Object object, String name, Object value) -> {
+        ValueFilter filter = (Object object, String name, Object value) -> {
             if ("dept".equals(name)) {
                 try {
                     return ((Dept) value).getName();
@@ -94,8 +98,8 @@ public class EmployeeController {
                 }
             }
             return value;
-        };*/
-        return map;
+        };
+        return JSON.toJSONString(map,filter);
     }
 
     @GetMapping("/create")
@@ -107,17 +111,16 @@ public class EmployeeController {
         json.put("deptData",deptMap);
         json.put("jobData",jobMap);
 
-        /*
         PropertyFilter filter = (Object object, String name, Object value) ->{
             if("".equals(value)){
                 try{
-                    ((Map<String,String>) object).remove(Integer.parseInt(name));
+                    ((Map<String,String>) object).remove(name);
                 }catch(ClassCastException ex){
                     return false;
                 }
             }
             return true;
-        };*/
+        };
         return json;
     }
 

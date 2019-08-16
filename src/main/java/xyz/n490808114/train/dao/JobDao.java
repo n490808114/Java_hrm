@@ -12,7 +12,7 @@ public interface JobDao {
         @Select("SELECT * FROM job_inf")
         @Results(id = "jobResult",value = { @Result(id = true, column = "id", property = "id"),
                         @Result(column = "name", property = "name"), @Result(column = "remark", property = "remark"),
-                        @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.dao.EmployeeDao.selectEmployeesByJobId", fetchType = FetchType.LAZY)) })
+                        @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByJobId", fetchType = FetchType.LAZY)) })
         List<Job> selectAll();
 
         @Select("SELECT * FROM job_inf WHERE id = #{id}")

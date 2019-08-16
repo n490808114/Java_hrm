@@ -5,8 +5,12 @@
     <title>Login</title>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/json2.js"></script>
+    <script src="js/jquery.form.min.js"></script>
     <link href="css/login.css" type="text/css" rel="stylesheet">
     <script>
+        function login() {
+
+        }
     function setStyle(point){
         var labels = document.getElementsByTagName("label");
         var input = document.getElementById("get_account");
@@ -36,6 +40,20 @@
             inputs[i].setAttribute("onclick","setStyle(this)");
         }
     }
+
+    $(document).ready(function () {
+        $("#form").ajaxForm({
+            url:"login",
+            type:"post",
+            asyns:false,
+            success:function (data) {
+                alert(data["message"]);
+                if(data["data"] === true){
+                    window.location.replace("/");
+                }
+            }
+            })
+    })
     window.onload=chooseLoginStyle;
     </script>
 

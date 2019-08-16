@@ -178,7 +178,7 @@ public class EmployeeDynaSqlProvider {
             {
                 SELECT("id,name,dept_id,job_id,phone");
                 FROM("employee_inf");
-                WHERE("id>=(SELECT id FROM notice_inf LIMIT  "+start +",1)");
+                WHERE("id>=(SELECT id FROM employee_inf LIMIT  "+start +",1)");
                 
             }
         }.toString() + " limit " + pageSize;

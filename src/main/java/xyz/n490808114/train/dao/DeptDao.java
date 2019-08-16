@@ -14,7 +14,7 @@ public interface DeptDao {
         @Select("SELECT * FROM dept_inf")
         @Results(id = "deptResult",value = { @Result(id = true, column = "id", property = "id"), @Result(column = "name", property = "name"),
                         @Result(column = "remark", property = "remark"),
-                        @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.dao.EmployeeDao.selectEmployeesByDeptId", fetchType = FetchType.LAZY)) })
+                        @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByDeptId", fetchType = FetchType.LAZY)) })
         List<Dept> selectAll();
 
         @Select("SELECT COUNT(id) FROM dept_inf")

@@ -39,10 +39,11 @@ public class NoticeController {
         List<Notice> data = hrmService.getNoticeList(param);
 
         Map<String, Object> json = new HashMap<>();
+        json.put("title","notice");
         json.put("count", hrmService.getNoticesCount());
         json.put("pageSize", pageSize);
         json.put("pageNo", pageNo);
-        json.put("title", TableTitle.noticeListTitle());
+        json.put("dataTitle", TableTitle.noticeListTitle());
         json.put("data", data);
 
         ValueFilter filter = (Object object, String name, Object value) -> {

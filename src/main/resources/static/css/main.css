@@ -12,19 +12,19 @@ header h1{
   font-family: STzhongsong;
   font-weight: 2000;
   text-align: left;
-  margin:15px 0px 0px 20px;
+  margin:15px 0 0px 20px;
 }
 main{
   position:fixed;
   box-sizing: border-box;
   top: 130px;
-  left: 0%;
-  right: 0%;
-  bottom: 0%;
+  left: 0;
+  right: 0;
+  bottom: 0;
   box-shadow: 5px 5px 10px inset #838383;
   padding: 10px;
 
-  font-family: STheiti;
+  font-family: STheiti, serif;
 
   background-color: rgb(255, 255, 255);
 
@@ -35,7 +35,7 @@ main h1{
   text-align: center;
 
   font-size: 30px;
-  font-family: STzhongsong;
+  font-family: STzhongsong, serif;
 }
 main footer{
   background-color: #dadada63;
