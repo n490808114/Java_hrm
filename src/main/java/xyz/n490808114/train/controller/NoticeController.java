@@ -3,11 +3,9 @@ package xyz.n490808114.train.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.ValueFilter;
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
+import javafx.beans.binding.ObjectExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import xyz.n490808114.train.domain.Notice;
 import xyz.n490808114.train.util.TableTitle;
@@ -40,23 +38,31 @@ public class NoticeController {
 
         Map<String, Object> json = new HashMap<>();
         json.put("title","notice");
-        json.put("count", hrmService.getNoticesCount());
         json.put("pageSize", pageSize);
         json.put("pageNo", pageNo);
-        json.put("dataTitle", TableTitle.noticeListTitle());
-        json.put("data", data);
 
-        ValueFilter filter = (Object object, String name, Object value) -> {
-            if ("user".equals(name)) {
-                try {
-                    return value == null?"None":((User) value).getUserName();
-                } catch (ClassCastException ex) {
-                    return value;
+        if(data.size() == 0){
+            json.put("code",404);
+            json.put("message","找不到任何的公告");
+            return JSON.toJSONString(json);
+        }else{
+            json.put("code",200);
+            json.put("message","获取成功");
+            json.put("count", hrmService.getNoticesCount());
+            json.put("dataTitle", TableTitle.noticeListTitle());
+            json.put("data", data);
+            ValueFilter filter = (Object object, String name, Object value) -> {
+                if ("user".equals(name)) {
+                    try {
+                        return value == null?"None":((User) value).getUserName();
+                    } catch (ClassCastException ex) {
+                        return value;
+                    }
                 }
-            }
-            return value;
-        };
-        return JSON.toJSONString(json,filter);
+                return value;
+            };
+            return JSON.toJSONString(json,filter);
+        }
     }
 
     /**
@@ -99,11 +105,21 @@ public class NoticeController {
      * @return 指定id 的 Notice 转换为JSON字符串
      */
     @GetMapping("/{id}")
-    public Map<String,Object> getDetail(@PathVariable("id") String id) {
+    public String getDetail(@PathVariable("id") int id) {
         Map<String,Object> map = new HashMap<>();
-        map.put("title",TableTitle.noticeTitle());
-        map.put("data",hrmService.findNoticeById(Integer.parseInt(id)));
-/*        ValueFilter filter = (Object object, String name, Object value) -> {
+        map.put("title","notice");
+        Notice notice = hrmService.findNoticeById(id);
+        if(notice == null){
+            map.put("code",404);
+            map.put("message","找不到这个公告");
+        }else{
+            map.put("code",200);
+            map.put("message","获取成功");
+            map.put("title","notice");
+            map.put("dataTitle",TableTitle.noticeTitle());
+            map.put("data",notice);
+        }
+        ValueFilter filter = (Object object, String name, Object value) -> {
             if ("user".equals(name)) {
                 try {
                     return ((User) value).getUserName();
@@ -118,8 +134,8 @@ public class NoticeController {
                 }
             }
             return value;
-        };*/
-        return map;
+        };
+        return JSON.toJSONString(map,filter);
     }
 
     /**
@@ -151,8 +167,20 @@ public class NoticeController {
      * @return 提交删除指定,返回给前台true
      */
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable("id") int id) {
-        hrmService.removeNotice(id);
-        return true;
+    public Map<String,Object> delete(@PathVariable("id") int id,
+                          @RequestParam("pageNo") int pageNo,
+                          @RequestParam("pageSize") int pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        Notice notice = hrmService.findNoticeById(id);
+        if(notice == null){
+            map.put("code","404");
+            map.put("message","错误的公告序号");
+        }else{
+            hrmService.removeNotice(id);
+            String json = getList(pageNo,pageSize);
+            map =(Map<String,Object>) JSON.parse(json);
+            map.put("message","删除成功,返回列表");
+        }
+        return map;
     }
 }

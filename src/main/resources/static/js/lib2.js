@@ -5,14 +5,26 @@ $(document).ready(function () {
             async:false,
             type:"get",
             success:function(data){
-                setMainTable(data);
+                data = JSON.parse(data);
+                if(data["code"] === 200){
+                    setMainTable(data);
+                }else{
+                    alert(data["message"]);
+                }
             }
         });
         return false;
     })
 });
+function cleanMain() {
+    var main = document.getElementsByTagName("main")[0];
+    var body = document.getElementsByTagName("body")[0];
+    main.remove();
+    main = document.createElement("main");
+    body.append(main);
+    return main;
+}
 function setMainTable(json) {
-    json = JSON.parse(json);
     var title = json.title;
     var count = json.count;
     var page_no = json.pageNo;
@@ -21,11 +33,7 @@ function setMainTable(json) {
     var data = json.data;
 
     var list = getTableWidthList(title);
-    var main = document.getElementsByTagName("main")[0];
-    var body = document.getElementsByTagName("body")[0];
-    main.remove();
-    main = document.createElement("main");
-    body.append(main);
+    var main = cleanMain();
     var table = document.createElement("table");
     main.appendChild(table);
     table.setAttribute("id", "main_table");
@@ -54,11 +62,23 @@ function setMainTable(json) {
             td.appendChild(tdText);
             td.setAttribute("title", data[childData][name])
             td.setAttribute("name", name);
-            td.setAttribute("onclick", "getDetail(this)");
             trtd.appendChild(td);
         }
     }
-
+    $("#main_table > tr").click(function () {
+        $.ajax(
+            {
+                url:title+"/"+this.firstElementChild.getAttribute("title"),
+                type:"get",
+                async:false,
+                success:function (data) {
+                    data = JSON.parse(data);
+                    openDetail(data["data"],page_no,page_size);
+                    alert(data["message"]);
+                }
+            }
+        )
+    });
     setPageChooseBar(title,count, parseInt(page_no), parseInt(page_size));
 }
 function getTableWidthList(name) {
@@ -194,9 +214,98 @@ function setPageChooseBar(title,count, page_no, page_size) {
             async:false,
             type:"get",
             success:function (data) {
+                data = JSON.pase(data);
                 setMainTable(data);
             }
         })
 
     });
+}
+function openDetail(data,page_no,page_size) {
+    var main = cleanMain();
+    var form = document.createElement("form");
+    main.appendChild(form);
+    form.setAttribute("id", "detail");
+    for (var b in data["dataTitle"]) {
+        if(b.includes("Data")){continue;}
+        var label = document.createElement("label");
+        var text = document.createTextNode(data["dataTitle"][b] + ":");
+        label.appendChild(text);
+
+        var textAreaT
+        if(data[b+"Data"] == undefined){
+            textArea = document.createElement("textarea");
+            var textDetail;
+            if(data["data"][b] == undefined){
+                textDetail = document.createTextNode("");
+            }else{
+                textDetail = document.createTextNode(data["data"][b]);
+            }
+            textArea.style.height = textDetail.scrollHeight;
+            textArea.appendChild(textDetail);
+        }else{
+            textArea = document.createElement("select");
+            for(var c in data[b+"Data"]){
+                var option = document.createElement("option");
+                var optionText =document.createTextNode(data[b+"Data"][c]);
+                option.setAttribute("value",c);
+                option.appendChild(optionText);
+                if(data[b+"Data"][c] === data["data"][b]){
+                    option.setAttribute("selected","selected");
+                }
+                textArea.appendChild(option);
+            }
+        }
+        textArea.setAttribute("name", b);
+        textArea.setAttribute("class","content");
+
+        var p = document.createElement("p");
+        var titleDiv = document.createElement("div");
+        titleDiv.appendChild(label);
+        titleDiv.setAttribute("class","title");
+        p.appendChild(titleDiv);
+        p.appendChild(textArea);
+        form.appendChild(p);
+    }
+    var updateButton = document.createElement("input");
+    updateButton.setAttribute("id", "update");
+    updateButton.setAttribute("type", "submit");
+    updateButton.setAttribute("value", "提交更改");
+    var deleteButton = document.createElement("input");
+    deleteButton.setAttribute("id", "delete");
+    deleteButton.setAttribute("type", "submit");
+    deleteButton.setAttribute("value", "删除");
+    form.appendChild(updateButton);
+    form.appendChild(deleteButton);
+    $("#update").click(function () {
+        $.ajaxForm({
+            url:data["title"]+"/"+data["data"]["id"],
+            type:"PUT",
+            success:function (data) {
+                data = JSON.parse(data);
+                if(data["code"] === 200){
+                    openDetail(data);
+                }else{
+                    alert("message");
+                }
+            }
+        })
+    });
+    $("#delete").click(function () {
+        $.ajax({
+            url:data["title"]+"/"+data["data"]["id"],
+            type:"delete",
+            async:false,
+            data:{"pageNo":page_no,"pageSize":page_size},
+            success:function (data) {
+                data = JSON.parse(data);
+                if(data["code"] === 200){
+                    alert(data["message"]);
+                    setMainTable(data);
+                }else{
+                    alert(data["message"]);
+                }
+            }
+        })
+    })
 }

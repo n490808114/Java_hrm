@@ -347,76 +347,7 @@ function closePopUp() {
     }
 
 }
-function openDetail(data) {
-    var oldDetail = document.getElementById("detail");
-    if (oldDetail != null) {
-        oldDetail.remove();
-    }
-    addCoverDiv();
-    var body = document.getElementsByTagName("body")[0];
-    var form = document.createElement("form");
-    body.appendChild(form);
-    form.setAttribute("method", "post");
-    form.setAttribute("id", "detail");
-    for (var b in data["title"]) {
-        if(b.includes("Data")){continue;}
-        var label = document.createElement("label");
-        var text = document.createTextNode(data["title"][b] + ":");
-        label.appendChild(text);
-        
-        var textArea
-        if(data[b+"Data"] === undefined){
-            textArea = document.createElement("textarea");
-            var textDetail;
-            if(data["data"][b] == undefined){
-                textDetail = document.createTextNode("");
-            }else{
-                textDetail = document.createTextNode(data["data"][b]);
-            }
-            textArea.appendChild(textDetail);
-        }else{
-            textArea = document.createElement("select");
-            for(var c in data[b+"Data"]){
-                var option = document.createElement("option");
-                var optionText =document.createTextNode(data[b+"Data"][c]);
-                option.setAttribute("value",c);
-                option.appendChild(optionText);
-                if(data[b+"Data"][c] === data["data"][b]){
-                    option.setAttribute("selected","selected");
-                }
-                textArea.appendChild(option);
-            }
-        }
-        textArea.setAttribute("name", b);
-        textArea.setAttribute("class","content");
-        
-        var p1 = document.createElement("p");
-        var titleDiv = document.createElement("div");
-        titleDiv.appendChild(label);
-        titleDiv.setAttribute("class","title");
-        p1.appendChild(titleDiv);
-        p1.appendChild(textArea);
-        form.appendChild(p1);
-        if(textArea.scrollHeight > 50){
-            textArea.style.height= textArea.scrollHeight+"px";
-        }else{
-            textArea.style.height= "25px";
-        }
-        
-    }
-    var updateButton = document.createElement("input");
-    updateButton.setAttribute("id", "detailUpdate");
-    updateButton.setAttribute("type", "submit");
-    updateButton.setAttribute("value", "提交更改");
-    var deleteButton = document.createElement("input");
-    deleteButton.setAttribute("id", "detailDelete");
-    deleteButton.setAttribute("type", "submit");
-    deleteButton.setAttribute("value", "删除");
 
-    form.appendChild(updateButton);
-    form.appendChild(deleteButton);
-    changeDetail();
-}
 
 function changeDetail() {
     var options = {

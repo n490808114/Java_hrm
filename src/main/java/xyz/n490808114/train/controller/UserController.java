@@ -8,11 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import xyz.n490808114.train.domain.User;
 import xyz.n490808114.train.service.HrmService;
-import xyz.n490808114.train.util.RESTCreater;
 import xyz.n490808114.train.util.TrainConstants;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -35,14 +35,21 @@ public class UserController {
             @RequestParam(value = "loginname", required = false) String loginName,
             @RequestParam("password") String password, HttpSession session) {
         User user = null;
+        Map<String,Object> map = new HashMap<>();
         if(email == null){
             user = hrmService.login(loginName,password);
         }else if(loginName == null){
             user = hrmService.loginByEmail(email,password);
         }
-        if(user == null){return RESTCreater.create(200,"登录失败，请检查您的账号密码信息是否正确，请重新登录",false);}
-        session.setAttribute(TrainConstants.USER_SESSION, user);
-        return RESTCreater.create(200,"登陆成功",true);
+        if(user == null){
+            map.put("code",404);
+            map.put("message","登录失败，请检查您的账号密码信息是否正确，请重新登录");
+        }else{
+            session.setAttribute(TrainConstants.USER_SESSION, user);
+            map.put("code",200);
+            map.put("message","登陆成功");
+        }
+        return map;
     }
 
     @GetMapping("/register")
@@ -70,13 +77,16 @@ public class UserController {
         }else{sb.append("密码格式错误，请修改密码\n");}
 
         user.setCreateDate(new Date());
+        Map<String,Object> map = new HashMap<>();
         if(sb.length() == 0){
             hrmService.register(user);
-            return RESTCreater.create(200,"注册成功，即将跳转登录",true);
+            map.put("code",200);
+            map.put("message","注册成功，即将跳转登录");
         }else{
-            return RESTCreater.create(200,sb.toString(),false);
+            map.put("code",202);
+            map.put("message",sb.toString());
         }
-
+        return map;
     }
     private boolean loginNameCheck(String name){
         return (hrmService.registerCheckName(name) == 0);
