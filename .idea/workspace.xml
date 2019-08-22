@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c304a6a-2538-44a9-8e25-a5ce302a6e2a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/NoticeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/NoticeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/util/RESTCreater.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/lib.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/lib.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/lib2.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/lib2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/register.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -92,6 +91,7 @@
       <workItem from="1565945117109" duration="4763000" />
       <workItem from="1566370534848" duration="8668000" />
       <workItem from="1566380014034" duration="1213000" />
+      <workItem from="1566452825195" duration="13264000" />
     </task>
     <servers />
   </component>

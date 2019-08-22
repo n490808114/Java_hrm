@@ -1,21 +1,22 @@
 $(document).ready(function () {
-    $("#aside > ul > li > a").click(function () {
-        $.ajax({
-            url:$(this).attr("href"),
-            async:false,
-            type:"get",
-            success:function(data){
-                data = JSON.parse(data);
-                if(data["code"] === 200){
-                    setMainTable(data);
-                }else{
-                    alert(data["message"]);
-                }
-            }
-        });
-        return false;
-    })
+    $("#aside > ul > li > a").click(getMainTable($(this).attr("href")));
 });
+function getMainTable(title) {
+    $.ajax({
+        url:title,
+        async:false,
+        type:"get",
+        success:function(data){
+            data = JSON.parse(data);
+            if(data["code"] === 200){
+                setMainTable(data);
+            }else{
+                alert(data["message"]);
+            }
+        }
+    });
+    return false;
+}
 function cleanMain() {
     var main = document.getElementsByTagName("main")[0];
     var body = document.getElementsByTagName("body")[0];
@@ -34,6 +35,7 @@ function setMainTable(json) {
 
     var list = getTableWidthList(title);
     var main = cleanMain();
+    addListButtonBar(title,page_no,page_size);
     var table = document.createElement("table");
     main.appendChild(table);
     table.setAttribute("id", "main_table");
@@ -73,8 +75,11 @@ function setMainTable(json) {
                 async:false,
                 success:function (data) {
                     data = JSON.parse(data);
-                    openDetail(data["data"],page_no,page_size);
-                    alert(data["message"]);
+                    if(data["code"] === 200){
+                        openDetail(data,page_no,page_size);
+                    }else{
+                        alert(data["message"]);
+                    }
                 }
             }
         )
@@ -87,6 +92,26 @@ function getTableWidthList(name) {
     } else if (name === "employee") {
         return ["10%", "20%", "20%", "20%", "20%", "10%"];
     }
+}
+function addListButtonBar(title,page_no,page_size){
+    var main = document.getElementsByTagName("main")[0];
+    var bar = document.createElement("div");
+    var addButton = document.createElement("button");
+    addButton.setAttribute("id","addButton");
+    addButton.setAttribute("type","button");
+    addButton.appendChild(document.createTextNode("添加"));
+    main.appendChild(bar);
+    bar.appendChild(addButton);
+    $("#addButton").click(function(){
+        $.ajax({
+            url:title+"/create",
+            type:"get",
+            async:false,
+            success:function(data){
+                openCreator(data,title,page_no,page_size);
+            }
+        })
+    })
 }
 function setPageChooseBar(title,count, page_no, page_size) {
     var main = document.getElementsByTagName("main")[0];
@@ -199,7 +224,7 @@ function setPageChooseBar(title,count, page_no, page_size) {
 
     var list = pageNoBar.childNodes;
     for (var x = 0; x < list.length; x++) {
-        if (list[x].getAttribute("value") === page_no) {
+        if (list[x].getAttribute("value") == page_no) {
             list[x].style.backgroundColor = "white";
             list[x].style.color = "rgba(64, 77, 255, 0.486)";
             break;
@@ -214,12 +239,73 @@ function setPageChooseBar(title,count, page_no, page_size) {
             async:false,
             type:"get",
             success:function (data) {
-                data = JSON.pase(data);
+                data = JSON.parse(data);
                 setMainTable(data);
             }
         })
 
     });
+}
+function openCreator(data,title,page_no,page_size) {
+    var form = document.createElement("form");
+    form.setAttribute("id", "form");
+    form.setAttribute("name", title);
+    var main = cleanMain();
+
+    main.appendChild(form);
+    for (var x in data) {
+        var p = document.createElement("p");
+        var input;
+        if(x.includes("Data")){continue;}
+        if(data[x+"Data"] !== undefined){
+            input = document.createElement("select");
+            xData = data[x+"Data"];
+            for(var y in xData){
+                var option = document.createElement("option");
+                var yText = document.createTextNode(xData[y]);
+                option.appendChild(yText);
+                option.setAttribute("value",y);
+                input.appendChild(option);
+            }
+        }else{
+            input = document.createElement("input");
+        }
+        if (x === "content") {
+            input = document.createElement("textarea");
+        } else if (x === "email") {
+            input.setAttribute("type", "email");
+        } else if (x === "password") {
+            input.setAttribute("type", "password");
+        } else {
+            input.setAttribute("type", "text");
+        }
+        form.appendChild(p);
+        p.appendChild(input);
+        input.setAttribute("placeholder", data[x]);
+        input.setAttribute("name", x);
+    }
+    var div = document.createElement("div");
+    form.appendChild(div);
+    var submit = document.createElement("input");
+    div.appendChild(submit);
+    submit.setAttribute("id","submitButton");
+    submit.setAttribute("type", "submit");
+    submit.setAttribute("value", "提交");
+    $("#submitButton").click(function () {
+        $("#form").ajaxForm({
+            url:title,
+            type:"POST",
+            async:false,
+            success:function (data) {
+                if(data["code"] == 200){
+                    alert("创建成功");
+                    getMainTable(title);
+                }else{
+                    alert(data["message"]);
+                }
+            }
+        })
+    })
 }
 function openDetail(data,page_no,page_size) {
     var main = cleanMain();
@@ -232,7 +318,7 @@ function openDetail(data,page_no,page_size) {
         var text = document.createTextNode(data["dataTitle"][b] + ":");
         label.appendChild(text);
 
-        var textAreaT
+        var textArea;
         if(data[b+"Data"] == undefined){
             textArea = document.createElement("textarea");
             var textDetail;
@@ -241,7 +327,7 @@ function openDetail(data,page_no,page_size) {
             }else{
                 textDetail = document.createTextNode(data["data"][b]);
             }
-            textArea.style.height = textDetail.scrollHeight;
+            textArea.style.height = textArea.scrollHeight;
             textArea.appendChild(textDetail);
         }else{
             textArea = document.createElement("select");
@@ -278,15 +364,16 @@ function openDetail(data,page_no,page_size) {
     form.appendChild(updateButton);
     form.appendChild(deleteButton);
     $("#update").click(function () {
-        $.ajaxForm({
+        $("#detail").ajaxForm({
             url:data["title"]+"/"+data["data"]["id"],
             type:"PUT",
             success:function (data) {
                 data = JSON.parse(data);
                 if(data["code"] === 200){
-                    openDetail(data);
+                    alert("修改成功");
+                    openDetail(data,page_no,page_size);
                 }else{
-                    alert("message");
+                    alert(data["message"]);
                 }
             }
         })
@@ -300,12 +387,15 @@ function openDetail(data,page_no,page_size) {
             success:function (data) {
                 data = JSON.parse(data);
                 if(data["code"] === 200){
-                    alert(data["message"]);
-                    setMainTable(data);
+                    alert("删除成功,即将返回列表");
+                    getMainTable(data["title"]);
                 }else{
                     alert(data["message"]);
                 }
             }
         })
+    });
+    $.each($("#detail textarea"),function (i,each) {
+        $(each).css("height",each.scrollHeight + "px");
     })
 }

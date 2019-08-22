@@ -193,21 +193,6 @@ function getMainList() {
  * @param {*} data 
  */
 function addCreateForm(data) {
-    if (data instanceof String) {
-        data = JSON.parse(data);
-    }
-    addCoverDiv();
-    var oldForm = document.getElementById("form");
-    var name = document.getElementById("main_title").getAttribute("name");
-    if (oldForm != null) {
-        if (oldForm.getAttribute("name") === name) {
-            oldForm.style.removeProperty("display");
-            insertAfter(oldForm, document.getElementById("divCover"));
-            return false;
-        } else {
-            oldForm.remove();
-        }
-    }
     var form = document.createElement("form");
     var title = document.getElementById("main_title").getAttribute("name");
     form.setAttribute("id", "form");
@@ -257,7 +242,6 @@ function addCreateForm(data) {
     div.appendChild(submit);
     submit.setAttribute("type", "submit");
     submit.setAttribute("value", "提交");
-    submitCreate();
 }
 function submitCreate(point) {
     var options = {

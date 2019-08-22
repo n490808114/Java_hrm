@@ -13,9 +13,10 @@
                 url:"login/register",
                 type:"post",
                 success:function (data) {
-                    alert(data["message"]);
-                    if(data["data"] === true){
+                    if(data["code"] === 200){
                         window.location.replace("/login");
+                    }else{
+                        alert(data["message"]);
                     }
                 }
             })

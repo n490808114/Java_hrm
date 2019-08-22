@@ -47,9 +47,10 @@
             type:"post",
             asyns:false,
             success:function (data) {
-                alert(data["message"]);
-                if(data["data"] === true){
+                if(data["code"] === 200){
                     window.location.replace("/");
+                }else{
+                    alert(data["message"]);
                 }
             }
             })

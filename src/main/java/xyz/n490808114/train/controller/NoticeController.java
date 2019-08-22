@@ -83,19 +83,24 @@ public class NoticeController {
      * @return 标题不为空，返回true,否则返回false
      */
     @PostMapping
-    public boolean create(@RequestParam("content") String content, @RequestParam("title") String title,
+    public Map<String,Object> create(@RequestParam("content") String content, @RequestParam("title") String title,
             HttpSession session) {
         Notice notice = new Notice();
         notice.setTitle(title);
         notice.setContent(content);
         notice.setCreateDate(new Date());
         notice.setUser((User) session.getAttribute(TrainConstants.USER_SESSION));
+
+        Map<String,Object> map = new HashMap<>();
         if (!"".equals(title.trim())) {
             hrmService.addNotice(notice);
-            return true;
+            map.put("code",200);
+            map.put("message","创建成功");
         } else {
-            return false;
+            map.put("code",404);
+            map.put("message","创建失败");
         }
+        return map;
     }
 
     /**
@@ -147,18 +152,23 @@ public class NoticeController {
      * @return 标题不为空，返回true,否则返回false
      */
     @PutMapping("/{id}")
-    public boolean update(@PathVariable("id") int id,@RequestParam Map<String, String> map, HttpSession session) {
+    public String update(@PathVariable("id") int id,@RequestParam Map<String, String> map, HttpSession session) {
         Notice notice = new Notice();
         notice.setId(Integer.parseInt(map.get("id")));
         notice.setTitle(map.get("title"));
         notice.setContent(map.get("content"));
         notice.setCreateDate(new Date());
         notice.setUser((User) session.getAttribute(TrainConstants.USER_SESSION));
-        if (!"".equals(notice.getTitle().trim())) {
+
+
+        if (!"".equals(notice.getTitle().trim()) && hrmService.findNoticeById(id) != null) {
             hrmService.modifyNotice(notice);
-            return true;
+            return getDetail(id);
         } else {
-            return false;
+            Map<String,Object> json = new HashMap<>();
+            json.put("code",404);
+            json.put("message","修改公告内容失败");
+            return JSON.toJSONString(json);
         }
     }
 
@@ -167,19 +177,19 @@ public class NoticeController {
      * @return 提交删除指定,返回给前台true
      */
     @DeleteMapping("/{id}")
-    public Map<String,Object> delete(@PathVariable("id") int id,
+    public Map<String, Object> delete(@PathVariable("id") int id,
                           @RequestParam("pageNo") int pageNo,
                           @RequestParam("pageSize") int pageSize) {
-        Map<String, Object> map = new HashMap<>();
+
         Notice notice = hrmService.findNoticeById(id);
+        Map<String, Object> map = new HashMap<>();
         if(notice == null){
             map.put("code","404");
             map.put("message","错误的公告序号");
         }else{
             hrmService.removeNotice(id);
-            String json = getList(pageNo,pageSize);
-            map =(Map<String,Object>) JSON.parse(json);
-            map.put("message","删除成功,返回列表");
+            map.put("code","200");
+            map.put("message","删除成功");
         }
         return map;
     }
