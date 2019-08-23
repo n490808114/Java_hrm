@@ -1,22 +1,23 @@
 $(document).ready(function () {
-    $("#aside > ul > li > a").click(getMainTable($(this).attr("href")));
-});
-function getMainTable(title) {
-    $.ajax({
-        url:title,
-        async:false,
-        type:"get",
-        success:function(data){
-            data = JSON.parse(data);
-            if(data["code"] === 200){
-                setMainTable(data);
-            }else{
-                alert(data["message"]);
-            }
-        }
+    $.each($("#aside > ul > li > a"),function (e,t) {
+        $(t).click(function () {
+            $.ajax({
+                url:$(t).attr("href"),
+                async:false,
+                type:"get",
+                success:function(data){
+                    data = JSON.parse(data);
+                    if(data["code"] === 200){
+                        setMainTable(data);
+                    }else{
+                        alert(data["message"]);
+                    }
+                }
+            });
+            return false;
+        });
     });
-    return false;
-}
+});
 function cleanMain() {
     var main = document.getElementsByTagName("main")[0];
     var body = document.getElementsByTagName("body")[0];
@@ -73,17 +74,19 @@ function setMainTable(json) {
                 url:title+"/"+this.firstElementChild.getAttribute("title"),
                 type:"get",
                 async:false,
-                success:function (data) {
-                    data = JSON.parse(data);
-                    if(data["code"] === 200){
-                        openDetail(data,page_no,page_size);
+                success:function (dataX) {
+                    dataX = JSON.parse(dataX);
+                    if(dataX["code"] === 200){
+                        openDetail(dataX,page_no,page_size);
                     }else{
-                        alert(data["message"]);
+                        alert(dataX["message"]);
                     }
                 }
             }
-        )
-    });
+        );
+        return false;
+    }
+    );
     setPageChooseBar(title,count, parseInt(page_no), parseInt(page_size));
 }
 function getTableWidthList(name) {
@@ -110,7 +113,8 @@ function addListButtonBar(title,page_no,page_size){
             success:function(data){
                 openCreator(data,title,page_no,page_size);
             }
-        })
+        });
+        return false;
     })
 }
 function setPageChooseBar(title,count, page_no, page_size) {
@@ -238,12 +242,12 @@ function setPageChooseBar(title,count, page_no, page_size) {
             url : ajaxUrl,
             async:false,
             type:"get",
-            success:function (data) {
-                data = JSON.parse(data);
-                setMainTable(data);
+            success:function (dataX) {
+                dataX = JSON.parse(dataX);
+                setMainTable(dataX);
             }
-        })
-
+        });
+        return false;
     });
 }
 function openCreator(data,title,page_no,page_size) {
@@ -292,19 +296,32 @@ function openCreator(data,title,page_no,page_size) {
     submit.setAttribute("type", "submit");
     submit.setAttribute("value", "提交");
     $("#submitButton").click(function () {
-        $("#form").ajaxForm({
+        $("#form").ajaxSubmit({
             url:title,
             type:"POST",
             async:false,
-            success:function (data) {
-                if(data["code"] == 200){
+            success:function (dataX) {
+                if(dataX["code"] == 200){
                     alert("创建成功");
-                    getMainTable(title);
+                    $.ajax({
+                        url:title,
+                        async:false,
+                        type:"get",
+                        success:function(dataY){
+                            dataY = JSON.parse(dataY);
+                            if(dataY["code"] === 200){
+                                setMainTable(dataY);
+                            }else{
+                                alert(dataY["message"]);
+                            }
+                        }
+                    });
                 }else{
-                    alert(data["message"]);
+                    alert(dataX["message"]);
                 }
             }
-        })
+        });
+        return false;
     })
 }
 function openDetail(data,page_no,page_size) {
@@ -364,19 +381,32 @@ function openDetail(data,page_no,page_size) {
     form.appendChild(updateButton);
     form.appendChild(deleteButton);
     $("#update").click(function () {
-        $("#detail").ajaxForm({
+        $("#detail").ajaxSubmit({
             url:data["title"]+"/"+data["data"]["id"],
             type:"PUT",
-            success:function (data) {
-                data = JSON.parse(data);
-                if(data["code"] === 200){
+            async:false,
+            success:function (dataX) {
+                if(dataX["code"] == 200){
                     alert("修改成功");
-                    openDetail(data,page_no,page_size);
+                    $.ajax({
+                        url:data["title"]+"/"+data["data"]["id"],
+                        type:"get",
+                        async:false,
+                        success:function (dataY) {
+                            dataY = JSON.parse(dataY);
+                            if(dataY["code"] == 200){
+                                openDetail(dataY,page_no,page_size);
+                            }else{
+                                alert(data["message"]);
+                            }
+                        }
+                    });
                 }else{
-                    alert(data["message"]);
+                    alert(dataX["message"]);
                 }
             }
-        })
+        });
+        return false;
     });
     $("#delete").click(function () {
         $.ajax({
@@ -384,16 +414,28 @@ function openDetail(data,page_no,page_size) {
             type:"delete",
             async:false,
             data:{"pageNo":page_no,"pageSize":page_size},
-            success:function (data) {
-                data = JSON.parse(data);
-                if(data["code"] === 200){
+            success:function (dataX) {
+                if(dataX["code"] == 200){
                     alert("删除成功,即将返回列表");
-                    getMainTable(data["title"]);
+                    $.ajax({
+                        url:data["title"],
+                        async:false,
+                        type:"get",
+                        success:function (dataY){
+                            dataY = JSON.parse(dataY);
+                            if(dataY["code"] === 200){
+                                setMainTable(dataY);
+                            }else{
+                                alert(dataY["message"]);
+                            }
+                        }
+                    });
                 }else{
-                    alert(data["message"]);
+                    alert(dataX["message"]);
                 }
             }
-        })
+        });
+        return false;
     });
     $.each($("#detail textarea"),function (i,each) {
         $(each).css("height",each.scrollHeight + "px");

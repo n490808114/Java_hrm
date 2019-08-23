@@ -1,32 +1,31 @@
 package xyz.n490808114.train.domain;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.*;
 
 public class Employee implements Serializable {
-    private Integer id;
-    private Dept dept;
-    private Job job;
-    private String name;
-    private String cardId;
+    @Null private Integer id;
+    @Valid private Dept dept;
+    @Valid private Job job;
+    @NotNull private String name;
+    @Size(min = 18,max = 18) private String cardId;
     private String address;
     private String postCode;
     private String tel;
-    private String phone;
+    @Size(min = 11,max = 11) private String phone;
     private String qqNum;
-    private String email;
+    @Email private String email;
     private Integer sex;
     private String party;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private Date birthday;
+    @PastOrPresent private Date birthday;
     private String race;
     private String education;
     private String speciality;
     private String hobby;
     private String remark;
-    private Date createDate;
+    @PastOrPresent private Date createDate;
     private static Map<String,String> sqlMapping = new HashMap<>();
     static{
         sqlMapping.put("id", "id");
@@ -75,6 +74,32 @@ public class Employee implements Serializable {
         this.hobby=hobby;
         this.remark=remark;
         this.createDate=createDate;
+    }
+    public Employee(Map<String,String> map){
+        for(String key : map.keySet()){
+            switch (key){
+                case "id":this.id = Integer.parseInt(map.get("id"));break;
+                case "dept":this.dept = new Dept(Integer.parseInt(map.get("dept")));break;
+                case "job":this.job = new Job(Integer.parseInt(map.get("job")));break;
+                case "name":this.name = map.get("name");break;
+                case "sex":this.sex = Integer.parseInt(map.get("sex"));break;
+                case "cardId":this.cardId = map.get("cardId");break;
+                case "address":this.address = map.get("address");break;
+                case "postCode":this.postCode = map.get("postCode");break;
+                case "tel":this.tel= map.get("tel");break;
+                case "phone":this.phone = map.get("phone");break;
+                case "qqNum":this.qqNum = map.get("qqNum");break;
+                case "email":this.email = map.get("email");break;
+                case "party":this.party = map.get("party");break;
+                case "birthday":this.birthday = new Date(Long.parseLong(map.get("birthday")));break;
+                case "race":this.race = map.get("race");break;
+                case "education":this.education = map.get("education");break;
+                case "speciality":this.speciality = map.get("speciality");break;
+                case "hobby":this.hobby = map.get("hobby");break;
+                case "remark":this.remark = map.get("remark");break;
+                case "createDate":this.createDate = new Date(Long.parseLong(map.get("createDate")));break;
+            }
+        }
     }
 
     public void setName(String name) {

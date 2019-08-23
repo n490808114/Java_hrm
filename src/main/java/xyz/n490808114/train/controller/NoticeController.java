@@ -45,24 +45,24 @@ public class NoticeController {
             json.put("code",404);
             json.put("message","找不到任何的公告");
             return JSON.toJSONString(json);
-        }else{
-            json.put("code",200);
-            json.put("message","获取成功");
-            json.put("count", hrmService.getNoticesCount());
-            json.put("dataTitle", TableTitle.noticeListTitle());
-            json.put("data", data);
-            ValueFilter filter = (Object object, String name, Object value) -> {
-                if ("user".equals(name)) {
-                    try {
-                        return value == null?"None":((User) value).getUserName();
-                    } catch (ClassCastException ex) {
-                        return value;
-                    }
-                }
-                return value;
-            };
-            return JSON.toJSONString(json,filter);
         }
+        json.put("code",200);
+        json.put("message","获取成功");
+        json.put("count", hrmService.getNoticesCount());
+        json.put("dataTitle", TableTitle.noticeListTitle());
+        json.put("data", data);
+
+        ValueFilter filter = (Object object, String name, Object value) -> {
+            if ("user".equals(name)) {
+                try {
+                    return value == null?"None":((User) value).getUserName();
+                } catch (ClassCastException ex) {
+                    return value;
+                }
+            }
+            return value;
+        };
+        return JSON.toJSONString(json,filter);
     }
 
     /**
@@ -152,24 +152,24 @@ public class NoticeController {
      * @return 标题不为空，返回true,否则返回false
      */
     @PutMapping("/{id}")
-    public String update(@PathVariable("id") int id,@RequestParam Map<String, String> map, HttpSession session) {
+    public Map<String,Object> update(@PathVariable("id") int id,@RequestParam Map<String, String> map, HttpSession session) {
         Notice notice = new Notice();
         notice.setId(Integer.parseInt(map.get("id")));
         notice.setTitle(map.get("title"));
         notice.setContent(map.get("content"));
         notice.setCreateDate(new Date());
         notice.setUser((User) session.getAttribute(TrainConstants.USER_SESSION));
-
+        Map<String,Object> json = new HashMap<>();
 
         if (!"".equals(notice.getTitle().trim()) && hrmService.findNoticeById(id) != null) {
             hrmService.modifyNotice(notice);
-            return getDetail(id);
+            json.put("code",200);
+            json.put("message","修改成功");
         } else {
-            Map<String,Object> json = new HashMap<>();
             json.put("code",404);
             json.put("message","修改公告内容失败");
-            return JSON.toJSONString(json);
         }
+        return json;
     }
 
     /**

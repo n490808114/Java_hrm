@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ComponentScans;
 
 @SpringBootApplication()
 @MapperScan("xyz.n490808114.train.dao")
-
 public class TrainApplication {
     public static void main(String[] args) {
         SpringApplication.run(TrainApplication.class,args);

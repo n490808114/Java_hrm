@@ -10,9 +10,9 @@ import java.util.Map;
 
 
 public interface EmployeeDao {
-        @Insert("INSERT INTO employee_inf(id,dept_id,job_id,name,card_id,address,post_code,tel,phone,qq_num,email,"
+        @Insert("INSERT INTO employee_inf(dept_id,job_id,name,card_id,address,post_code,tel,phone,qq_num,email,"
                         + "sex,party,birthday,race,education,speciality,hobby,remark,create_date) "
-                        + "VALUES(#{id},#{dept.id},#{job.id},#{name},#{cardId},#{address},#{postCard},#{tel},#{phone},#{qqNum},"
+                        + "VALUES(#{dept.id},#{job.id},#{name},#{cardId},#{address},#{postCard},#{tel},#{phone},#{qqNum},"
                         + "#{email},#{sex},#{party},#{birthday},#{race},#{education},#{speciality},#{hobby},#{remark},#{createDate})")
         @Options(useGeneratedKeys = true, keyProperty = "id")
         int save(Employee employee);

@@ -10,6 +10,9 @@ public class Dept implements Serializable {
     private String remark;
     private List<Employee> employees;
     public Dept(){}
+    public Dept(int id){
+        this.id = id;
+    }
     public Dept(int id,String name,String remark){
         this.id=id;
         this.name=name;
