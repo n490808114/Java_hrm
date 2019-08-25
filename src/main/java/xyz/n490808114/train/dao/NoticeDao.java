@@ -2,8 +2,6 @@ package xyz.n490808114.train.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
-import org.apache.ibatis.type.Alias;
-import org.springframework.stereotype.Service;
 import xyz.n490808114.train.domain.Notice;
 
 import java.util.*;
@@ -24,7 +22,7 @@ public interface NoticeDao {
         @ResultMap("noticeResult")
         List<Notice> selectAll();
 
-        @SelectProvider(type = NoticeDynaSqlProvider.class,method = "getNoticeListByPageNoAndPageSize")
+        @SelectProvider(type = NoticeDynaSqlProvider.class,method = "getNoticeListByParam")
         @Results(id = "noticeList",value = { @Result(id = true, column = "id", property = "id"), 
                                                 @Result(column = "title", property = "title"),
                                                 @Result(column = "create_date", property = "createDate"),
@@ -39,11 +37,10 @@ public interface NoticeDao {
                         + "VALUES(#{title},#{content},#{createDate},#{user.id})")
         void save(Notice notice);
 
-        @Update("UPDATE notice_inf SET title = #{title}," + "content = #{content}," + "create_date = #{createDate},"
-                        + "user_id = #{user.id} " + "WHERE id = #{id}")
+        @Update("UPDATE notice_inf SET title = #{title},content = #{content} WHERE id = #{id}")
         void modify(Notice notice);
 
-        @Select("SELECT COUNT(id) from notice_inf")
-        int getCount();
+        @SelectProvider(type = NoticeDynaSqlProvider.class,method = "getCount")
+        int getCount(Map<String, String> param);
 
 }

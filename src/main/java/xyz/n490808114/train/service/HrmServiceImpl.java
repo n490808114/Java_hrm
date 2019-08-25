@@ -1,6 +1,5 @@
 package xyz.n490808114.train.service;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,13 +72,13 @@ public class HrmServiceImpl implements HrmService {
     }
 
     @Override
-    public List<Employee> getEmployeeList(Map<String,Object> param){
+    public List<Employee> getEmployeeList(Map<String,String> param){
         return employeeDao.selectEmployeeListWithParam(param);
     }
 
     @Override
-    public int getEmployeeCount() {
-        return employeeDao.getCount();
+    public int getEmployeeCount(Map<String, String> param) {
+        return employeeDao.getCount(param);
     }
 
     @Override
@@ -216,8 +215,8 @@ public class HrmServiceImpl implements HrmService {
     }
 
     @Override
-    public int getNoticesCount() {
-        return noticeDao.getCount();
+    public int getNoticesCount(Map<String, String> param) {
+        return noticeDao.getCount(param);
     }
 
 

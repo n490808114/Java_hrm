@@ -6,11 +6,13 @@ public class TableTitle {
     private static final Map<String,String> noticeTitle = new LinkedHashMap<>();
     private static final Map<String,String> noticeListTitle = new LinkedHashMap<>();
     private static final Map<String,String> noticeCreateTitle = new LinkedHashMap<>();
+    private static final Map<String,String> noticeSearchTitle = new LinkedHashMap<>();
 
     private static final Map<String,String> employeeTitle = new LinkedHashMap<>();
     private static final Map<String,String> employeeListTitle = new LinkedHashMap<>();
     private static final Map<String,String> employeeCreateTitle = new LinkedHashMap<>();
-    private static final Map<Integer,String> sexMap = new LinkedHashMap<>();
+    private static final Map<String,String> sexMap = new LinkedHashMap<>();
+    private static final Map<String,String> employeeSqlMapping = new HashMap<>();
 
     private static final Map<String,String> deptListTitle = new LinkedHashMap<>();
     
@@ -19,16 +21,17 @@ public class TableTitle {
         noticeTitle.put("id","序号");
         noticeTitle.put("title","标题");
         noticeTitle.put("content","公告内容");
-        noticeTitle.put("createDate","最后更改日期");
         noticeTitle.put("user","创建人");
         
         noticeListTitle.put("id","序号");
         noticeListTitle.put("title","标题");
-        noticeListTitle.put("createDate","最后更改日期");
+        noticeListTitle.put("createDate","创建日期");
         noticeListTitle.put("user","创建人");
 
         noticeCreateTitle.put("title","标题");
         noticeCreateTitle.put("content","公告内容");
+
+        noticeSearchTitle.put("title","标题");
     }
     static{
         employeeTitle.put("id", "序号");
@@ -50,7 +53,6 @@ public class TableTitle {
         employeeTitle.put("speciality","特长");
         employeeTitle.put("hobby","爱好");
         employeeTitle.put("remark","备注");
-        employeeTitle.put("createDate","创建日期");
 
 
         employeeListTitle.put("id", "员工号");
@@ -78,9 +80,30 @@ public class TableTitle {
         employeeCreateTitle.put("hobby","爱好");
         employeeCreateTitle.put("remark","备注");
 
-        sexMap.put(0,"女");
-        sexMap.put(1, "男");
-        sexMap.put(2,"未知");
+        employeeSqlMapping.put("id", "id");
+        employeeSqlMapping.put("dept", "dept_id");
+        employeeSqlMapping.put("job", "job_id");
+        employeeSqlMapping.put("name", "name");
+        employeeSqlMapping.put("cardId", "card_id");
+        employeeSqlMapping.put("address", "address");
+        employeeSqlMapping.put("postCode", "post_code");
+        employeeSqlMapping.put("tel", "tel");
+        employeeSqlMapping.put("phone", "phone");
+        employeeSqlMapping.put("qqNum", "qq_num");
+        employeeSqlMapping.put("email", "email");
+        employeeSqlMapping.put("sex", "sex");
+        employeeSqlMapping.put("party", "party");
+        employeeSqlMapping.put("birthday", "birthday");
+        employeeSqlMapping.put("race", "race");
+        employeeSqlMapping.put("education", "education");
+        employeeSqlMapping.put("speciality", "speciality");
+        employeeSqlMapping.put("hobby", "hobby");
+        employeeSqlMapping.put("remark", "remark");
+        employeeSqlMapping.put("createDate", "create_date");
+
+        sexMap.put("0","女");
+        sexMap.put("1", "男");
+        sexMap.put("2","未知");
     }
     static {
         deptListTitle.put("id", "序号");
@@ -91,11 +114,13 @@ public class TableTitle {
     public static Map<String, String> noticeTitle(){return noticeTitle;}
     public static Map<String,String> noticeListTitle(){return noticeListTitle;}
     public static Map<String,String> noticeCreateTitle(){return noticeCreateTitle;}
+    public static Map<String, String> noticeSearchTitle() {return noticeSearchTitle;}
 
     public static Map<String,String> employeeTitle(){return employeeTitle;}
     public static Map<String,String> employeeListTitle(){return employeeListTitle;}
     public static Map<String,String> employeeCreateTitle(){return employeeCreateTitle;}
-    public static Map<Integer,String> sexMap(){return sexMap;}
+    public static Map<String,String> sexMap(){return sexMap;}
+    public static Map<String,String> employeeSqlMapping(){return employeeSqlMapping;}
 
     public static Map<String,String> deptListTitle(){return deptListTitle;}
 }

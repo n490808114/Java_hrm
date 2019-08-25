@@ -3,13 +3,16 @@ package xyz.n490808114.train.domain;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Null private Integer id;
     @Valid private Dept dept;
     @Valid private Job job;
-    @NotNull private String name;
+    @NotNull @Size(min = 2,max = 20) private String name;
     @Size(min = 18,max = 18) private String cardId;
     private String address;
     private String postCode;
@@ -26,28 +29,9 @@ public class Employee implements Serializable {
     private String hobby;
     private String remark;
     @PastOrPresent private Date createDate;
-    private static Map<String,String> sqlMapping = new HashMap<>();
+    
     static{
-        sqlMapping.put("id", "id");
-        sqlMapping.put("dept", "dept_id");
-        sqlMapping.put("job", "job_id");
-        sqlMapping.put("name", "name");
-        sqlMapping.put("cardId", "card_id");
-        sqlMapping.put("address", "address");
-        sqlMapping.put("postCode", "post_code");
-        sqlMapping.put("tel", "tel");
-        sqlMapping.put("phone", "phone");
-        sqlMapping.put("qqNum", "qq_num");
-        sqlMapping.put("email", "email");
-        sqlMapping.put("sex", "sex");
-        sqlMapping.put("party", "party");
-        sqlMapping.put("birthday", "birthday");
-        sqlMapping.put("race", "race");
-        sqlMapping.put("education", "education");
-        sqlMapping.put("speciality", "speciality");
-        sqlMapping.put("hobby", "hobby");
-        sqlMapping.put("remark", "remark");
-        sqlMapping.put("createDate", "create_date");
+
     }
     public Employee(){
     }
@@ -91,13 +75,33 @@ public class Employee implements Serializable {
                 case "qqNum":this.qqNum = map.get("qqNum");break;
                 case "email":this.email = map.get("email");break;
                 case "party":this.party = map.get("party");break;
-                case "birthday":this.birthday = new Date(Long.parseLong(map.get("birthday")));break;
+                case "birthday":
+                    if(map.get("birthday").equals("")){
+                        this.birthday = new Date(0L);
+                    }else{
+                        try{
+                            this.birthday = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("birthday"));
+                        }catch(ParseException ex){
+                            this.birthday = new Date(Long.MAX_VALUE);
+                        }
+                    }
+                    break;
                 case "race":this.race = map.get("race");break;
                 case "education":this.education = map.get("education");break;
                 case "speciality":this.speciality = map.get("speciality");break;
                 case "hobby":this.hobby = map.get("hobby");break;
                 case "remark":this.remark = map.get("remark");break;
-                case "createDate":this.createDate = new Date(Long.parseLong(map.get("createDate")));break;
+                case "createDate":                    
+                    if(map.get("createDate").equals("")){
+                        this.createDate = new Date(0L);
+                    }else{
+                        try{
+                            this.createDate = new SimpleDateFormat("yyyy-MM-dd").parse(map.get("createDate"));
+                        }catch(ParseException ex){
+                            this.createDate = new Date(Long.MAX_VALUE);
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -106,7 +110,7 @@ public class Employee implements Serializable {
         this.name = name;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -175,18 +179,11 @@ public class Employee implements Serializable {
         this.tel = tel;
     }
 
-    /**
-     * @param sqlMapping the sqlMapping to set
-     */
-    public static void setSqlMapping(Map<String, String> sqlMapping) {
-        Employee.sqlMapping = sqlMapping;
-    }
-
     public String getName() {
         return name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -274,12 +271,7 @@ public class Employee implements Serializable {
     public Integer getSex() {
         return sex;
     }
-    /**
-     * @return the sqlMapping
-     */
-    public static Map<String, String> getSqlMapping() {
-        return sqlMapping;
-    }
+
 
     @Override
     public String toString() {

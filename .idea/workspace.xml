@@ -2,48 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c304a6a-2538-44a9-8e25-a5ce302a6e2a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/util/BeanDataCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" afterPath="$PROJECT_DIR$/.project" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/TrainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/TrainApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/DeptController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/DeptController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/EmployeeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/NoticeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/controller/NoticeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/DeptDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/DeptDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/DocumentDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/DocumentDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/EmployeeDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/EmployeeDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/JobDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/JobDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/NoticeDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/NoticeDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/dao/UserDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Dept.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Dept.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Document.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Document.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Employee.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Job.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Job.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Notice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/Notice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/domain/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/service/HrmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/service/HrmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/service/HrmServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/service/HrmServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/util/BeanDataCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/util/BeanDataCache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/util/TableTitle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xyz/n490808114/train/util/TableTitle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/lib2.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/lib2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/AuthorizedInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/backup/AuthorizedInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/HrmConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/backup/HrmConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/StringToDateConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backup/StringToDateConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backup/log4j.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/applicationContext.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/css/css.css" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/css/css.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/css/login.css" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/css/login.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/js/jquery-3.3.1.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/js/jquery-3.3.1.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/js/jquery.form.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/js/jquery.form.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/js/json2.js" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/js/json2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/js/lib.js" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/js/lib.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/loginForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/loginForm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/picture/blueflax.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/picture/blueflax.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/picture/screencut.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/picture/screencut.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/registerForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/registerForm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/beiying.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/beiying.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/beiying.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/beiying.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/fkjava.ico" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/fkjava.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/image_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/image_gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/item.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/item.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/kuangrenriji.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/kuangrenriji.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/test.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/text.html" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/text.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/content/test/topics.gif" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/content/test/topics.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/springmvc-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/springmvc-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文件夹/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/backup/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/xyz/n490808114/train/NoticeControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/xyz/n490808114/train/NoticeControllerTest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -75,6 +56,13 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
   </component>
   <component name="ProjectId" id="1PRv3kl8elNPVkXuQ1q2SXna4bX" />
   <component name="ProjectLevelVcsManager">
@@ -133,6 +121,7 @@
       <workItem from="1566539393834" duration="8679000" />
       <workItem from="1566550584618" duration="1138000" />
       <workItem from="1566552250718" duration="1919000" />
+      <workItem from="1566690724424" duration="113000" />
     </task>
     <servers />
   </component>

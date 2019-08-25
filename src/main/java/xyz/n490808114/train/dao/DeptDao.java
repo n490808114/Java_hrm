@@ -2,9 +2,6 @@ package xyz.n490808114.train.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import xyz.n490808114.train.domain.Dept;
 
 import java.util.*;

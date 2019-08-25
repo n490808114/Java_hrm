@@ -3,10 +3,14 @@ package xyz.n490808114.train.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Null;
+
 
 public class Notice implements Serializable {
-    private int id;
-    private String title;
+    private static final long serialVersionUID = 1L;
+    @Null private Integer id;
+    @Size(min = 1,max = 100) String title;
     private String content;
     private Date createDate;
     private User user;

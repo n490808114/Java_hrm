@@ -1,7 +1,7 @@
 package xyz.n490808114.train.service;
 
 
-import org.springframework.stereotype.Service;
+
 import xyz.n490808114.train.domain.*;
 
 import java.util.*;
@@ -70,13 +70,13 @@ public interface HrmService {
      * 获得员工列表
      * @return employeeList
      */
-    List<Employee> getEmployeeList(Map<String,Object> param);
+    List<Employee> getEmployeeList(Map<String,String> param);
 
     /**
      * 获得Employee总数
      * @return 总数
      */
-    int getEmployeeCount();
+    int getEmployeeCount(Map<String, String> param);
 
     /**
      * 修改员工
@@ -209,7 +209,7 @@ public interface HrmService {
      * 获取Notice的条目数
      * @return Notice的条目数
      */
-    int getNoticesCount();
+    int getNoticesCount(Map<String, String> param);
     /**
      * 需要提供key 为 pageNo 和 pageSize 的数据
      */

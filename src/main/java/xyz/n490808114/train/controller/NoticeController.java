@@ -2,8 +2,7 @@ package xyz.n490808114.train.controller;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.ValueFilter;
-import javafx.beans.binding.ObjectExpression;
+import com.alibaba.fastjson.serializer.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,9 @@ import xyz.n490808114.train.domain.User;
 import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.util.TrainConstants;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 import javax.servlet.http.HttpSession;
 
@@ -26,11 +28,14 @@ public class NoticeController {
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
 
+    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
     @GetMapping
     public String getList(@RequestParam(value = "pageSize",defaultValue = "20") int pageSize,
-                          @RequestParam(value = "pageNo",defaultValue = "1") int pageNo)
+                        @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
+                        @RequestParam Map<String,String> requestParam)
     {
-        Map<String, Object> param = new HashMap<>();
+        Map<String, Object> param = new HashMap<>(requestParam);
         param.put("pageNo", pageNo);
         param.put("pageSize", pageSize);
 
@@ -48,7 +53,7 @@ public class NoticeController {
         }
         json.put("code",200);
         json.put("message","获取成功");
-        json.put("count", hrmService.getNoticesCount());
+        json.put("count", hrmService.getNoticesCount(requestParam));
         json.put("dataTitle", TableTitle.noticeListTitle());
         json.put("data", data);
 
@@ -57,6 +62,13 @@ public class NoticeController {
                 try {
                     return value == null?"None":((User) value).getUserName();
                 } catch (ClassCastException ex) {
+                    return value;
+                }
+            }else if("createDate".equals(name)){
+                try{
+                    if(value == null){throw new ClassCastException();}
+                    return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
+                }catch(ClassCastException ex){
                     return value;
                 }
             }
@@ -70,8 +82,18 @@ public class NoticeController {
      * @return 可填写的内容String
      */
     @GetMapping("/create")
-    public Map<String, String> create() {
-        return TableTitle.noticeCreateTitle();
+    public Map<String, Object> create() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("title","notice");
+        map.put("dataTitle",TableTitle.noticeCreateTitle());
+        return map;
+    }
+    @GetMapping("/search")
+    public Map<String,Object> search(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("title","notice");
+        map.put("dataTitle",TableTitle.noticeSearchTitle());
+        return map;
     }
 
     /**
@@ -83,22 +105,27 @@ public class NoticeController {
      * @return 标题不为空，返回true,否则返回false
      */
     @PostMapping
-    public Map<String,Object> create(@RequestParam("content") String content, @RequestParam("title") String title,
-            HttpSession session) {
+    public Map<String,Object> create(@RequestParam Map<String,String> param,HttpSession session) {
         Notice notice = new Notice();
-        notice.setTitle(title);
-        notice.setContent(content);
+        notice.setTitle(param.get("title"));
+        notice.setContent(param.get("content"));
         notice.setCreateDate(new Date());
         notice.setUser((User) session.getAttribute(TrainConstants.USER_SESSION));
 
+        Set<ConstraintViolation<Notice>> set = validator.validate(notice);
         Map<String,Object> map = new HashMap<>();
-        if (!"".equals(title.trim())) {
+        if(set.size() == 0){
             hrmService.addNotice(notice);
             map.put("code",200);
             map.put("message","创建成功");
-        } else {
-            map.put("code",404);
-            map.put("message","创建失败");
+        }else{
+            Map<String,String> error = new LinkedHashMap<>();
+            for(ConstraintViolation<Notice> constraintViolation : set){
+                error.put(constraintViolation.getPropertyPath().toString()
+                , constraintViolation.getMessage());
+            }
+            map.put("code", 404);
+            map.put("message",error);
         }
         return map;
     }
@@ -117,30 +144,34 @@ public class NoticeController {
         if(notice == null){
             map.put("code",404);
             map.put("message","找不到这个公告");
+            return JSON.toJSONString(map);
         }else{
             map.put("code",200);
             map.put("message","获取成功");
-            map.put("title","notice");
             map.put("dataTitle",TableTitle.noticeTitle());
             map.put("data",notice);
+            ValueFilter valueFilter = (Object object, String name, Object value) -> {
+                if ("user".equals(name)) {
+                    try {
+                        return ((User) value).getUserName();
+                    } catch (ClassCastException ex) {
+                        return value;
+                    }
+                }
+                return value;
+            };
+            PropertyFilter propertyFilter = (Object Object,String name,Object value) ->{
+                if(name.equals("createDate")){
+                    return false;
+                }
+                return true;
+            };
+            SerializeFilter[] list = new SerializeFilter[2];
+            list[0] = valueFilter;
+            list[1] = propertyFilter;
+            return JSON.toJSONString(map,list);
         }
-        ValueFilter filter = (Object object, String name, Object value) -> {
-            if ("user".equals(name)) {
-                try {
-                    return ((User) value).getUserName();
-                } catch (ClassCastException ex) {
-                    return value;
-                }
-            }else if("createDate".equals(name)){
-                try{
-                    return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
-                }catch(ClassCastException ex){
-                    return value;
-                }
-            }
-            return value;
-        };
-        return JSON.toJSONString(map,filter);
+
     }
 
     /**
@@ -152,24 +183,28 @@ public class NoticeController {
      * @return 标题不为空，返回true,否则返回false
      */
     @PutMapping("/{id}")
-    public Map<String,Object> update(@PathVariable("id") int id,@RequestParam Map<String, String> map, HttpSession session) {
+    public Map<String,Object> update(@PathVariable("id") int id,@RequestParam Map<String, String> param, HttpSession session) {
         Notice notice = new Notice();
-        notice.setId(Integer.parseInt(map.get("id")));
-        notice.setTitle(map.get("title"));
-        notice.setContent(map.get("content"));
-        notice.setCreateDate(new Date());
-        notice.setUser((User) session.getAttribute(TrainConstants.USER_SESSION));
-        Map<String,Object> json = new HashMap<>();
+        notice.setTitle(param.get("title"));
+        notice.setContent(param.get("content"));
 
-        if (!"".equals(notice.getTitle().trim()) && hrmService.findNoticeById(id) != null) {
-            hrmService.modifyNotice(notice);
-            json.put("code",200);
-            json.put("message","修改成功");
-        } else {
-            json.put("code",404);
-            json.put("message","修改公告内容失败");
+        Set<ConstraintViolation<Notice>> set = validator.validate(notice);
+        Map<String,Object> map = new HashMap<>();
+        if(set.size() == 0){
+            notice.setId(id);
+            hrmService.modifyNotice(notice);;
+            map.put("code",200);
+            map.put("message","创建成功");
+        }else{
+            Map<String,String> error = new LinkedHashMap<>();
+            for(ConstraintViolation<Notice> constraintViolation : set){
+                error.put(constraintViolation.getPropertyPath().toString()
+                , constraintViolation.getMessage());
+            }
+            map.put("code", 404);
+            map.put("message",error);
         }
-        return json;
+        return map;
     }
 
     /**
@@ -177,10 +212,7 @@ public class NoticeController {
      * @return 提交删除指定,返回给前台true
      */
     @DeleteMapping("/{id}")
-    public Map<String, Object> delete(@PathVariable("id") int id,
-                          @RequestParam("pageNo") int pageNo,
-                          @RequestParam("pageSize") int pageSize) {
-
+    public Map<String, Object> delete(@PathVariable("id") int id) {
         Notice notice = hrmService.findNoticeById(id);
         Map<String, Object> map = new HashMap<>();
         if(notice == null){

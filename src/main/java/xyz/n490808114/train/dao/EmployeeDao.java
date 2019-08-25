@@ -2,7 +2,6 @@ package xyz.n490808114.train.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
-import org.springframework.stereotype.Service;
 import xyz.n490808114.train.domain.Employee;
 
 import java.util.List;
@@ -10,11 +9,8 @@ import java.util.Map;
 
 
 public interface EmployeeDao {
-        @Insert("INSERT INTO employee_inf(dept_id,job_id,name,card_id,address,post_code,tel,phone,qq_num,email,"
-                        + "sex,party,birthday,race,education,speciality,hobby,remark,create_date) "
-                        + "VALUES(#{dept.id},#{job.id},#{name},#{cardId},#{address},#{postCard},#{tel},#{phone},#{qqNum},"
-                        + "#{email},#{sex},#{party},#{birthday},#{race},#{education},#{speciality},#{hobby},#{remark},#{createDate})")
-        @Options(useGeneratedKeys = true, keyProperty = "id")
+        @InsertProvider(type = EmployeeDynaSqlProvider.class,method = "insert")
+        /*@Options(useGeneratedKeys = true, keyProperty = "id")*/
         int save(Employee employee);
 
         @InsertProvider(type = EmployeeDynaSqlProvider.class,method = "insertByParam")
@@ -73,7 +69,7 @@ public interface EmployeeDao {
         @ResultMap("employeeResult")
         List<Employee> selectEmployeesWithParam(Map<String, Object> param);
 
-        @SelectProvider(type = EmployeeDynaSqlProvider.class,method = "getEmployeeListByPageNoAndPageSize")
+        @SelectProvider(type = EmployeeDynaSqlProvider.class,method = "getEmployeeListByParam")
         @Results(id="employeeList",value = {
                 @Result(id=true,column = "id",property = "id"),
                 @Result(column = "name", property = "name"),
@@ -81,9 +77,9 @@ public interface EmployeeDao {
                 @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.train.dao.JobDao.selectById", fetchType = FetchType.EAGER)),
                 @Result(column = "phone", property = "phone")
         })
-        List<Employee> selectEmployeeListWithParam(Map<String,Object> param);
+        List<Employee> selectEmployeeListWithParam(Map<String,String> param);
 
-        @Select("SELECT COUNT(id) FROM employee_inf")
-        int getCount();
+        @SelectProvider(type = EmployeeDynaSqlProvider.class,method = "getCount")
+        int getCount(Map<String, String> param);
 
 }

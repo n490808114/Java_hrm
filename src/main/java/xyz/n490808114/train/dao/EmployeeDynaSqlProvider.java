@@ -1,10 +1,13 @@
 package xyz.n490808114.train.dao;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.jdbc.SQL;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import xyz.n490808114.train.domain.Employee;
 import xyz.n490808114.train.service.HrmService;
+import xyz.n490808114.train.util.TableTitle;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -13,8 +16,37 @@ public class EmployeeDynaSqlProvider {
     @Qualifier("hrmServiceImpl")
     HrmService hrmService;
 
+    private static Log log = LogFactory.getLog(EmployeeDynaSqlProvider.class);
+
+    public String insert(Employee employee){
+        return new SQL(){
+            {
+                INSERT_INTO("employee_inf");
+                VALUES("dept_id", "" + employee.getDept().getId());
+                VALUES("job_id", "" + employee.getJob().getId());
+                VALUES("name", "'" + employee.getName() + "'");
+                if(!employee.getCardId().equals("")){VALUES("card_id", "'" + employee.getCardId() + "'");}
+                if(!employee.getAddress().equals("")){VALUES("address", "'" + employee.getAddress() + "'");}
+                if(!employee.getPostCode().equals("")){VALUES("post_code", "'" + employee.getPostCode() + "'");}
+                if(!employee.getTel().equals("")){VALUES("tel", "'" + employee.getTel() + "'");}
+                VALUES("phone", employee.getPhone());
+                if(!employee.getQqNum().equals("")){VALUES("qq_num", "'" + employee.getQqNum() + "'");}
+                if(!employee.getEmail().equals("")){VALUES( "email", "'" + employee.getEmail() + "'");}
+                VALUES("sex", "" + employee.getSex());
+                if(!employee.getParty().equals("")){VALUES("party", "'" + employee.getParty() + "'");}
+                if(employee.getBirthday() != null){VALUES("birthday", "'" + new SimpleDateFormat("yyyy-MM-dd").format(employee.getBirthday()) + "'");}
+                if(!employee.getRace().equals("")){VALUES("race", "'" + employee.getRace() + "'");}
+                if(!employee.getEducation().equals("")){VALUES("education", "'" + employee.getEducation() + "'");}
+                if(!employee.getSpeciality().equals("")){VALUES("speciality", "'" + employee.getSpeciality() + "'");}
+                if(!employee.getHobby().equals("")){VALUES("hobby", "'" + employee.getHobby() + "'");}
+                if(!employee.getRemark().equals("")){VALUES("remark", "'" + employee.getRemark() + "'");}
+                VALUES("create_date", "'" + new SimpleDateFormat("yyyy-MM-dd").format(employee.getCreateDate()) + "'");
+            }
+        }.toString();
+    }
+
     public String insertByParam(Map<String,String> param){
-        Map<String,String> sqlMapping = Employee.getSqlMapping();
+        Map<String,String> sqlMapping = TableTitle.employeeSqlMapping();
         /*
         String head = "INSERT INTO employee_inf";
         Stack<String> columns = new Stack<>();
@@ -49,12 +81,12 @@ public class EmployeeDynaSqlProvider {
                             case "name":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
                             case "dept":VALUES(sqlMapping.get(s), param.get(s));;break;
                             case "job":VALUES(sqlMapping.get(s), param.get(s));;break;
-                            case "cardId":VALUES(sqlMapping.get(s), param.get(s));;break;
+                            case "cardId":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
                             case "address":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
-                            case "postCode":VALUES(sqlMapping.get(s), param.get(s));;break;
-                            case "tel":VALUES(sqlMapping.get(s), param.get(s));;break;
-                            case "phone":VALUES(sqlMapping.get(s), param.get(s));;break;
-                            case "qqNum":VALUES(sqlMapping.get(s), param.get(s));;break;
+                            case "postCode":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
+                            case "tel":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
+                            case "phone":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
+                            case "qqNum":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
                             case "email":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
                             case "sex":VALUES(sqlMapping.get(s), param.get(s));;break;
                             case "party":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
@@ -64,10 +96,11 @@ public class EmployeeDynaSqlProvider {
                             case "speciality":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
                             case "hobby":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
                             case "remark":VALUES(sqlMapping.get(s), "'"+param.get(s)+"'");;break;
+                            case "createDate":VALUES("create_date","'" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "'");break;
                         }
                     }
                 }
-                VALUES("create_date","'" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "'");
+                
             }
         }.toString();
         
@@ -137,8 +170,9 @@ public class EmployeeDynaSqlProvider {
     }
 
     public String modify(Map<String,String> param){
+        log.info(param);
         if(param.get("id").equals("")){return "";}
-        Map<String,String> sqlMapping = Employee.getSqlMapping();
+        Map<String,String> sqlMapping = TableTitle.employeeSqlMapping();
         return new SQL(){
             {
                 UPDATE("employee_inf");
@@ -148,12 +182,12 @@ public class EmployeeDynaSqlProvider {
                             case "name":SET(sqlMapping.get(s) + " = " + " '"+param.get(s)+"'");;break;
                             case "dept":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
                             case "job":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
-                            case "cardId":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
+                            case "cardId":SET(sqlMapping.get(s) + " = "+ " '" + param.get(s)+"'");;break;
                             case "address":SET(sqlMapping.get(s) + " = " + "'"+param.get(s)+"'");;break;
-                            case "postCode":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
-                            case "tel":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
-                            case "phone":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
-                            case "qqNum":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
+                            case "postCode":SET(sqlMapping.get(s) + " = "+ " '" + param.get(s)+"'");;break;
+                            case "tel":SET(sqlMapping.get(s) + " = "+ " '" + param.get(s)+"'");;break;
+                            case "phone":SET(sqlMapping.get(s) + " = "+ " '" + param.get(s)+"'");;break;
+                            case "qqNum":SET(sqlMapping.get(s) + " = "+ " '" + param.get(s)+"'");;break;
                             case "email":SET(sqlMapping.get(s) + " = " + "'"+param.get(s)+"'");;break;
                             case "sex":SET(sqlMapping.get(s) + " = " + param.get(s));;break;
                             case "party":SET(sqlMapping.get(s) + " = " + "'"+param.get(s)+"'");;break;
@@ -170,17 +204,58 @@ public class EmployeeDynaSqlProvider {
             }
         }.toString();
     }
-    public String getEmployeeListByPageNoAndPageSize(Map<String,Object> param){
-        int pageSize = (Integer) param.get("pageSize");
-        int start =pageSize * ((Integer) param.get("pageNo") - 1);
-        
-        return new SQL(){
+    public String getEmployeeListByParam(Map<String,String> param){
+        int pageSize = Integer.parseInt(param.get("pageSize"));
+        String r = new SQL(){
             {
                 SELECT("id,name,dept_id,job_id,phone");
                 FROM("employee_inf");
-                WHERE("id>=(SELECT id FROM employee_inf LIMIT  "+start +",1)");
-                
+                WHERE("id>=("+ getSelectId(new HashMap<String,String>(param))+")");
+                param.remove("pageNo");
+                param.remove("pageSize");
+                for(String key : param.keySet()){
+                    if(!param.get(key).equals("")){
+                        AND();
+                        WHERE(TableTitle.employeeSqlMapping().get(key) + " LIKE '%"+ param.get(key) +"%'");
+                    }
+                }
             }
         }.toString() + " limit " + pageSize;
+        log.info(r);
+        return r;
+    }
+    private String getSelectId(Map<String,String> param){
+        int pageSize = Integer.parseInt(param.get("pageSize"));
+        int start =pageSize * (Integer.parseInt(param.get("pageNo"))  - 1);
+        return new SQL(){
+            {
+                SELECT("id");
+                FROM("notice_inf");
+                param.remove("pageNo");
+                param.remove("pageSize");
+                for(String key : param.keySet()){
+                    if(!param.get(key).equals("")){
+                        AND();
+                        WHERE(TableTitle.employeeSqlMapping().get(key) + " LIKE '%"+ param.get(key) +"%'");
+                    }
+                }
+            }
+        }.toString()+" limit "+start+",1";
+    }
+    public String getCount(Map<String, String> param){
+        String r = new SQL(){
+            {
+                SELECT("COUNT(id)");
+                FROM("employee_inf");
+                for(String key : param.keySet()){
+                    if(!param.get(key).equals("")){
+                        AND();
+                        WHERE(TableTitle.employeeSqlMapping().get(key) + " LIKE '%"+ param.get(key) +"%'");
+                    }
+                }
+            }
+        }.toString();
+        log.info(r);
+        return r;
     }
 }

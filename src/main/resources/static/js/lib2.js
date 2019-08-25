@@ -14,6 +14,10 @@ $(document).ready(function () {
                     }
                 }
             });
+            $.each($("#aside > ul > li > a"),function(a,b){
+                b.style.color = "";
+            });
+            t.style.color = "#005d80";
             return false;
         });
     });
@@ -28,17 +32,28 @@ function cleanMain() {
 }
 function setMainTable(json) {
     var title = json.title;
+    var page_no = json.pageNo;
+    var page_size = json.pageSize;
+
+    cleanMain();
+    addSearchpanel(title);
+    addListButtonBar(title,page_no,page_size);
+    setTable(json);
+}
+function setTable(json){
+    var title = json.title;
     var count = json.count;
     var page_no = json.pageNo;
     var page_size = json.pageSize;
     var dataTitle = json.dataTitle;
     var data = json.data;
-
     var list = getTableWidthList(title);
-    var main = cleanMain();
-    addListButtonBar(title,page_no,page_size);
+    $("#main_table").remove();
+    $("#main_page_choose_bar").remove();
     var table = document.createElement("table");
+    var main = document.getElementsByTagName("main")[0];
     main.appendChild(table);
+
     table.setAttribute("id", "main_table");
 
     var trth = document.createElement("tr");
@@ -76,7 +91,7 @@ function setMainTable(json) {
                 async:false,
                 success:function (dataX) {
                     dataX = JSON.parse(dataX);
-                    if(dataX["code"] === 200){
+                    if(dataX["code"] == 200){
                         openDetail(dataX,page_no,page_size);
                     }else{
                         alert(dataX["message"]);
@@ -96,15 +111,56 @@ function getTableWidthList(name) {
         return ["10%", "20%", "20%", "20%", "20%", "10%"];
     }
 }
+function addSearchpanel(title){
+    var form = document.createElement("form");
+    form.setAttribute("id","search");
+    var main = document.getElementsByTagName("main")[0];
+    main.appendChild(form);
+    $.ajax({
+        url:title+"/search",
+        type:"get",
+        success:function(data){
+            setList(form,data);
+            $.each($("#search > p > select"),function(a,b){
+                var option = document.createElement("option");
+                option.appendChild(document.createTextNode("请选择"));
+                option.setAttribute("value","");
+                option.setAttribute("selected","selected");
+                b.appendChild(option);
+            })
+        }
+    });
+    var searchButton = document.createElement("input");
+    searchButton.setAttribute("type","submit");
+    searchButton.setAttribute("value","搜索");
+    searchButton.style.color = "red";
+    var searchButtonDiv = document.createElement("div");
+    searchButtonDiv.setAttribute("id","searchButton");
+    searchButtonDiv.appendChild(searchButton);
+    form.appendChild(searchButtonDiv);
+    $("#searchButton > input").click(function(){
+        $("#search").ajaxSubmit({
+            url:title,
+            type:"get",
+            success:function(data){
+                setTable(JSON.parse(data));
+            }
+        })
+        return false;
+    });
+
+}
 function addListButtonBar(title,page_no,page_size){
     var main = document.getElementsByTagName("main")[0];
     var bar = document.createElement("div");
+
     var addButton = document.createElement("button");
     addButton.setAttribute("id","addButton");
     addButton.setAttribute("type","button");
     addButton.appendChild(document.createTextNode("添加"));
     main.appendChild(bar);
     bar.appendChild(addButton);
+
     $("#addButton").click(function(){
         $.ajax({
             url:title+"/create",
@@ -238,13 +294,13 @@ function setPageChooseBar(title,count, page_no, page_size) {
         var pageNo = $(this).attr("value");
         var pageSize = $("#page_size")[0].value;
         var ajaxUrl = title + "?pageNo="+pageNo+"&pageSize="+pageSize;
-        $.ajax({
+        $("#search").ajaxSubmit({
             url : ajaxUrl,
             async:false,
             type:"get",
             success:function (dataX) {
                 dataX = JSON.parse(dataX);
-                setMainTable(dataX);
+                setTable(dataX);
             }
         });
         return false;
@@ -257,37 +313,7 @@ function openCreator(data,title,page_no,page_size) {
     var main = cleanMain();
 
     main.appendChild(form);
-    for (var x in data) {
-        var p = document.createElement("p");
-        var input;
-        if(x.includes("Data")){continue;}
-        if(data[x+"Data"] !== undefined){
-            input = document.createElement("select");
-            xData = data[x+"Data"];
-            for(var y in xData){
-                var option = document.createElement("option");
-                var yText = document.createTextNode(xData[y]);
-                option.appendChild(yText);
-                option.setAttribute("value",y);
-                input.appendChild(option);
-            }
-        }else{
-            input = document.createElement("input");
-        }
-        if (x === "content") {
-            input = document.createElement("textarea");
-        } else if (x === "email") {
-            input.setAttribute("type", "email");
-        } else if (x === "password") {
-            input.setAttribute("type", "password");
-        } else {
-            input.setAttribute("type", "text");
-        }
-        form.appendChild(p);
-        p.appendChild(input);
-        input.setAttribute("placeholder", data[x]);
-        input.setAttribute("name", x);
-    }
+    setList(form,data);
     var div = document.createElement("div");
     form.appendChild(div);
     var submit = document.createElement("input");
@@ -317,7 +343,11 @@ function openCreator(data,title,page_no,page_size) {
                         }
                     });
                 }else{
-                    alert(dataX["message"]);
+                    var alertMessage = "";
+                    for(var message in dataX["message"]){
+                        alertMessage += $("#form > p[title='" + message +"'] > div > label").text() + dataX["message"][message] + ".\n";
+                    }
+                    alert(alertMessage);
                 }
             }
         });
@@ -329,47 +359,7 @@ function openDetail(data,page_no,page_size) {
     var form = document.createElement("form");
     main.appendChild(form);
     form.setAttribute("id", "detail");
-    for (var b in data["dataTitle"]) {
-        if(b.includes("Data")){continue;}
-        var label = document.createElement("label");
-        var text = document.createTextNode(data["dataTitle"][b] + ":");
-        label.appendChild(text);
 
-        var textArea;
-        if(data[b+"Data"] == undefined){
-            textArea = document.createElement("textarea");
-            var textDetail;
-            if(data["data"][b] == undefined){
-                textDetail = document.createTextNode("");
-            }else{
-                textDetail = document.createTextNode(data["data"][b]);
-            }
-            textArea.style.height = textArea.scrollHeight;
-            textArea.appendChild(textDetail);
-        }else{
-            textArea = document.createElement("select");
-            for(var c in data[b+"Data"]){
-                var option = document.createElement("option");
-                var optionText =document.createTextNode(data[b+"Data"][c]);
-                option.setAttribute("value",c);
-                option.appendChild(optionText);
-                if(data[b+"Data"][c] === data["data"][b]){
-                    option.setAttribute("selected","selected");
-                }
-                textArea.appendChild(option);
-            }
-        }
-        textArea.setAttribute("name", b);
-        textArea.setAttribute("class","content");
-
-        var p = document.createElement("p");
-        var titleDiv = document.createElement("div");
-        titleDiv.appendChild(label);
-        titleDiv.setAttribute("class","title");
-        p.appendChild(titleDiv);
-        p.appendChild(textArea);
-        form.appendChild(p);
-    }
     var updateButton = document.createElement("input");
     updateButton.setAttribute("id", "update");
     updateButton.setAttribute("type", "submit");
@@ -378,8 +368,17 @@ function openDetail(data,page_no,page_size) {
     deleteButton.setAttribute("id", "delete");
     deleteButton.setAttribute("type", "submit");
     deleteButton.setAttribute("value", "删除");
+    var returnButton = document.createElement("button");
+    returnButton.setAttribute("id","return");
+    returnButton.setAttribute("type","button");
+    returnButton.appendChild(document.createTextNode("返回"));
+
     form.appendChild(updateButton);
     form.appendChild(deleteButton);
+    form.appendChild(returnButton);
+
+    setList(form,data);
+
     $("#update").click(function () {
         $("#detail").ajaxSubmit({
             url:data["title"]+"/"+data["data"]["id"],
@@ -402,7 +401,11 @@ function openDetail(data,page_no,page_size) {
                         }
                     });
                 }else{
-                    alert(dataX["message"]);
+                    var alertMessage = "";
+                    for(var message in dataX["message"]){
+                        alertMessage += $("#detail > p[title='" + message +"'] > div > label").text() + dataX["message"][message] + ".\n";
+                    }
+                    alert(alertMessage);
                 }
             }
         });
@@ -437,7 +440,79 @@ function openDetail(data,page_no,page_size) {
         });
         return false;
     });
+    $("#return").click(function(){
+        $.ajax({
+            url:data["title"],
+            async:false,
+            type:"get",
+            success:function (dataY){
+                dataY = JSON.parse(dataY);
+                if(dataY["code"] === 200){
+                    setMainTable(dataY);
+                }else{
+                    alert(dataY["message"]);
+                }
+            }
+        });
+    })
     $.each($("#detail textarea"),function (i,each) {
         $(each).css("height",each.scrollHeight + "px");
     })
+}
+
+function setList(parent,data){
+    for (var b in data["dataTitle"]) {
+        var p = document.createElement("p");
+        parent.appendChild(p);
+        if(b.includes("Data")){continue;}
+        var label = document.createElement("label");
+        var text = document.createTextNode(data["dataTitle"][b] + ":");
+        label.appendChild(text);
+
+        var textArea;
+        if(data[b+"Data"] == undefined){
+            if(b.includes("date") || b.includes("Date") || b == "birthday"){
+                textArea = document.createElement("input");
+                textArea.setAttribute("type","date");
+                if(data["data"] != undefined){
+                    textArea.setAttribute("value",data["data"][b]);
+                }
+            }else{
+                textArea = document.createElement("textarea");
+                if(data["data"] != undefined){
+                    var textDetail;
+                    if(data["data"][b] == undefined){
+                        textDetail = document.createTextNode("");
+                    }else{
+                        textDetail = document.createTextNode(data["data"][b]);
+                    }
+                    textArea.style.height = textArea.scrollHeight;
+                    textArea.appendChild(textDetail);
+                }
+            }
+        }else{
+            textArea = document.createElement("select");
+            for(var c in data[b+"Data"]){
+                var option = document.createElement("option");
+                var optionText =document.createTextNode(data[b+"Data"][c]);
+                option.setAttribute("value",c);
+                option.appendChild(optionText);
+                if(data["data"] != undefined && data[b+"Data"][c] === data["data"][b]){
+                    option.setAttribute("selected","selected");
+                }
+                textArea.appendChild(option);
+            }
+        }
+        textArea.setAttribute("name", b);
+        textArea.setAttribute("class","content");
+
+
+        var titleDiv = document.createElement("div");
+        titleDiv.appendChild(label);
+        titleDiv.setAttribute("class","title");
+        p.appendChild(titleDiv);
+        p.appendChild(textArea);
+        p.setAttribute("title",b)
+        
+    }
 }

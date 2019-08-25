@@ -2,10 +2,11 @@ package xyz.n490808114.train.domain;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
+
 
 
 public class Job implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer id;
     private String name;
     private String remark;

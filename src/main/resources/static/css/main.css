@@ -24,7 +24,7 @@ main{
     box-shadow: 5px 5px 10px inset #838383;
     padding: 10px;
 
-    font-family: STheiti, serif;
+    font-family: STzhongsong, serif;
 
     background-color: rgb(255, 255, 255);
 
@@ -128,8 +128,36 @@ input[type="submit"]:hover,button:hover{
     background-color:rgba(0, 78, 255, 0.65);
     cursor: default;
 }
-textarea,input[type="text"],input[type="email"],select{
+textarea,select,input[type="date"]{
     width:100%;
     resize:none;
+}
+#return{
+    position: absolute;
+    right: 20px;
+}
+
+
+#search > p{
+    padding:0px;
+    margin:0px;
+    width:50%;
+    display:inline;
+    text-align:center;
+}
+#search .title{
+    display:inline-block;
+    width:18%;
+    text-align:right;
+    padding:0 10px 0 0;
+}
+#search .content{
+    box-sizing:border-box;
+    height:21px;
+    width:30%;
+}
+#searchButton{
+    width:100%;
+    text-align:center;
 }
 
