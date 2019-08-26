@@ -1,6 +1,5 @@
 package xyz.n490808114.train.domain;
 
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.text.ParseException;

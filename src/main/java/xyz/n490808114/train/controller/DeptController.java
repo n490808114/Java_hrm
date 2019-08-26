@@ -15,7 +15,6 @@ import xyz.n490808114.train.util.BeanDataCache;
 import xyz.n490808114.train.util.TableTitle;
 import xyz.n490808114.train.service.HrmService;
 
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/dept")
@@ -124,6 +123,7 @@ public class DeptController{
         Map<String,Object> map = new HashMap<>();
         map.put("code",200);
         map.put("message","创建成功");
+        log.info(map);
         return map;
     }
 
