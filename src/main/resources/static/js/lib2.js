@@ -6,7 +6,9 @@ $(document).ready(function () {
                 async:false,
                 type:"get",
                 success:function(data){
-                    data = JSON.parse(data);
+                    if(data["code"] === undefined){
+                        data = JSON.parse(data);
+                    }
                     if(data["code"] === 200){
                         setMainTable(data);
                     }else{
@@ -84,15 +86,16 @@ function setTable(json){
         }
     }
     $("#main_table > tr").click(function () {
+        var id = this.firstElementChild.getAttribute("title");
         $.ajax(
             {
-                url:title+"/"+this.firstElementChild.getAttribute("title"),
+                url:title+"/"+id,
                 type:"get",
                 async:false,
                 success:function (dataX) {
                     dataX = JSON.parse(dataX);
                     if(dataX["code"] == 200){
-                        openDetail(dataX,page_no,page_size);
+                        openDetail(dataX,page_no,page_size,id);
                     }else{
                         alert(dataX["message"]);
                     }
@@ -109,6 +112,8 @@ function getTableWidthList(name) {
         return ["5%", "65%", "15%", "15%"];
     } else if (name === "employee") {
         return ["10%", "20%", "20%", "20%", "20%", "10%"];
+    }else if(name === "dept"){
+        return ["10%","20%"];
     }
 }
 function addSearchpanel(title){
@@ -354,7 +359,7 @@ function openCreator(data,title,page_no,page_size) {
         return false;
     })
 }
-function openDetail(data,page_no,page_size) {
+function openDetail(data,page_no,page_size,id) {
     var main = cleanMain();
     var form = document.createElement("form");
     main.appendChild(form);
@@ -381,20 +386,20 @@ function openDetail(data,page_no,page_size) {
 
     $("#update").click(function () {
         $("#detail").ajaxSubmit({
-            url:data["title"]+"/"+data["data"]["id"],
+            url:data["title"]+"/"+id,
             type:"PUT",
             async:false,
             success:function (dataX) {
                 if(dataX["code"] == 200){
                     alert("修改成功");
                     $.ajax({
-                        url:data["title"]+"/"+data["data"]["id"],
+                        url:data["title"]+"/"+id,
                         type:"get",
                         async:false,
                         success:function (dataY) {
                             dataY = JSON.parse(dataY);
                             if(dataY["code"] == 200){
-                                openDetail(dataY,page_no,page_size);
+                                openDetail(dataY,page_no,page_size,id);
                             }else{
                                 alert(data["message"]);
                             }
@@ -413,7 +418,7 @@ function openDetail(data,page_no,page_size) {
     });
     $("#delete").click(function () {
         $.ajax({
-            url:data["title"]+"/"+data["data"]["id"],
+            url:data["title"]+"/"+id,
             type:"delete",
             async:false,
             data:{"pageNo":page_no,"pageSize":page_size},

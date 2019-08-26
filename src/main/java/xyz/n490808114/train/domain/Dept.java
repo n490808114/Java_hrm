@@ -1,18 +1,24 @@
 package xyz.n490808114.train.domain;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.List;
 
 
 public class Dept implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer id;
-    private String name;
+    @Null private Integer id;
+    @Min(1) private String name;
     private String remark;
-    private List<Employee> employees;
+    @Null private List<Employee> employees;
     public Dept(){}
     public Dept(int id){
         this.id = id;
+    }
+    public Dept(int id,String name){
+        this.id = id;
+        this.name = name;
     }
     public Dept(int id,String name,String remark){
         this.id=id;

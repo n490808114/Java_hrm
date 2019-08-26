@@ -10,8 +10,8 @@ import java.util.*;
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Null private Integer id;
-    @Valid private Dept dept;
-    @Valid private Job job;
+    private Dept dept;
+    private Job job;
     @NotNull @Size(min = 2,max = 20) private String name;
     @Size(min = 18,max = 18) private String cardId;
     private String address;

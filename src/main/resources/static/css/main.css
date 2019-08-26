@@ -54,6 +54,7 @@ aside ul li{
     margin:15px 0 15px 0;
     width:15%;
     float:left;
+    text-align:center;
     list-style-type:none;
 }
 
@@ -137,7 +138,10 @@ textarea,select,input[type="date"]{
     right: 20px;
 }
 
-
+#search{
+    border: 2px solid rgba(0, 78, 255, 0.22);;
+    padding:5px;
+}
 #search > p{
     padding:0px;
     margin:0px;

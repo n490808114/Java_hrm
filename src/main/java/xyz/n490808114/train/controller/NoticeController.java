@@ -28,7 +28,7 @@ public class NoticeController {
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
 
-    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @GetMapping
     public String getList(@RequestParam(value = "pageSize",defaultValue = "20") int pageSize,
@@ -99,8 +99,7 @@ public class NoticeController {
     /**
      * 收到前台填写的内容，并获取客户的User,使用当前日期，Mysql中id是自动递增的,所以不指定id
      * 
-     * @param content 获取到的文本
-     * @param title   获取到的标题
+
      * @param session 会话，从中获取客户的User
      * @return 标题不为空，返回true,否则返回false
      */
@@ -161,10 +160,7 @@ public class NoticeController {
                 return value;
             };
             PropertyFilter propertyFilter = (Object Object,String name,Object value) ->{
-                if(name.equals("createDate")){
-                    return false;
-                }
-                return true;
+                return !name.equals("createDate");
             };
             SerializeFilter[] list = new SerializeFilter[2];
             list[0] = valueFilter;
@@ -177,8 +173,7 @@ public class NoticeController {
     /**
      * 获取在详情Detail页修改后的所有内容，使用其中的id,title,content;使用当天的new
      * Date();使用会话session中的用户User
-     * 
-     * @param map     详情Detail页修改后的所有内容
+     *
      * @param session 会话session,用于获取User
      * @return 标题不为空，返回true,否则返回false
      */

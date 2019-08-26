@@ -14,8 +14,10 @@ public class TableTitle {
     private static final Map<String,String> sexMap = new LinkedHashMap<>();
     private static final Map<String,String> employeeSqlMapping = new HashMap<>();
 
+    private static final Map<String,String> deptTitle = new LinkedHashMap<>();
     private static final Map<String,String> deptListTitle = new LinkedHashMap<>();
-    
+    private static final Map<String,String> deptCreateTitle = new LinkedHashMap<>();
+    private static final Map<String,String> deptSearchTitle = new LinkedHashMap<>();
 
     static {
         noticeTitle.put("id","序号");
@@ -106,10 +108,17 @@ public class TableTitle {
         sexMap.put("2","未知");
     }
     static {
+        deptTitle.put("name", "部门名称");
+        deptTitle.put("remark", "介绍");
+
         deptListTitle.put("id", "序号");
         deptListTitle.put("name", "部门名称");
-        deptListTitle.put("remark", "介绍");
-        deptListTitle.put("employees", "职员列表");
+
+        deptCreateTitle.put("name", "部门名称");
+        deptCreateTitle.put("remark", "介绍");
+
+        deptSearchTitle.put("name", "部门名称");
+
     }
     public static Map<String, String> noticeTitle(){return noticeTitle;}
     public static Map<String,String> noticeListTitle(){return noticeListTitle;}
@@ -122,5 +131,8 @@ public class TableTitle {
     public static Map<String,String> sexMap(){return sexMap;}
     public static Map<String,String> employeeSqlMapping(){return employeeSqlMapping;}
 
+    public static Map<String,String> deptTitle(){return deptTitle;}
     public static Map<String,String> deptListTitle(){return deptListTitle;}
+    public static Map<String,String> deptCreateTitle(){return deptCreateTitle;}
+    public static Map<String,String> deptSearchTitle(){return deptSearchTitle;}
 }
