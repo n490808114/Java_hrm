@@ -61,9 +61,9 @@ public interface EmployeeDao {
         @ResultMap("employeeResult")
         List<Employee> selectEmployeesByDeptId(int id);
 
-        @Select("SELECT * FROM employee_inf WHERE job_id = #{id}")
-        @ResultMap("employeeResult")
-        List<Employee> selectEmployeesByJobId(int id);
+        @Update("Update employee_inf set job_id = #{after} WHERE job_id = #{before}")
+        void changeAllThisJob(int before,int after);
+        
 
         @SelectProvider(type = EmployeeDynaSqlProvider.class, method = "selectWithParam")
         @ResultMap("employeeResult")
