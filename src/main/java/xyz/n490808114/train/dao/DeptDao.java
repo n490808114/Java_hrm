@@ -8,19 +8,21 @@ import java.util.*;
 
 public interface DeptDao {
 
-        @Select("SELECT * FROM dept_inf")
-        @Results(id = "deptResult",value = { @Result(id = true, column = "id", property = "id"),
+        @Select("SELECT id,name,remark FROM dept_inf")
+        @Results(id = "deptListResult",value = { @Result(id = true, column = "id", property = "id"),
                         @Result(column = "name", property = "name"),
-                        @Result(column = "remark", property = "remark"),
-                        @Result(column = "id", property = "employees",
-                                many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByDeptId", fetchType = FetchType.LAZY)) })
+                        @Result(column = "remark", property = "remark")})
         List<Dept> selectAll();
 
         @Select("SELECT COUNT(id) FROM dept_inf")
         int getCount();
 
         @Select("SELECT * FROM dept_inf WHERE id = #{id}")
-        @ResultMap("deptResult")
+        @Results(id = "deptResult",value = { @Result(id = true, column = "id", property = "id"),
+                                        @Result(column = "name", property = "name"),
+                                        @Result(column = "remark", property = "remark"),
+                                        @Result(column = "id", property = "employees",
+                                                        many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByDeptId", fetchType = FetchType.LAZY)) })
         Dept selectById(int id);
 
         @SelectProvider(type = DeptDynaSqlProvider.class,method = "getDeptListByPageNoAndPageSize")

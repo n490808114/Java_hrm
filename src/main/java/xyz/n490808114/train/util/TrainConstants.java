@@ -14,4 +14,5 @@ public class TrainConstants {
     public static String DEFAULT_PAGESIZE = "20";
 
     public static final String USER_DEFAULT_NAME = "User";
+
 }

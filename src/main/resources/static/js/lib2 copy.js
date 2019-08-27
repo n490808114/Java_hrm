@@ -1,4 +1,3 @@
-var page_size = 20;
 $(document).ready(function () {
     $.each($("#aside > ul > li > a"),function (e,t) {
         $(t).click(function () {
@@ -6,7 +5,6 @@ $(document).ready(function () {
                 url:$(t).attr("href"),
                 async:false,
                 type:"get",
-                data:{"pageSize":page_size},
                 success:function(data){
                     if(data["code"] === undefined){
                         data = JSON.parse(data);
@@ -37,16 +35,18 @@ function cleanMain() {
 function setMainTable(json) {
     var title = json.title;
     var page_no = json.pageNo;
+    var page_size = json.pageSize;
 
     cleanMain();
     addSearchpanel(title);
-    addListButtonBar(title,page_no);
+    addListButtonBar(title,page_no,page_size);
     setTable(json);
 }
 function setTable(json){
     var title = json.title;
     var count = json.count;
     var page_no = json.pageNo;
+    var page_size = json.pageSize;
     var dataTitle = json.dataTitle;
     var data = json.data;
     var list = getTableWidthList(title);
@@ -68,7 +68,8 @@ function setTable(json){
         var th = document.createElement("th");
         trth.appendChild(th);
         th.setAttribute("name", childTitle);
-        th.appendChild(document.createTextNode(dataTitle[childTitle]));
+        var thText = document.createTextNode(dataTitle[childTitle]);
+        th.appendChild(thText);
 
         th.style.width = list[a];
         a++;
@@ -88,7 +89,8 @@ function setTable(json){
         for (var x = 1; x < titleName.length; x++) {
             var td = document.createElement("td");
             var name = titleName[x].getAttribute("name");
-            td.appendChild(document.createTextNode(data[childData][name]));
+            var tdText = document.createTextNode(data[childData][name]);
+            td.appendChild(tdText);
             td.setAttribute("title", data[childData]["id"])
             td.setAttribute("name", name);
             trtd.appendChild(td);
@@ -104,7 +106,7 @@ function setTable(json){
                         success:function (dataX) {
                             dataX = JSON.parse(dataX);
                             if(dataX["code"] == 200){
-                                openDetail(dataX,page_no,$(b).attr("title"));
+                                openDetail(dataX,page_no,page_size,$(b).attr("title"));
                             }else{
                                 alert(dataX["message"]);
                             }
@@ -116,7 +118,7 @@ function setTable(json){
         }
 
     })
-    setPageChooseBar(title,count, parseInt(page_no));
+    setPageChooseBar(title,count, parseInt(page_no), parseInt(page_size));
 }
 function getTableWidthList(name) {
     if (name === "notice") {
@@ -168,7 +170,7 @@ function addSearchpanel(title){
     });
 
 }
-function addListButtonBar(title,page_no){
+function addListButtonBar(title,page_no,page_size){
     var main = document.getElementsByTagName("main")[0];
     var bar = document.createElement("div");
     main.appendChild(bar);
@@ -192,7 +194,7 @@ function addListButtonBar(title,page_no){
             type:"get",
             async:false,
             success:function(data){
-                openCreator(data,title,page_no);
+                openCreator(data,title,page_no,page_size);
             }
         });
         return false;
@@ -232,7 +234,7 @@ function addListButtonBar(title,page_no){
         });
     })
 }
-function setPageChooseBar(title,count, page_no) {
+function setPageChooseBar(title,count, page_no, page_size) {
     var main = document.getElementsByTagName("main")[0];
     var pageChooseBar = document.createElement("div");
     main.appendChild(pageChooseBar);
@@ -247,32 +249,39 @@ function setPageChooseBar(title,count, page_no) {
     pageChooseBar.appendChild(pageNoBar);
 
     //总条数bar
+    var countText0 = document.createTextNode("共" + count + "条,当前每页");
     var pageSizeChooser = document.createElement("select");
     pageSizeChooser.setAttribute("id", "page_size");
     var option10 = document.createElement("option");
     option10.setAttribute("value", "10");
-    option10.appendChild(document.createTextNode("10"));
+    var option10Text = document.createTextNode("10");
+    option10.appendChild(option10Text);
     var option20 = document.createElement("option");
     option20.setAttribute("value", "20");
-    option20.appendChild(document.createTextNode("20"));
+    var option20Text = document.createTextNode("20");
+    option20.appendChild(option20Text);
     var option30 = document.createElement("option");
     option30.setAttribute("value", "30");
-    option30.appendChild(document.createTextNode("30"));
+    var option30Text = document.createTextNode("30");
+    option30.appendChild(option30Text);
     var option40 = document.createElement("option");
     option40.setAttribute("value", "40");
-    option40.appendChild(document.createTextNode("40"));
+    var option40Text = document.createTextNode("40");
+    option40.appendChild(option40Text);
     var option50 = document.createElement("option");
     option50.setAttribute("value", "50");
-    option50.appendChild(document.createTextNode("50"));
+    var option50Text = document.createTextNode("50");
+    option50.appendChild(option50Text);
     pageSizeChooser.appendChild(option10);
     pageSizeChooser.appendChild(option20);
     pageSizeChooser.appendChild(option30);
     pageSizeChooser.appendChild(option40);
     pageSizeChooser.appendChild(option50);
+    var countText1 = document.createTextNode("条");
 
-    countBar.appendChild(document.createTextNode("共" + count + "条,当前每页"));
+    countBar.appendChild(countText0);
     countBar.appendChild(pageSizeChooser);
-    countBar.appendChild(document.createTextNode("条"));
+    countBar.appendChild(countText1);
     //设置每页条数
     pageSizeChooser.value = page_size;
 
@@ -285,13 +294,15 @@ function setPageChooseBar(title,count, page_no) {
     }
     var firstPageNo = document.createElement("a");
     firstPageNo.setAttribute("value", "1");
-    firstPageNo.appendChild(document.createTextNode("首页"));
+    var firstPageNoText = document.createTextNode("首页");
+    firstPageNo.appendChild(firstPageNoText);
 
     pageNoBar.appendChild(firstPageNo);
     if (max_page_no > 1) {
         if ((page_no - 3) > 1) {
             var left_span = document.createElement("span");
-            left_span.appendChild(document.createTextNode("..."));
+            var left_dots = document.createTextNode("...");
+            left_span.appendChild(left_dots);
             pageNoBar.appendChild(left_span);
         }
         for (var x = 2; x > 0; x--) {
@@ -299,13 +310,15 @@ function setPageChooseBar(title,count, page_no) {
             if (left_page_no <= 1) { continue; }
             var leftPageNo = document.createElement("a");
             leftPageNo.setAttribute("value", left_page_no);
-            leftPageNo.appendChild(document.createTextNode(left_page_no));
+            var leftPageNoText = document.createTextNode(left_page_no);
+            leftPageNo.appendChild(leftPageNoText);
             pageNoBar.appendChild(leftPageNo);
         }
         if (page_no !== 1 && page_no !== max_page_no) {
             var thisPageNo = document.createElement("a");
             thisPageNo.setAttribute("value", page_no);
-            thisPageNo.appendChild(document.createTextNode(page_no));
+            var thisPageNoText = document.createTextNode(page_no);
+            thisPageNo.appendChild(thisPageNoText);
             pageNoBar.appendChild(thisPageNo);
         }
         for (var x = 1; x < 3; x++) {
@@ -313,17 +326,20 @@ function setPageChooseBar(title,count, page_no) {
             if (right_page_no >= max_page_no) { break; }
             var rightPageNo = document.createElement("a");
             rightPageNo.setAttribute("value", right_page_no);
-            rightPageNo.appendChild(document.createTextNode(right_page_no));
+            var rightPageNoText = document.createTextNode(right_page_no);
+            rightPageNo.appendChild(rightPageNoText);
             pageNoBar.appendChild(rightPageNo);
         }
         if ((page_no + 3) < max_page_no) {
             var right_span = document.createElement("span");
-            right_span.appendChild(document.createTextNode("..."));
+            var right_dots = document.createTextNode("...");
+            right_span.appendChild(right_dots);
             pageNoBar.appendChild(right_span);
         }
         var maxPageNo = document.createElement("a");
         maxPageNo.setAttribute("value", max_page_no);
-        maxPageNo.appendChild(document.createTextNode(max_page_no));
+        var maxPageNoText = document.createTextNode(max_page_no);
+        maxPageNo.appendChild(maxPageNoText);
         pageNoBar.appendChild(maxPageNo);
     }
 
@@ -337,8 +353,8 @@ function setPageChooseBar(title,count, page_no) {
     }
     $("#page_size").change(function(){
         var pageNo = page_no;
-        page_size = this.value;
-        var ajaxUrl = title + "?pageNo="+pageNo+"&pageSize="+page_size;
+        var pageSize = this.value;
+        var ajaxUrl = title + "?pageNo="+pageNo+"&pageSize="+pageSize;
         $("#search").ajaxSubmit({
             url : ajaxUrl,
             async:false,
@@ -352,7 +368,8 @@ function setPageChooseBar(title,count, page_no) {
     })
     $("#page_number_bar > a").click(function () {
         var pageNo = $(this).attr("value");
-        var ajaxUrl = title + "?pageNo="+pageNo+"&pageSize="+page_size;
+        var pageSize = $("#page_size")[0].value;
+        var ajaxUrl = title + "?pageNo="+pageNo+"&pageSize="+pageSize;
         $("#search").ajaxSubmit({
             url : ajaxUrl,
             async:false,
@@ -365,7 +382,7 @@ function setPageChooseBar(title,count, page_no) {
         return false;
     });
 }
-function openCreator(data,title,page_no) {
+function openCreator(data,title,page_no,page_size) {
     var form = document.createElement("form");
     form.setAttribute("id", "form");
     form.setAttribute("name", title);
@@ -392,7 +409,6 @@ function openCreator(data,title,page_no) {
                         url:title,
                         async:false,
                         type:"get",
-                        data:{"pageNo":page_no,"pageSize":page_size},
                         success:function(dataY){
                             dataY = JSON.parse(dataY);
                             if(dataY["code"] === 200){
@@ -414,7 +430,7 @@ function openCreator(data,title,page_no) {
         return false;
     })
 }
-function openDetail(data,page_no,id) {
+function openDetail(data,page_no,page_size,id) {
     var main = cleanMain();
     var form = document.createElement("form");
     main.appendChild(form);
@@ -454,7 +470,7 @@ function openDetail(data,page_no,id) {
                         success:function (dataY) {
                             dataY = JSON.parse(dataY);
                             if(dataY["code"] == 200){
-                                openDetail(dataY,page_no,id);
+                                openDetail(dataY,page_no,page_size,id);
                             }else{
                                 alert(data["message"]);
                             }
@@ -476,6 +492,7 @@ function openDetail(data,page_no,id) {
             url:data["title"]+"/"+id,
             type:"delete",
             async:false,
+            data:{"pageNo":page_no,"pageSize":page_size},
             success:function (dataX) {
                 if(dataX["code"] == 200){
                     alert("删除成功,即将返回列表");
@@ -525,7 +542,8 @@ function setList(parent,data){
         parent.appendChild(p);
         if(b.includes("Data")){continue;}
         var label = document.createElement("label");
-        label.appendChild(document.createTextNode(data["dataTitle"][b] + ":"));
+        var text = document.createTextNode(data["dataTitle"][b] + ":");
+        label.appendChild(text);
 
         var textArea;
         if(data[b+"Data"] == undefined){
@@ -552,8 +570,9 @@ function setList(parent,data){
             textArea = document.createElement("select");
             for(var c in data[b+"Data"]){
                 var option = document.createElement("option");
+                var optionText =document.createTextNode(data[b+"Data"][c]["name"]);
                 option.setAttribute("value",c);
-                option.appendChild(document.createTextNode(data[b+"Data"][c]["name"]));
+                option.appendChild(optionText);
                 if(data["data"] != undefined && data[b+"Data"][c] === data["data"][b]){
                     option.setAttribute("selected","selected");
                 }

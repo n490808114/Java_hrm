@@ -1,4 +1,4 @@
-package xyz.n490808114.train.util;
+package xyz.n490808114.train.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,9 +23,9 @@ public class BeanDataCache {
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
 
-    private static Map<String,String> deptMap = new LinkedHashMap<>();
+    private static Map<String,Dept> deptMap = new LinkedHashMap<>();
     private static Boolean isExpiredOfDeptCache = true;
-    private static Map<String,String> jobMap = new LinkedHashMap<>();
+    private static Map<String,Job> jobMap = new LinkedHashMap<>();
     private static Boolean isExpiredOfJobCache = true;
 
     public static void setDeptCacheExpired(){
@@ -48,10 +48,16 @@ public class BeanDataCache {
     /**
      * 获取JobMap 如果为空，执行init()初始化并等待200ms,如果还为空，循环验证是否为空（即是否初始化成功）并等待200ms;
      */
-    public Map<String,String> getJobMap()  {
+    public Map<String,Job> getJobMap()  {
         if(isExpiredOfJobCache){
             synchronized(isExpiredOfJobCache){
-                reLoadJobMap();
+                List<Job> list = hrmService.findAllJob();
+                Map<String,Job> newMap = new LinkedHashMap<>();
+                for(Job job:list){
+                    newMap.put("" + job.getId(), job);
+                }
+                log.info("更新JobCache:"+newMap);
+                jobMap = newMap;
                 isExpiredOfJobCache = false;
             }
         }
@@ -60,35 +66,19 @@ public class BeanDataCache {
     /**
      * 获取DeptMap 如果为空，执行init()初始化并等待200ms,如果还为空，循环验证是否为空（即是否初始化成功）并等待200ms;
      */
-    public Map<String,String> getDeptMap(){
+    public Map<String,Dept> getDeptMap(){
         if(isExpiredOfDeptCache){
             synchronized(isExpiredOfDeptCache){
-                reLoadDeptMap();
+                List<Dept> list = hrmService.findAllDept();
+                Map<String,Dept> newMap = new LinkedHashMap<>();
+                for(Dept dept:list){
+                    newMap.put(""+dept.getId(), dept);
+                }
+                log.info("更新DeptCache:"+newMap);
+                deptMap = newMap;
                 isExpiredOfDeptCache = false;
             }
         }
         return deptMap;
-    }
-    public void reLoadJobMap(){
-        log.info("开始更新JobMap");
-        List<Job> jobs = hrmService.findAllJob();
-        Map<String,String> map = new LinkedHashMap<>();
-        for(Job job : jobs){
-            map.put("" + job.getId(),job.getName());
-        }
-        jobMap = map;
-        log.info(map);
-        log.info("JobMap更新完毕");
-    }
-    public void reLoadDeptMap(){
-        log.info("开始更新DeptMap");
-        List<Dept> depts = hrmService.findAllDept();
-        Map<String,String> map = new LinkedHashMap<>();
-        for(Dept dept : depts){
-            map.put("" + dept.getId(), dept.getName());
-        }
-        deptMap = map;
-        log.info(map);
-        log.info("DeptMap更新完毕");
     }
 }

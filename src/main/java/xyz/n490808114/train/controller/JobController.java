@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import xyz.n490808114.train.domain.Dept;
+import xyz.n490808114.train.domain.Job;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
 import xyz.n490808114.train.util.TrainConstants;
@@ -22,9 +22,9 @@ import xyz.n490808114.train.service.HrmService;
 
 
 @RestController
-@RequestMapping("/dept")
-public class DeptController{
-    private static Log log = LogFactory.getLog(DeptController.class);
+@RequestMapping("/job")
+public class JobController{
+    private static Log log = LogFactory.getLog(JobController.class);
     @Autowired
     @Qualifier("hrmServiceImpl")
     HrmService hrmService;
@@ -40,14 +40,14 @@ public class DeptController{
                           @RequestParam(value = "pageSize",defaultValue = "20")int pageSize,
                           @RequestParam Map<String,String> requestParam){
         Map<String, Object> map = new HashMap<>();
-        map.put("title","dept");
+        map.put("title","job");
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
         map.put("code",200);
         map.put("message","获取成功");
-        map.put("dataTitle",TableTitle.deptListTitle());
-        Map<String,Dept> cacheMap = beanDataCache.getDeptMap();
-        List<Dept> data = new LinkedList<>();
+        map.put("dataTitle",TableTitle.jobListTitle());
+        Map<String,Job> cacheMap = beanDataCache.getJobMap();
+        List<Job> data = new LinkedList<>();
         int mapCount = 0;
         int start = (pageNo - 1) * pageSize;
         String name = requestParam.get("name");
@@ -85,34 +85,34 @@ public class DeptController{
     @GetMapping("/create")
     public Map<String,Object> create(){
         Map<String,Object> map = new HashMap<>();
-        map.put("title","dept");
-        map.put("dataTitle",TableTitle.deptCreateTitle());
+        map.put("title","job");
+        map.put("dataTitle",TableTitle.jobCreateTitle());
         log.info(map);
         return map;
     }
     @GetMapping("/search")
     public Map<String,Object> search(){
         Map<String,Object> map = new HashMap<>();
-        map.put("title","dept");
-        map.put("dataTitle",TableTitle.deptSearchTitle());
+        map.put("title","job");
+        map.put("dataTitle",TableTitle.jobSearchTitle());
         log.info(map);
         return map;
     }
     @GetMapping("/{id}")
     public String getDetail(@PathVariable("id") int id){
         Map<String,Object> map = new HashMap<>();
-        map.put("title","dept");
+        map.put("title","job");
 
-        Dept dept = hrmService.findDeptById(id);
-        if(dept == null){
+        Job job = hrmService.findJobById(id);
+        if(job == null){
             map.put("code",404);
             map.put("message","找不到这个部门");
             return JSON.toJSONString(map);
         }else{
             map.put("code",200);
             map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.deptTitle());
-            map.put("data",dept);
+            map.put("dataTitle",TableTitle.jobTitle());
+            map.put("data",job);
             PropertyFilter propertyFilter = (Object object,String name,Object value) ->{
                 if("employees".equals(name)){
                     return false;
@@ -128,19 +128,19 @@ public class DeptController{
     }
     @PostMapping
     public Map<String,Object> create(@RequestParam Map<String,String> param){
-        Dept dept = new Dept();
-        dept.setName(param.get("name"));
-        dept.setRemark(param.get("remark"));
+        Job job = new Job();
+        job.setName(param.get("name"));
+        job.setRemark(param.get("remark"));
 
-        Set<ConstraintViolation<Dept>> set = validator.validate(dept);
+        Set<ConstraintViolation<Job>> set = validator.validate(job);
         Map<String,Object> map = new HashMap<>();
         if(set.size() == 0){
-            hrmService.addDept(dept);
+            hrmService.addJob(job);
             map.put("code",200);
             map.put("message","创建成功");
         }else{
             Map<String,String> error = new LinkedHashMap<>();
-            for(ConstraintViolation<Dept> constraintViolation : set){
+            for(ConstraintViolation<Job> constraintViolation : set){
                 error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
             }
             map.put("code", 404);
@@ -151,20 +151,20 @@ public class DeptController{
     }
     @PutMapping("/{id}")
     public Map<String,Object> update(@PathVariable("id") int id,@RequestParam Map<String,String> param){
-        Dept dept = new Dept();
-        dept.setName(param.get("name"));
-        dept.setRemark(param.get("remark"));
+        Job job = new Job();
+        job.setName(param.get("name"));
+        job.setRemark(param.get("remark"));
 
-        Set<ConstraintViolation<Dept>> set = validator.validate(dept);
+        Set<ConstraintViolation<Job>> set = validator.validate(job);
         Map<String,Object> map = new HashMap<>();
         if(set.size() == 0){
-            dept.setId(id);
-            hrmService.modifyDept(dept);;
+            job.setId(id);
+            hrmService.modifyJob(job);;
             map.put("code",200);
             map.put("message","修改成功");
         }else{
             Map<String,String> error = new LinkedHashMap<>();
-            for(ConstraintViolation<Dept> constraintViolation : set){
+            for(ConstraintViolation<Job> constraintViolation : set){
                 error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
             }
             map.put("code", 404);
@@ -176,14 +176,14 @@ public class DeptController{
     @DeleteMapping("/{id}")
     public Map<String,Object> delete(@PathVariable("id") int id){
         Map<String,Object> map = new HashMap<>();
-        if(beanDataCache.getDeptMap().get(""+id) == null){
+        if(beanDataCache.getJobMap().get(""+id) == null){
             map.put("code","404");
             map.put("message","错误的部门序号");
-        }else if(hrmService.countEmployeesByDeptId(id) > 0){
+        }else if(hrmService.countEmployeesByJobId(id) > 0){
             map.put("code","404");
             map.put("message","该部门内还有员工,请先调整他们的部门后再进行删除");
         }else{
-            hrmService.removeDeptById(id);
+            hrmService.removeJob(id);
             map.put("code","200");
             map.put("message","删除成功");
         }

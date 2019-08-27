@@ -1,5 +1,7 @@
 package xyz.n490808114.train.domain;
 
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,13 +9,17 @@ import java.util.List;
 
 public class Job implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer id;
-    private String name;
+    @Null private Integer id;
+    @Size(min=1,max=20) private String name;
     private String remark;
-    private List<Employee> employees;
+    @Null private List<Employee> employees;
     public Job(){}
     public Job(int id){
         this.id = id;
+    }
+    public Job(int id,String name){
+        this.id = id;
+        this.name = name;
     }
     public Job(int id,String name,String remark){
         this.id=id;

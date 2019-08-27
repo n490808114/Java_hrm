@@ -1,6 +1,6 @@
 package xyz.n490808114.train.domain;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public class Dept implements Serializable {
     private static final long serialVersionUID = 1L;
     @Null private Integer id;
-    @Min(1) private String name;
+    @Size(min=1,max=10) private String name;
     private String remark;
     @Null private List<Employee> employees;
     public Dept(){}

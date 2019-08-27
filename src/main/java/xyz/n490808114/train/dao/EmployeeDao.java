@@ -56,10 +56,14 @@ public interface EmployeeDao {
 
         @Select("SELECT * FROM employee_inf")
         List<Employee> selectAll();
-
+        
         @Select("SELECT * FROM employee_inf WHERE dept_id = #{id}")
         @ResultMap("employeeResult")
         List<Employee> selectEmployeesByDeptId(int id);
+
+        @Select("SELECT * FROM employee_inf WHERE job_id = #{id}")
+        @ResultMap("employeeResult")
+        List<Employee> selectEmployeesByJobId(int id);
 
         @Update("Update employee_inf set job_id = #{after} WHERE job_id = #{before}")
         void changeAllThisJob(int before,int after);
@@ -81,5 +85,11 @@ public interface EmployeeDao {
 
         @SelectProvider(type = EmployeeDynaSqlProvider.class,method = "getCount")
         int getCount(Map<String, String> param);
+
+        @Select("SELECT COUNT(id) FROM employee_inf WHERE dept_id = #{deptId}")
+        int getCountByDeptId(int deptId);
+
+        @Select("SELECT COUNT(id) FROM employee_inf WHERE job_id = #{jobId}")
+        int getCountByJobId(int jobId);
 
 }

@@ -8,14 +8,17 @@ import java.util.List;
 
 
 public interface JobDao {
-        @Select("SELECT * FROM job_inf")
-        @Results(id = "jobResult",value = { @Result(id = true, column = "id", property = "id"),
-                        @Result(column = "name", property = "name"), @Result(column = "remark", property = "remark"),
-                        @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByJobId", fetchType = FetchType.LAZY)) })
+        @Select("SELECT id,name,remark FROM job_inf")
+        @Results(id = "jobListResult",value = { @Result(id = true, column = "id", property = "id"),
+                        @Result(column = "name", property = "name"), 
+                        @Result(column = "remark", property = "remark")})
         List<Job> selectAll();
 
         @Select("SELECT * FROM job_inf WHERE id = #{id}")
-        @ResultMap("jobResult")
+        @Results(id = "jobResult",value = { @Result(id = true, column = "id", property = "id"),
+                                        @Result(column = "name", property = "name"), 
+                                        @Result(column = "remark", property = "remark"),
+                                        @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByJobId", fetchType = FetchType.LAZY)) })
         Job selectById(int id);
 
         @Select("SELECT * FROM job_inf WHERE name = #{name}")
@@ -27,6 +30,6 @@ public interface JobDao {
         @Delete("DELETE FROM job_inf WHERE id = #{id}")
         void deleteById(int id);
 
-        @Update("UPDATE job_int SET name = #{name},remark = #{remark} WHERE id = #{id}")
+        @Update("UPDATE job_inf SET name = #{name},remark = #{remark} WHERE id = #{id}")
         void modify(Job job);
 }

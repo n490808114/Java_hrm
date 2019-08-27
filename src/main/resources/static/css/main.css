@@ -107,9 +107,15 @@ input[type="submit"]:hover,button:hover{
 #main_table>tr>th{
     background-color: rgba(0, 78, 255, 0.65);
 }
+#main_table .checkbox{
+    width:25px;
+}
 #main_page_choose_bar div{
 
     float:left;
+}
+#page_size{
+    width:50px;
 }
 #page_number_bar{
     position:absolute;

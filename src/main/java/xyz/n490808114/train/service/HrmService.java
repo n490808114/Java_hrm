@@ -1,7 +1,5 @@
 package xyz.n490808114.train.service;
 
-
-
 import xyz.n490808114.train.domain.*;
 
 import java.util.*;
@@ -77,6 +75,11 @@ public interface HrmService {
      * @return 总数
      */
     int getEmployeeCount(Map<String, String> param);
+
+    int countEmployeesByDeptId(int deptId);
+
+    int countEmployeesByJobId(int jobId);
+
 
     /**
      * 修改员工

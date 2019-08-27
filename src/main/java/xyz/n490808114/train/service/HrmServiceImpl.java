@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 
 import xyz.n490808114.train.dao.*;
 import xyz.n490808114.train.domain.*;
-
+import xyz.n490808114.train.service.HrmService;
 import java.util.*;
 
 @Service("hrmServiceImpl")
-public class HrmServiceImpl implements HrmService {
+public class HrmServiceImpl implements HrmService{
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -65,10 +65,17 @@ public class HrmServiceImpl implements HrmService {
     public void register(User user){
         userDao.save(user);
     }
-
     @Override
     public Employee findEmployeeById(int id){
         return employeeDao.selectById(id);
+    }
+    @Override
+    public int countEmployeesByDeptId(int deptId) {
+        return employeeDao.getCountByDeptId(deptId);
+    }
+    @Override
+    public int countEmployeesByJobId(int jobId) {
+        return employeeDao.getCountByJobId(jobId);
     }
 
     @Override
@@ -133,18 +140,21 @@ public class HrmServiceImpl implements HrmService {
     @Override
     public void removeDeptById(int id){
         deptDao.deleteById(id);
+        BeanDataCache.setDeptCacheExpired();
     }
 
 
     @Override
     public void addDept(Dept dept){
         deptDao.save(dept);
+        BeanDataCache.setDeptCacheExpired();
     }
 
 
     @Override
     public void modifyDept(Dept dept){
         deptDao.modify(dept);
+        BeanDataCache.setDeptCacheExpired();
     }
 
     @Override
@@ -164,18 +174,21 @@ public class HrmServiceImpl implements HrmService {
     @Override
     public void addJob(Job job){
         jobDao.save(job);
+        BeanDataCache.setJobCacheExpired();
     }
 
 
     @Override
     public void removeJob(int id){
         jobDao.deleteById(id);
+        BeanDataCache.setJobCacheExpired();
     }
 
 
     @Override
     public void modifyJob(Job job){
         jobDao.modify(job);
+        BeanDataCache.setJobCacheExpired();
     }
 
 
