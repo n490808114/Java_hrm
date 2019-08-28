@@ -5,157 +5,137 @@ import java.util.*;
 import xyz.n490808114.train.domain.Sex;
 public class TableTitle {
 
-    private static final Map<String,String> noticeTitle = new LinkedHashMap<>();
-    private static final Map<String,String> noticeListTitle = new LinkedHashMap<>();
-    private static final Map<String,String> noticeCreateTitle = new LinkedHashMap<>();
-    private static final Map<String,String> noticeSearchTitle = new LinkedHashMap<>();
+    public static final Map<String,String> NOTICE_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> NOTICE_LIST_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> NOTICE_CREATE_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> NOTICE_SEARCH_TITLE = new LinkedHashMap<>();
 
-    private static final Map<String,String> employeeTitle = new LinkedHashMap<>();
-    private static final Map<String,String> employeeListTitle = new LinkedHashMap<>();
-    private static final Map<String,String> employeeCreateTitle = new LinkedHashMap<>();
-    private static final Map<String,Object> sexMap = new LinkedHashMap<>();
-    private static final Map<String,String> employeeSqlMapping = new HashMap<>();
+    public static final Map<String,String> EMPLOYEE_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> EMPLOYEE_LIST_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> EMPLOYEE_CREATE_TITLE = new LinkedHashMap<>();
+    public static final Map<String,Object> SEX_MAP = new LinkedHashMap<>();
+    public static final Map<String,String> EMPLOYEE_SQL_MAPPING = new HashMap<>();
 
-    private static final Map<String,String> deptTitle = new LinkedHashMap<>();
-    private static final Map<String,String> deptListTitle = new LinkedHashMap<>();
-    private static final Map<String,String> deptCreateTitle = new LinkedHashMap<>();
-    private static final Map<String,String> deptSearchTitle = new LinkedHashMap<>();
+    public static final Map<String,String> DEPT_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> DEPT_LIST_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> DEPT_CREATE_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> DEPT_SEARCH_TITLE = new LinkedHashMap<>();
 
-    private static final Map<String,String> jobTitle = new LinkedHashMap<>();
-    private static final Map<String,String> jobListTitle = new LinkedHashMap<>();
-    private static final Map<String,String> jobCreateTitle = new LinkedHashMap<>();
-    private static final Map<String,String> jobSearchTitle = new LinkedHashMap<>();
+    public static final Map<String,String> JOB_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> JOB_LIST_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> JOB_CREATE_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> JOB_SEARCH_TITLE = new LinkedHashMap<>();
 
     static {
-        noticeTitle.put("id","序号");
-        noticeTitle.put("title","标题");
-        noticeTitle.put("content","公告内容");
-        noticeTitle.put("user","创建人");
+        NOTICE_TITLE.put("id","序号");
+        NOTICE_TITLE.put("title","标题");
+        NOTICE_TITLE.put("content","公告内容");
+        NOTICE_TITLE.put("user","创建人");
         
-        noticeListTitle.put("id","序号");
-        noticeListTitle.put("title","标题");
-        noticeListTitle.put("createDate","创建日期");
-        noticeListTitle.put("user","创建人");
+        NOTICE_LIST_TITLE.put("id","序号");
+        NOTICE_LIST_TITLE.put("title","标题");
+        NOTICE_LIST_TITLE.put("createDate","创建日期");
+        NOTICE_LIST_TITLE.put("user","创建人");
 
-        noticeCreateTitle.put("title","标题");
-        noticeCreateTitle.put("content","公告内容");
+        NOTICE_CREATE_TITLE.put("title","标题");
+        NOTICE_CREATE_TITLE.put("content","公告内容");
 
-        noticeSearchTitle.put("title","标题");
+        NOTICE_SEARCH_TITLE.put("title","标题");
     }
     static{
-        employeeTitle.put("id", "序号");
-        employeeTitle.put("name", "姓名");
-        employeeTitle.put("sex","性别");
-        employeeTitle.put("dept", "部门");
-        employeeTitle.put("job","职位");
-        employeeTitle.put("cardId","身份证号");
-        employeeTitle.put("address","联系地址");
-        employeeTitle.put("postCode","邮编");
-        employeeTitle.put("tel","固定电话");
-        employeeTitle.put("phone", "手机号码");
-        employeeTitle.put("qqNum","QQ号码");
-        employeeTitle.put("email","邮箱地址");
-        employeeTitle.put("party","政治身份");
-        employeeTitle.put("birthday","出生日期");
-        employeeTitle.put("race","民族");
-        employeeTitle.put("education","教育程度");
-        employeeTitle.put("speciality","特长");
-        employeeTitle.put("hobby","爱好");
-        employeeTitle.put("remark","备注");
+        EMPLOYEE_TITLE.put("id", "序号");
+        EMPLOYEE_TITLE.put("name", "姓名");
+        EMPLOYEE_TITLE.put("sex","性别");
+        EMPLOYEE_TITLE.put("dept", "部门");
+        EMPLOYEE_TITLE.put("job","职位");
+        EMPLOYEE_TITLE.put("cardId","身份证号");
+        EMPLOYEE_TITLE.put("address","联系地址");
+        EMPLOYEE_TITLE.put("postCode","邮编");
+        EMPLOYEE_TITLE.put("tel","固定电话");
+        EMPLOYEE_TITLE.put("phone", "手机号码");
+        EMPLOYEE_TITLE.put("qqNum","QQ号码");
+        EMPLOYEE_TITLE.put("email","邮箱地址");
+        EMPLOYEE_TITLE.put("party","政治身份");
+        EMPLOYEE_TITLE.put("birthday","出生日期");
+        EMPLOYEE_TITLE.put("race","民族");
+        EMPLOYEE_TITLE.put("education","教育程度");
+        EMPLOYEE_TITLE.put("speciality","特长");
+        EMPLOYEE_TITLE.put("hobby","爱好");
+        EMPLOYEE_TITLE.put("remark","备注");
 
 
-        employeeListTitle.put("id", "员工号");
-        employeeListTitle.put("name", "姓名");
-        employeeListTitle.put("dept", "部门");
-        employeeListTitle.put("job","职位");
-        employeeListTitle.put("phone", "电话");
+        EMPLOYEE_LIST_TITLE.put("id", "员工号");
+        EMPLOYEE_LIST_TITLE.put("name", "姓名");
+        EMPLOYEE_LIST_TITLE.put("dept", "部门");
+        EMPLOYEE_LIST_TITLE.put("job","职位");
+        EMPLOYEE_LIST_TITLE.put("phone", "电话");
 
-        employeeCreateTitle.put("name", "姓名");
-        employeeCreateTitle.put("sex","性别");
-        employeeCreateTitle.put("dept", "部门");
-        employeeCreateTitle.put("job","职位");
-        employeeCreateTitle.put("cardId","身份证号");
-        employeeCreateTitle.put("address","联系地址");
-        employeeCreateTitle.put("postCode","邮编");
-        employeeCreateTitle.put("tel","固定电话");
-        employeeCreateTitle.put("phone", "手机号码");
-        employeeCreateTitle.put("qqNum","QQ号码");
-        employeeCreateTitle.put("email","邮箱地址");
-        employeeCreateTitle.put("party","政治身份");
-        employeeCreateTitle.put("birthday","出生日期");
-        employeeCreateTitle.put("race","民族");
-        employeeCreateTitle.put("education","教育程度");
-        employeeCreateTitle.put("speciality","特长");
-        employeeCreateTitle.put("hobby","爱好");
-        employeeCreateTitle.put("remark","备注");
+        EMPLOYEE_CREATE_TITLE.put("name", "姓名");
+        EMPLOYEE_CREATE_TITLE.put("sex","性别");
+        EMPLOYEE_CREATE_TITLE.put("dept", "部门");
+        EMPLOYEE_CREATE_TITLE.put("job","职位");
+        EMPLOYEE_CREATE_TITLE.put("cardId","身份证号");
+        EMPLOYEE_CREATE_TITLE.put("address","联系地址");
+        EMPLOYEE_CREATE_TITLE.put("postCode","邮编");
+        EMPLOYEE_CREATE_TITLE.put("tel","固定电话");
+        EMPLOYEE_CREATE_TITLE.put("phone", "手机号码");
+        EMPLOYEE_CREATE_TITLE.put("qqNum","QQ号码");
+        EMPLOYEE_CREATE_TITLE.put("email","邮箱地址");
+        EMPLOYEE_CREATE_TITLE.put("party","政治身份");
+        EMPLOYEE_CREATE_TITLE.put("birthday","出生日期");
+        EMPLOYEE_CREATE_TITLE.put("race","民族");
+        EMPLOYEE_CREATE_TITLE.put("education","教育程度");
+        EMPLOYEE_CREATE_TITLE.put("speciality","特长");
+        EMPLOYEE_CREATE_TITLE.put("hobby","爱好");
+        EMPLOYEE_CREATE_TITLE.put("remark","备注");
 
-        employeeSqlMapping.put("id", "id");
-        employeeSqlMapping.put("dept", "dept_id");
-        employeeSqlMapping.put("job", "job_id");
-        employeeSqlMapping.put("name", "name");
-        employeeSqlMapping.put("cardId", "card_id");
-        employeeSqlMapping.put("address", "address");
-        employeeSqlMapping.put("postCode", "post_code");
-        employeeSqlMapping.put("tel", "tel");
-        employeeSqlMapping.put("phone", "phone");
-        employeeSqlMapping.put("qqNum", "qq_num");
-        employeeSqlMapping.put("email", "email");
-        employeeSqlMapping.put("sex", "sex");
-        employeeSqlMapping.put("party", "party");
-        employeeSqlMapping.put("birthday", "birthday");
-        employeeSqlMapping.put("race", "race");
-        employeeSqlMapping.put("education", "education");
-        employeeSqlMapping.put("speciality", "speciality");
-        employeeSqlMapping.put("hobby", "hobby");
-        employeeSqlMapping.put("remark", "remark");
-        employeeSqlMapping.put("createDate", "create_date");
+        EMPLOYEE_SQL_MAPPING.put("id", "id");
+        EMPLOYEE_SQL_MAPPING.put("dept", "dept_id");
+        EMPLOYEE_SQL_MAPPING.put("job", "job_id");
+        EMPLOYEE_SQL_MAPPING.put("name", "name");
+        EMPLOYEE_SQL_MAPPING.put("cardId", "card_id");
+        EMPLOYEE_SQL_MAPPING.put("address", "address");
+        EMPLOYEE_SQL_MAPPING.put("postCode", "post_code");
+        EMPLOYEE_SQL_MAPPING.put("tel", "tel");
+        EMPLOYEE_SQL_MAPPING.put("phone", "phone");
+        EMPLOYEE_SQL_MAPPING.put("qqNum", "qq_num");
+        EMPLOYEE_SQL_MAPPING.put("email", "email");
+        EMPLOYEE_SQL_MAPPING.put("sex", "sex");
+        EMPLOYEE_SQL_MAPPING.put("party", "party");
+        EMPLOYEE_SQL_MAPPING.put("birthday", "birthday");
+        EMPLOYEE_SQL_MAPPING.put("race", "race");
+        EMPLOYEE_SQL_MAPPING.put("education", "education");
+        EMPLOYEE_SQL_MAPPING.put("speciality", "speciality");
+        EMPLOYEE_SQL_MAPPING.put("hobby", "hobby");
+        EMPLOYEE_SQL_MAPPING.put("remark", "remark");
+        EMPLOYEE_SQL_MAPPING.put("createDate", "create_date");
 
-        sexMap.put("0",new Sex(0,"女"));
-        sexMap.put("1",new Sex(1,"男"));
-        sexMap.put("2",new Sex(2,"其他"));
+        SEX_MAP.put("0",new Sex(0,"女"));
+        SEX_MAP.put("1",new Sex(1,"男"));
+        SEX_MAP.put("2",new Sex(2,"其他"));
     }
     static {
-        deptTitle.put("name", "部门名称");
-        deptTitle.put("remark", "介绍");
+        DEPT_TITLE.put("name", "部门名称");
+        DEPT_TITLE.put("remark", "介绍");
 
-        deptListTitle.put("name", "部门名称");
-        deptListTitle.put("remark", "介绍");
+        DEPT_LIST_TITLE.put("name", "部门名称");
+        DEPT_LIST_TITLE.put("remark", "介绍");
 
-        deptCreateTitle.put("name", "部门名称");
-        deptCreateTitle.put("remark", "介绍");
+        DEPT_CREATE_TITLE.put("name", "部门名称");
+        DEPT_CREATE_TITLE.put("remark", "介绍");
 
-        deptSearchTitle.put("name", "部门名称");
+        DEPT_SEARCH_TITLE.put("name", "部门名称");
     }
     static{
-        jobTitle.put("name", "职位名称");
-        jobTitle.put("remark", "介绍");
+        JOB_TITLE.put("name", "职位名称");
+        JOB_TITLE.put("remark", "介绍");
 
-        jobListTitle.put("name", "职位名称");
-        jobListTitle.put("remark", "介绍");
+        JOB_LIST_TITLE.put("name", "职位名称");
+        JOB_LIST_TITLE.put("remark", "介绍");
 
-        jobCreateTitle.put("name", "职位名称");
-        jobCreateTitle.put("remark", "介绍");
+        JOB_CREATE_TITLE.put("name", "职位名称");
+        JOB_CREATE_TITLE.put("remark", "介绍");
 
-        jobSearchTitle.put("name", "职位名称");
+        JOB_SEARCH_TITLE.put("name", "职位名称");
     }
-    public static Map<String, String> noticeTitle(){return noticeTitle;}
-    public static Map<String,String> noticeListTitle(){return noticeListTitle;}
-    public static Map<String,String> noticeCreateTitle(){return noticeCreateTitle;}
-    public static Map<String, String> noticeSearchTitle() {return noticeSearchTitle;}
-
-    public static Map<String,String> employeeTitle(){return employeeTitle;}
-    public static Map<String,String> employeeListTitle(){return employeeListTitle;}
-    public static Map<String,String> employeeCreateTitle(){return employeeCreateTitle;}
-    public static Map<String,Object> sexMap(){return sexMap;}
-    public static Map<String,String> employeeSqlMapping(){return employeeSqlMapping;}
-
-    public static Map<String,String> deptTitle(){return deptTitle;}
-    public static Map<String,String> deptListTitle(){return deptListTitle;}
-    public static Map<String,String> deptCreateTitle(){return deptCreateTitle;}
-    public static Map<String,String> deptSearchTitle(){return deptSearchTitle;}
-
-    public static Map<String,String> jobTitle(){return jobTitle;}
-    public static Map<String,String> jobListTitle(){return jobListTitle;}
-    public static Map<String,String> jobCreateTitle(){return jobCreateTitle;}
-    public static Map<String,String> jobSearchTitle(){return jobSearchTitle;}
 }

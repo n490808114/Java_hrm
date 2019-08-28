@@ -3,6 +3,8 @@ package xyz.n490808114.train.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;

@@ -8,9 +8,6 @@ $(document).ready(function () {
                 type:"get",
                 data:{"pageSize":page_size},
                 success:function(data){
-                    if(data["code"] === undefined){
-                        data = JSON.parse(data);
-                    }
                     if(data["code"] === 200){
                         setMainTable(data);
                     }else{
@@ -102,7 +99,6 @@ function setTable(json){
                         url:title+"/"+$(b).attr("title"),
                         type:"get",
                         success:function (dataX) {
-                            dataX = JSON.parse(dataX);
                             if(dataX["code"] == 200){
                                 openDetail(dataX,page_no,$(b).attr("title"));
                             }else{
@@ -161,7 +157,7 @@ function addSearchpanel(title){
             url:title,
             type:"get",
             success:function(data){
-                setTable(JSON.parse(data));
+                setTable(data);
             }
         })
         return false;
@@ -222,7 +218,6 @@ function addListButtonBar(title,page_no){
             async:false,
             type:"get",
             success:function (dataY){
-                dataY = JSON.parse(dataY);
                 if(dataY["code"] === 200){
                     setTable(dataY);
                 }else{
@@ -344,7 +339,6 @@ function setPageChooseBar(title,count, page_no) {
             async:false,
             type:"get",
             success:function (dataX) {
-                dataX = JSON.parse(dataX);
                 setTable(dataX);
             }
         });
@@ -358,7 +352,6 @@ function setPageChooseBar(title,count, page_no) {
             async:false,
             type:"get",
             success:function (dataX) {
-                dataX = JSON.parse(dataX);
                 setTable(dataX);
             }
         });
@@ -394,7 +387,6 @@ function openCreator(data,title,page_no) {
                         type:"get",
                         data:{"pageNo":page_no,"pageSize":page_size},
                         success:function(dataY){
-                            dataY = JSON.parse(dataY);
                             if(dataY["code"] === 200){
                                 setMainTable(dataY);
                             }else{
@@ -452,7 +444,6 @@ function openDetail(data,page_no,id) {
                         type:"get",
                         async:false,
                         success:function (dataY) {
-                            dataY = JSON.parse(dataY);
                             if(dataY["code"] == 200){
                                 openDetail(dataY,page_no,id);
                             }else{
@@ -484,7 +475,6 @@ function openDetail(data,page_no,id) {
                         async:false,
                         type:"get",
                         success:function (dataY){
-                            dataY = JSON.parse(dataY);
                             if(dataY["code"] === 200){
                                 setMainTable(dataY);
                             }else{
@@ -505,7 +495,6 @@ function openDetail(data,page_no,id) {
             async:false,
             type:"get",
             success:function (dataY){
-                dataY = JSON.parse(dataY);
                 if(dataY["code"] === 200){
                     setMainTable(dataY);
                 }else{

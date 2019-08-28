@@ -1,6 +1,9 @@
 package xyz.n490808114.train.domain;
 
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +14,7 @@ public class Dept implements Serializable {
     @Null private Integer id;
     @Size(min=1,max=10) private String name;
     private String remark;
+    @JsonIgnore
     @Null private List<Employee> employees;
     public Dept(){}
     public Dept(int id){

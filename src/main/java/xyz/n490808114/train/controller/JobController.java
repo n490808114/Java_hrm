@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.domain.Job;
+import xyz.n490808114.train.dto.ListDto;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
-import xyz.n490808114.train.util.TrainConstants;
 import xyz.n490808114.train.service.HrmService;
 
 
@@ -36,16 +36,12 @@ public class JobController{
 
 
     @GetMapping
-    public String getList(@RequestParam(value = "pageNo",defaultValue = "1")int pageNo,
+    public ListDto<Job> getList(@RequestParam(value = "pageNo",defaultValue = "1")int pageNo,
                           @RequestParam(value = "pageSize",defaultValue = "20")int pageSize,
                           @RequestParam Map<String,String> requestParam){
-        Map<String, Object> map = new HashMap<>();
-        map.put("title","job");
-        map.put("pageNo", pageNo);
-        map.put("pageSize", pageSize);
-        map.put("code",200);
-        map.put("message","获取成功");
-        map.put("dataTitle",TableTitle.jobListTitle());
+
+        ListDto<Job> dto = null;
+
         Map<String,Job> cacheMap = beanDataCache.getJobMap();
         List<Job> data = new LinkedList<>();
         int mapCount = 0;
@@ -63,8 +59,12 @@ public class JobController{
                     count++;
                 }
             }
-            map.put("count",count);
-            map.put("data",data);
+            if(data.size() != 0){
+                dto = new ListDto<>(200,"获取成功","job",
+                                        pageNo,pageSize,count,
+                                        TableTitle.JOB_LIST_TITLE,
+                                        data);
+            }
         }else{
             for(String key : cacheMap.keySet()){
                 if(mapCount == start && data.size() < pageSize){
@@ -75,18 +75,22 @@ public class JobController{
                     mapCount++;
                 }
             }
-            map.put("count",cacheMap.size());
-            map.put("data",data);
+            if(data.size() != 0){
+                dto = new ListDto<>(200,"获取成功","job",
+                                        pageNo,pageSize,cacheMap.size(),
+                                        TableTitle.JOB_LIST_TITLE,
+                                        data);
+            }
         }
-        String s = JSON.toJSONString(map);
-        log.info(s);
-        return s;
+        if(data.size() == 0){dto = new ListDto<>(404,"找不到任何的职位");}
+        log.info(dto);
+        return dto;
     }
     @GetMapping("/create")
     public Map<String,Object> create(){
         Map<String,Object> map = new HashMap<>();
         map.put("title","job");
-        map.put("dataTitle",TableTitle.jobCreateTitle());
+        map.put("dataTitle",TableTitle.JOB_CREATE_TITLE);
         log.info(map);
         return map;
     }
@@ -94,7 +98,7 @@ public class JobController{
     public Map<String,Object> search(){
         Map<String,Object> map = new HashMap<>();
         map.put("title","job");
-        map.put("dataTitle",TableTitle.jobSearchTitle());
+        map.put("dataTitle",TableTitle.JOB_SEARCH_TITLE);
         log.info(map);
         return map;
     }
@@ -106,12 +110,12 @@ public class JobController{
         Job job = hrmService.findJobById(id);
         if(job == null){
             map.put("code",404);
-            map.put("message","找不到这个部门");
+            map.put("message","找不到这个职位");
             return JSON.toJSONString(map);
         }else{
             map.put("code",200);
             map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.jobTitle());
+            map.put("dataTitle",TableTitle.JOB_TITLE);
             map.put("data",job);
             PropertyFilter propertyFilter = (Object object,String name,Object value) ->{
                 if("employees".equals(name)){
@@ -178,10 +182,10 @@ public class JobController{
         Map<String,Object> map = new HashMap<>();
         if(beanDataCache.getJobMap().get(""+id) == null){
             map.put("code","404");
-            map.put("message","错误的部门序号");
+            map.put("message","错误的职位序号");
         }else if(hrmService.countEmployeesByJobId(id) > 0){
             map.put("code","404");
-            map.put("message","该部门内还有员工,请先调整他们的部门后再进行删除");
+            map.put("message","该职位内还有员工,请先调整他们的职位后再进行删除");
         }else{
             hrmService.removeJob(id);
             map.put("code","200");

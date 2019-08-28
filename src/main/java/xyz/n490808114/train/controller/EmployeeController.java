@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.domain.*;
+import xyz.n490808114.train.dto.ListDto;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
 
@@ -36,7 +37,7 @@ public class EmployeeController {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @GetMapping
-    public String getList(@RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
+    public ListDto<Employee> getList(@RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
                                     @RequestParam(value = "pageSize",defaultValue = "20") int pageSize,
                                     @RequestParam Map<String,String> requestParam) {
         log.info(requestParam);
@@ -50,45 +51,27 @@ public class EmployeeController {
         map.put("title","employee");
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
-
+        
+        ListDto<Employee> dto = null;
         if(data.size() == 0){
-            map.put("code",404);
-            map.put("message","找不到任何的员工");
-            return JSON.toJSONString(map);
+            dto = new ListDto<>(404,"找不到任何的员工");
         }
-        map.put("code",200);
-        map.put("message","获取成功");
-        map.put("count", hrmService.getEmployeeCount(requestParam));
-        map.put("dataTitle", TableTitle.employeeListTitle());
-        map.put("data",data);
+        dto = new ListDto<>(200,"获取成功","employee",pageNo,pageSize,
+                                    hrmService.getEmployeeCount(requestParam),
+                                    TableTitle.EMPLOYEE_LIST_TITLE,
+                                    data);
 
-        ValueFilter filter = (Object object, String name, Object value) -> {
-            if ("dept".equals(name)) {
-                try {
-                    return ((Dept) value).getName();
-                } catch (ClassCastException ex) {
-                    return value;
-                }
-            } else if ("job".equals(name)) {
-                try {
-                    return ((Job) value).getName();
-                } catch (ClassCastException ex) {
-                    return value;
-                }
-            }
-            return value;
-        };
-        return JSON.toJSONString(map,filter);
+        return dto;
     }
 
     @GetMapping("/create")
     public Map<String, Object> create(){
         Map<String,Object> map = new HashMap<>();
         map.put("title","employee");
-        map.put("dataTitle",TableTitle.employeeCreateTitle());
+        map.put("dataTitle",TableTitle.EMPLOYEE_CREATE_TITLE);
         map.put("deptData", beanDataCache.getDeptMap());
         map.put("jobData",beanDataCache.getJobMap());
-        map.put("sexData", TableTitle.sexMap());
+        map.put("sexData", TableTitle.SEX_MAP);
         return map;
     }
     @GetMapping("/search")
@@ -130,11 +113,11 @@ public class EmployeeController {
         }else{
             map.put("code",200);
             map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.employeeTitle());
+            map.put("dataTitle",TableTitle.EMPLOYEE_TITLE);
             map.put("data",employee);
             map.put("deptData", beanDataCache.getDeptMap());
             map.put("jobData",beanDataCache.getJobMap());
-            map.put("sexData", TableTitle.sexMap());
+            map.put("sexData", TableTitle.SEX_MAP);
             ValueFilter valueFilter = (Object object, String name, Object value) -> {
                 if ("dept".equals(name)) {
                     try {
@@ -157,7 +140,7 @@ public class EmployeeController {
                     }
                 }else if("sex".equals(name)){
                     if(value instanceof Integer){
-                        return TableTitle.sexMap().get(value);
+                        return TableTitle.SEX_MAP.get(value);
                     }
                 }
                 return value;

@@ -1,15 +1,26 @@
 package xyz.n490808114.train.domain;
 
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import xyz.n490808114.train.dto.JsonDeptSerialize;
+import xyz.n490808114.train.dto.JsonJobSerialize;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@JsonInclude(Include.NON_NULL)
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Null private Integer id;
+    @Null Integer id;
+    @JsonSerialize(using = JsonDeptSerialize.class)
     private Dept dept;
+    @JsonSerialize(using = JsonJobSerialize.class)
     private Job job;
     @NotNull @Size(min = 2,max = 20) private String name;
     @Size(min = 18,max = 18) private String cardId;

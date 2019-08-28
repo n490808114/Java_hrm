@@ -46,7 +46,7 @@ public class EmployeeDynaSqlProvider {
     }
 
     public String insertByParam(Map<String,String> param){
-        Map<String,String> sqlMapping = TableTitle.employeeSqlMapping();
+        Map<String,String> sqlMapping = TableTitle.EMPLOYEE_SQL_MAPPING;
         /*
         String head = "INSERT INTO employee_inf";
         Stack<String> columns = new Stack<>();
@@ -172,7 +172,7 @@ public class EmployeeDynaSqlProvider {
     public String modify(Map<String,String> param){
         log.info(param);
         if(param.get("id").equals("")){return "";}
-        Map<String,String> sqlMapping = TableTitle.employeeSqlMapping();
+        Map<String,String> sqlMapping = TableTitle.EMPLOYEE_SQL_MAPPING;
         return new SQL(){
             {
                 UPDATE("employee_inf");
@@ -216,7 +216,7 @@ public class EmployeeDynaSqlProvider {
                 for(String key : param.keySet()){
                     if(!param.get(key).equals("")){
                         AND();
-                        WHERE(TableTitle.employeeSqlMapping().get(key) + " LIKE '%"+ param.get(key) +"%'");
+                        WHERE(TableTitle.EMPLOYEE_SQL_MAPPING.get(key) + " LIKE '%"+ param.get(key) +"%'");
                     }
                 }
             }
@@ -236,7 +236,7 @@ public class EmployeeDynaSqlProvider {
                 for(String key : param.keySet()){
                     if(!param.get(key).equals("")){
                         AND();
-                        WHERE(TableTitle.employeeSqlMapping().get(key) + " LIKE '%"+ param.get(key) +"%'");
+                        WHERE(TableTitle.EMPLOYEE_SQL_MAPPING.get(key) + " LIKE '%"+ param.get(key) +"%'");
                     }
                 }
             }
@@ -250,7 +250,7 @@ public class EmployeeDynaSqlProvider {
                 for(String key : param.keySet()){
                     if(!param.get(key).equals("")){
                         AND();
-                        WHERE(TableTitle.employeeSqlMapping().get(key) + " LIKE '%"+ param.get(key) +"%'");
+                        WHERE(TableTitle.EMPLOYEE_SQL_MAPPING.get(key) + " LIKE '%"+ param.get(key) +"%'");
                     }
                 }
             }

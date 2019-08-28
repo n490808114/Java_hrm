@@ -1,24 +1,25 @@
 package xyz.n490808114.train.controller;
 
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import xyz.n490808114.train.domain.Notice;
 import xyz.n490808114.train.util.TableTitle;
 import xyz.n490808114.train.domain.User;
+import xyz.n490808114.train.dto.DetailDto;
+import xyz.n490808114.train.dto.ListDto;
+import xyz.n490808114.train.dto.NoticeDetail;
+import xyz.n490808114.train.dto.SimpleDto;
 import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.util.TrainConstants;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-
 import javax.servlet.http.HttpSession;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -27,54 +28,34 @@ public class NoticeController {
     @Autowired
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
-
+    private static Log log = LogFactory.getLog(NoticeController.class);
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @GetMapping
-    public String getList(@RequestParam(value = "pageSize",defaultValue = "20") int pageSize,
+    public ListDto<Notice> getList(@RequestParam(value = "pageSize",defaultValue = "20") int pageSize,
                         @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
                         @RequestParam Map<String,String> requestParam)
     {
+
         Map<String, Object> param = new HashMap<>(requestParam);
         param.put("pageNo", pageNo);
         param.put("pageSize", pageSize);
 
         List<Notice> data = hrmService.getNoticeList(param);
-
-        Map<String, Object> json = new HashMap<>();
-        json.put("title","notice");
-        json.put("pageSize", pageSize);
-        json.put("pageNo", pageNo);
-
+        ListDto<Notice> dto = null;
         if(data.size() == 0){
-            json.put("code",404);
-            json.put("message","找不到任何的公告");
-            return JSON.toJSONString(json);
+            dto = new ListDto<Notice>(404,"找不到任何的公告");
         }
-        json.put("code",200);
-        json.put("message","获取成功");
-        json.put("count", hrmService.getNoticesCount(requestParam));
-        json.put("dataTitle", TableTitle.noticeListTitle());
-        json.put("data", data);
-
-        ValueFilter filter = (Object object, String name, Object value) -> {
-            if ("user".equals(name)) {
-                try {
-                    return value == null?"None":((User) value).getUserName();
-                } catch (ClassCastException ex) {
-                    return value;
-                }
-            }else if("createDate".equals(name)){
-                try{
-                    if(value == null){throw new ClassCastException();}
-                    return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
-                }catch(ClassCastException ex){
-                    return value;
-                }
-            }
-            return value;
-        };
-        return JSON.toJSONString(json,filter);
+        dto =  new ListDto<Notice>(200,
+                                "获取成功",
+                                "notice",
+                                pageNo,
+                                pageSize,
+                                hrmService.getNoticesCount(requestParam),
+                                TableTitle.NOTICE_LIST_TITLE,
+                                data);
+        log.info(dto);
+        return dto;
     }
 
     /**
@@ -85,14 +66,14 @@ public class NoticeController {
     public Map<String, Object> create() {
         Map<String,Object> map = new HashMap<>();
         map.put("title","notice");
-        map.put("dataTitle",TableTitle.noticeCreateTitle());
+        map.put("dataTitle",TableTitle.NOTICE_CREATE_TITLE);
         return map;
     }
     @GetMapping("/search")
     public Map<String,Object> search(){
         Map<String,Object> map = new HashMap<>();
         map.put("title","notice");
-        map.put("dataTitle",TableTitle.noticeSearchTitle());
+        map.put("dataTitle",TableTitle.NOTICE_SEARCH_TITLE);
         return map;
     }
 
@@ -104,7 +85,7 @@ public class NoticeController {
      * @return 标题不为空，返回true,否则返回false
      */
     @PostMapping
-    public Map<String,Object> create(@RequestParam Map<String,String> param,HttpSession session) {
+    public SimpleDto create(@RequestParam Map<String, String> param, HttpSession session) {
         Notice notice = new Notice();
         notice.setTitle(param.get("title"));
         notice.setContent(param.get("content"));
@@ -112,21 +93,17 @@ public class NoticeController {
         notice.setUser((User) session.getAttribute(TrainConstants.USER_SESSION));
 
         Set<ConstraintViolation<Notice>> set = validator.validate(notice);
-        Map<String,Object> map = new HashMap<>();
         if(set.size() == 0){
             hrmService.addNotice(notice);
-            map.put("code",200);
-            map.put("message","创建成功");
+            return new SimpleDto(200,"创建成功");
         }else{
             Map<String,String> error = new LinkedHashMap<>();
             for(ConstraintViolation<Notice> constraintViolation : set){
                 error.put(constraintViolation.getPropertyPath().toString()
                 , constraintViolation.getMessage());
             }
-            map.put("code", 404);
-            map.put("message",error);
+            return new SimpleDto(404,error);
         }
-        return map;
     }
 
     /**
@@ -136,38 +113,16 @@ public class NoticeController {
      * @return 指定id 的 Notice 转换为JSON字符串
      */
     @GetMapping("/{id}")
-    public String getDetail(@PathVariable("id") int id) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("title","notice");
-        Notice notice = hrmService.findNoticeById(id);
+    public DetailDto<NoticeDetail> getDetail(@PathVariable("id") int id) {
+        DetailDto<NoticeDetail> dto = null;
+        NoticeDetail notice = new NoticeDetail(hrmService.findNoticeById(id));
         if(notice == null){
-            map.put("code",404);
-            map.put("message","找不到这个公告");
-            return JSON.toJSONString(map);
+            dto = new DetailDto<>(404,"找不到这个公告");
         }else{
-            map.put("code",200);
-            map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.noticeTitle());
-            map.put("data",notice);
-            ValueFilter valueFilter = (Object object, String name, Object value) -> {
-                if ("user".equals(name)) {
-                    try {
-                        return ((User) value).getUserName();
-                    } catch (ClassCastException ex) {
-                        return value;
-                    }
-                }
-                return value;
-            };
-            PropertyFilter propertyFilter = (Object Object,String name,Object value) ->{
-                return !name.equals("createDate");
-            };
-            SerializeFilter[] list = new SerializeFilter[2];
-            list[0] = valueFilter;
-            list[1] = propertyFilter;
-            return JSON.toJSONString(map,list);
+            dto = new DetailDto<>(200,"获取成功","notice",TableTitle.NOTICE_TITLE,notice);
         }
-
+        log.info(dto);
+        return dto;
     }
 
     /**
@@ -178,28 +133,24 @@ public class NoticeController {
      * @return 标题不为空，返回true,否则返回false
      */
     @PutMapping("/{id}")
-    public Map<String,Object> update(@PathVariable("id") int id,@RequestParam Map<String, String> param, HttpSession session) {
+    public SimpleDto update(@PathVariable("id") int id, @RequestParam Map<String, String> param, HttpSession session) {
         Notice notice = new Notice();
         notice.setTitle(param.get("title"));
         notice.setContent(param.get("content"));
 
         Set<ConstraintViolation<Notice>> set = validator.validate(notice);
-        Map<String,Object> map = new HashMap<>();
         if(set.size() == 0){
             notice.setId(id);
             hrmService.modifyNotice(notice);;
-            map.put("code",200);
-            map.put("message","创建成功");
+            return new SimpleDto(200,"创建成功");
         }else{
             Map<String,String> error = new LinkedHashMap<>();
             for(ConstraintViolation<Notice> constraintViolation : set){
                 error.put(constraintViolation.getPropertyPath().toString()
                 , constraintViolation.getMessage());
             }
-            map.put("code", 404);
-            map.put("message",error);
+            return  new SimpleDto(404,error);
         }
-        return map;
     }
 
     /**
@@ -207,17 +158,13 @@ public class NoticeController {
      * @return 提交删除指定,返回给前台true
      */
     @DeleteMapping("/{id}")
-    public Map<String, Object> delete(@PathVariable("id") int id) {
+    public SimpleDto delete(@PathVariable("id") int id) {
         Notice notice = hrmService.findNoticeById(id);
-        Map<String, Object> map = new HashMap<>();
         if(notice == null){
-            map.put("code","404");
-            map.put("message","错误的公告序号");
+            return new SimpleDto(404,"错误的公告序号");
         }else{
             hrmService.removeNotice(id);
-            map.put("code","200");
-            map.put("message","删除成功");
+            return new SimpleDto(200,"删除成功");
         }
-        return map;
     }
 }

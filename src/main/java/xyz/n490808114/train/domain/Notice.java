@@ -4,15 +4,24 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import xyz.n490808114.train.dto.JsonUserSerialize;
+
 import javax.validation.constraints.Null;
-
-
+@JsonInclude(Include.NON_NULL)
 public class Notice implements Serializable {
     private static final long serialVersionUID = 1L;
     @Null private Integer id;
     @Size(min = 1,max = 100) String title;
     private String content;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
+    @JsonSerialize(using = JsonUserSerialize.class)
     private User user;
 
     public Notice(){}

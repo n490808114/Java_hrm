@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.domain.Dept;
+import xyz.n490808114.train.dto.ListDto;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
-import xyz.n490808114.train.util.TrainConstants;
 import xyz.n490808114.train.service.HrmService;
 
 
@@ -36,16 +36,12 @@ public class DeptController{
 
 
     @GetMapping
-    public String getList(@RequestParam(value = "pageNo",defaultValue = "1")int pageNo,
+    public ListDto<Dept> getList(@RequestParam(value = "pageNo",defaultValue = "1")int pageNo,
                           @RequestParam(value = "pageSize",defaultValue = "20")int pageSize,
                           @RequestParam Map<String,String> requestParam){
-        Map<String, Object> map = new HashMap<>();
-        map.put("title","dept");
-        map.put("pageNo", pageNo);
-        map.put("pageSize", pageSize);
-        map.put("code",200);
-        map.put("message","获取成功");
-        map.put("dataTitle",TableTitle.deptListTitle());
+
+        ListDto<Dept> dto = null;
+
         Map<String,Dept> cacheMap = beanDataCache.getDeptMap();
         List<Dept> data = new LinkedList<>();
         int mapCount = 0;
@@ -63,8 +59,12 @@ public class DeptController{
                     count++;
                 }
             }
-            map.put("count",count);
-            map.put("data",data);
+            if(data.size() != 0){
+                dto = new ListDto<>(200,"获取成功","dept",
+                                        pageNo,pageSize,count,
+                                        TableTitle.DEPT_LIST_TITLE,
+                                        data);
+            }
         }else{
             for(String key : cacheMap.keySet()){
                 if(mapCount == start && data.size() < pageSize){
@@ -75,18 +75,22 @@ public class DeptController{
                     mapCount++;
                 }
             }
-            map.put("count",cacheMap.size());
-            map.put("data",data);
+            if(data.size() != 0){
+                dto = new ListDto<>(200,"获取成功","dept",
+                                        pageNo,pageSize,cacheMap.size(),
+                                        TableTitle.DEPT_LIST_TITLE,
+                                        data);
+            }
         }
-        String s = JSON.toJSONString(map);
-        log.info(s);
-        return s;
+        if(data.size() == 0){dto = new ListDto<>(404,"找不到任何的部门");}
+        log.info(dto);
+        return dto;
     }
     @GetMapping("/create")
     public Map<String,Object> create(){
         Map<String,Object> map = new HashMap<>();
         map.put("title","dept");
-        map.put("dataTitle",TableTitle.deptCreateTitle());
+        map.put("dataTitle",TableTitle.DEPT_CREATE_TITLE);
         log.info(map);
         return map;
     }
@@ -94,7 +98,7 @@ public class DeptController{
     public Map<String,Object> search(){
         Map<String,Object> map = new HashMap<>();
         map.put("title","dept");
-        map.put("dataTitle",TableTitle.deptSearchTitle());
+        map.put("dataTitle",TableTitle.DEPT_SEARCH_TITLE);
         log.info(map);
         return map;
     }
@@ -111,7 +115,7 @@ public class DeptController{
         }else{
             map.put("code",200);
             map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.deptTitle());
+            map.put("dataTitle",TableTitle.DEPT_TITLE);
             map.put("data",dept);
             PropertyFilter propertyFilter = (Object object,String name,Object value) ->{
                 if("employees".equals(name)){
