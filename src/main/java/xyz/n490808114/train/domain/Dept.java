@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Dept implements Serializable {
     private static final long serialVersionUID = 1L;
+    @JsonIgnore
     @Null private Integer id;
     @Size(min=1,max=10) private String name;
     private String remark;

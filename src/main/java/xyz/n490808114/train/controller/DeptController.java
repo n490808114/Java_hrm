@@ -6,8 +6,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PropertyFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.domain.Dept;
+import xyz.n490808114.train.dto.DetailDto;
 import xyz.n490808114.train.dto.ListDto;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
@@ -103,32 +102,22 @@ public class DeptController{
         return map;
     }
     @GetMapping("/{id}")
-    public String getDetail(@PathVariable("id") int id){
-        Map<String,Object> map = new HashMap<>();
-        map.put("title","dept");
+    public DetailDto getDetail(@PathVariable("id") int id){
+        DetailDto dto = null;
 
         Dept dept = hrmService.findDeptById(id);
         if(dept == null){
-            map.put("code",404);
-            map.put("message","找不到这个部门");
-            return JSON.toJSONString(map);
+            dto = new DetailDto().builder().code(404).message("找不到这个部门").build();
         }else{
-            map.put("code",200);
-            map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.DEPT_TITLE);
-            map.put("data",dept);
-            PropertyFilter propertyFilter = (Object object,String name,Object value) ->{
-                if("employees".equals(name)){
-                    return false;
-                }else if("id".equals(name)){
-                    return false;
-                }
-                return true;
-            };
-            String s = JSON.toJSONString(map,propertyFilter);
-            log.info(s);
-            return s;
+            dto = new DetailDto().builder().code(200)
+                                        .message("获取成功")
+                                        .title("dept")
+                                        .dataTitle(TableTitle.DEPT_TITLE)
+                                        .data(dept)
+                                        .build();
         }
+        log.info(dto);
+        return dto;
     }
     @PostMapping
     public Map<String,Object> create(@RequestParam Map<String,String> param){

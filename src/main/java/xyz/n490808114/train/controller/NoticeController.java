@@ -10,7 +10,6 @@ import xyz.n490808114.train.util.TableTitle;
 import xyz.n490808114.train.domain.User;
 import xyz.n490808114.train.dto.DetailDto;
 import xyz.n490808114.train.dto.ListDto;
-import xyz.n490808114.train.dto.NoticeDetail;
 import xyz.n490808114.train.dto.SimpleDto;
 import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.util.TrainConstants;
@@ -18,6 +17,7 @@ import xyz.n490808114.train.util.TrainConstants;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpSession;
 
 import java.util.*;
@@ -113,13 +113,19 @@ public class NoticeController {
      * @return 指定id 的 Notice 转换为JSON字符串
      */
     @GetMapping("/{id}")
-    public DetailDto<NoticeDetail> getDetail(@PathVariable("id") int id) {
-        DetailDto<NoticeDetail> dto = null;
-        NoticeDetail notice = new NoticeDetail(hrmService.findNoticeById(id));
+    public DetailDto getDetail(@PathVariable("id") int id) {
+        DetailDto dto = null;
+        Notice  notice = hrmService.findNoticeById(id);
         if(notice == null){
-            dto = new DetailDto<>(404,"找不到这个公告");
+            dto = new DetailDto().builder().code(404).message("找不到这个公告").build();
         }else{
-            dto = new DetailDto<>(200,"获取成功","notice",TableTitle.NOTICE_TITLE,notice);
+            dto = new DetailDto().builder()
+                            .code(200)
+                            .message("获取成功")
+                            .title("notice")
+                            .dataTitle(TableTitle.NOTICE_TITLE)
+                            .data(notice)
+                            .build();
         }
         log.info(dto);
         return dto;

@@ -1,12 +1,6 @@
 package xyz.n490808114.train.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PropertyFilter;
-import com.alibaba.fastjson.serializer.SerializeFilter;
-import com.alibaba.fastjson.serializer.ValueFilter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.domain.*;
+import xyz.n490808114.train.dto.DetailDto;
 import xyz.n490808114.train.dto.ListDto;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
@@ -102,60 +97,26 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public String getDetail(@PathVariable("id") int id){
+    public DetailDto getDetail(@PathVariable("id") int id){
+        DetailDto dto = null;
         Map<String,Object> map = new HashMap<>();
         map.put("title","employee");
         Employee employee = hrmService.findEmployeeById(id);
         if(employee == null){
-            map.put("code",404);
-            map.put("message","找不到这个员工");
-            return JSON.toJSONString(map);
+            dto = new DetailDto().builder().code(404).message("找不到这个员工信息!").build();
         }else{
-            map.put("code",200);
-            map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.EMPLOYEE_TITLE);
-            map.put("data",employee);
-            map.put("deptData", beanDataCache.getDeptMap());
-            map.put("jobData",beanDataCache.getJobMap());
-            map.put("sexData", TableTitle.SEX_MAP);
-            ValueFilter valueFilter = (Object object, String name, Object value) -> {
-                if ("dept".equals(name)) {
-                    try {
-                        return ((Dept) value).getName();
-                    } catch (ClassCastException ex) {
-                        return value;
-                    }
-                } else if ("job".equals(name)) {
-                    try {
-                        return ((Job) value).getName();
-                    } catch (ClassCastException ex) {
-                        return value;
-                    }
-                }else if("birthday".equals(name)){
-                    try{
-                        if(value == null){throw new ClassCastException();}
-                        return new SimpleDateFormat("YYYY-MM-dd").format((Date) value);
-                    }catch(ClassCastException ex){
-                        return value;
-                    }
-                }else if("sex".equals(name)){
-                    if(value instanceof Integer){
-                        return TableTitle.SEX_MAP.get(value);
-                    }
-                }
-                return value;
-            };
-            PropertyFilter propertyFilter = (Object Object,String name,Object value) ->{
-                if("createDate".equals(name)){
-                    return false;
-                }
-                return true;
-            };
-            SerializeFilter[] list = new SerializeFilter[2];
-            list[0] = valueFilter;
-            list[1] = propertyFilter;
-            return JSON.toJSONString(map,list);
+            dto = new DetailDto().builder().code(200)
+                                        .message("获取成功")
+                                        .title("employee")
+                                        .dataTitle(TableTitle.EMPLOYEE_TITLE)
+                                        .data(employee)
+                                        .addDataMap(beanDataCache.getDeptMap())
+                                        .addDataMap(beanDataCache.getJobMap())
+                                        .addDataMap(TableTitle.SEX_MAP)
+                                        .build();
         }
+        log.info(dto);
+        return dto;
     }
 
     @PutMapping("/{id}")

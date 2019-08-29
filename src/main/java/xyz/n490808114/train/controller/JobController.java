@@ -6,8 +6,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.PropertyFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.domain.Job;
+import xyz.n490808114.train.dto.DetailDto;
 import xyz.n490808114.train.dto.ListDto;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
@@ -82,7 +81,7 @@ public class JobController{
                                         data);
             }
         }
-        if(data.size() == 0){dto = new ListDto<>(404,"找不到任何的职位");}
+        if(data.size() == 0){dto = new ListDto<>(404,"找不到任何的部门");}
         log.info(dto);
         return dto;
     }
@@ -103,32 +102,22 @@ public class JobController{
         return map;
     }
     @GetMapping("/{id}")
-    public String getDetail(@PathVariable("id") int id){
-        Map<String,Object> map = new HashMap<>();
-        map.put("title","job");
+    public DetailDto getDetail(@PathVariable("id") int id){
+        DetailDto dto = null;
 
         Job job = hrmService.findJobById(id);
         if(job == null){
-            map.put("code",404);
-            map.put("message","找不到这个职位");
-            return JSON.toJSONString(map);
+            dto = new DetailDto().builder().code(404).message("找不到这个部门").build();
         }else{
-            map.put("code",200);
-            map.put("message","获取成功");
-            map.put("dataTitle",TableTitle.JOB_TITLE);
-            map.put("data",job);
-            PropertyFilter propertyFilter = (Object object,String name,Object value) ->{
-                if("employees".equals(name)){
-                    return false;
-                }else if("id".equals(name)){
-                    return false;
-                }
-                return true;
-            };
-            String s = JSON.toJSONString(map,propertyFilter);
-            log.info(s);
-            return s;
+            dto = new DetailDto().builder().code(200)
+                                        .message("获取成功")
+                                        .title("job")
+                                        .dataTitle(TableTitle.JOB_TITLE)
+                                        .data(job)
+                                        .build();
         }
+        log.info(dto);
+        return dto;
     }
     @PostMapping
     public Map<String,Object> create(@RequestParam Map<String,String> param){
@@ -182,10 +171,10 @@ public class JobController{
         Map<String,Object> map = new HashMap<>();
         if(beanDataCache.getJobMap().get(""+id) == null){
             map.put("code","404");
-            map.put("message","错误的职位序号");
+            map.put("message","错误的部门序号");
         }else if(hrmService.countEmployeesByJobId(id) > 0){
             map.put("code","404");
-            map.put("message","该职位内还有员工,请先调整他们的职位后再进行删除");
+            map.put("message","该部门内还有员工,请先调整他们的部门后再进行删除");
         }else{
             hrmService.removeJob(id);
             map.put("code","200");

@@ -23,7 +23,13 @@ public interface UserDao {
     @ResultMap("userResult")
     User selectByEmailAndPassword(@Param("email") String email,@Param("password") String password);
 
+    @Select("select * from user_inf where name = #{name}")
+    @ResultMap("userResult")
+    User selectByName(String name);
 
+    @Select("select * from user_inf where email = #{email}")
+    @ResultMap("userResult")
+    User selectByEmail(String email);
 
     @Select("select count(id) from user_inf where loginname = #{name}")
     int registerCheckName(@Param("name") String name);

@@ -2,6 +2,8 @@ package xyz.n490808114.train.domain;
 
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -32,12 +34,14 @@ public class Employee implements Serializable {
     @Email private String email;
     private Integer sex;
     private String party;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     @PastOrPresent private Date birthday;
     private String race;
     private String education;
     private String speciality;
     private String hobby;
     private String remark;
+    @JsonIgnore
     @PastOrPresent private Date createDate;
     
     static{

@@ -1,11 +1,16 @@
 package xyz.n490808114.train.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class User implements Serializable {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class User implements UserDetails,Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
     private String userName;
@@ -14,6 +19,8 @@ public class User implements Serializable {
     private Integer status;
     private Date createDate;
     private String email;
+    @JsonIgnore
+    List<GrantedAuthority> grantedAuthorities;
     public User(){
         createDate = new Date();
     }
@@ -32,7 +39,7 @@ public class User implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
+    
     public String getUserName() {
         return userName;
     }
@@ -49,7 +56,7 @@ public class User implements Serializable {
     public String getLoginName() {
         return loginName;
     }
-
+    @Override
     public String getPassword() {
         return password;
     }
@@ -90,7 +97,36 @@ public class User implements Serializable {
                 ",loginName="+loginName+
                 ",password="+password+
                 ",status="+status+
-                ",createDate="+createDate+
-                ",email="+email+""+"]";
+                ",createDate=" + createDate + ",email=" + email + "" + "]";
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return grantedAuthorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return loginName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+		return false;
+	}
 }

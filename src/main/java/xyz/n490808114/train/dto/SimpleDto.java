@@ -1,8 +1,8 @@
 package xyz.n490808114.train.dto;
 
 public class SimpleDto{
-    private Integer code;
-    private Object message;
+    protected Integer code;
+    protected Object message;
     public SimpleDto(){}
     public SimpleDto(Integer code,Object message){
         this.code = code;

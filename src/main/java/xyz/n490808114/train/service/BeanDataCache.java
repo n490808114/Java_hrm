@@ -23,9 +23,9 @@ public class BeanDataCache {
     @Qualifier("hrmServiceImpl")
     private HrmService hrmService;
 
-    private static Map<String,Dept> deptMap = new LinkedHashMap<>();
+    private static Map<String, Dept> deptMap = new LinkedHashMap<>();
     private static Boolean isExpiredOfDeptCache = true;
-    private static Map<String,Job> jobMap = new LinkedHashMap<>();
+    private static Map<String, Job> jobMap = new LinkedHashMap<>();
     private static Boolean isExpiredOfJobCache = true;
 
     public static void setDeptCacheExpired(){
@@ -70,7 +70,7 @@ public class BeanDataCache {
         if(isExpiredOfDeptCache){
             synchronized(isExpiredOfDeptCache){
                 List<Dept> list = hrmService.findAllDept();
-                Map<String,Dept> newMap = new LinkedHashMap<>();
+                Map<String, Dept> newMap = new LinkedHashMap<>();
                 for(Dept dept:list){
                     newMap.put(""+dept.getId(), dept);
                 }

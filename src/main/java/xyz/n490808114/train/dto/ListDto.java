@@ -3,10 +3,7 @@ package xyz.n490808114.train.dto;
 import java.util.List;
 import java.util.Map;
 
-public class ListDto <T> {
-    private Integer code;
-    private String message;
-
+public class ListDto <T> extends SimpleDto{
     private String title;
 
     private Integer pageNo;
@@ -19,11 +16,12 @@ public class ListDto <T> {
     public ListDto(){
 
     }
-    public ListDto(Integer code,String message){
+    public ListDto(Integer code,Object message){
         this.code = code;
         this.message = message;
     }
-    public ListDto(Integer code,String message,String title,Integer pageNo,Integer pageSize,
+
+    public ListDto(Integer code,Object message,String title,Integer pageNo,Integer pageSize,
                         Integer count,Map<String,String> dataTitle,List<T> data)
     {
         this.code = code;
@@ -36,12 +34,6 @@ public class ListDto <T> {
         this.data = data;
     }
 
-    /**
-     * @param code the code to set
-     */
-    public void setCode(Integer code) {
-        this.code = code;
-    }
     /**
      * @param count the count to set
      */
@@ -64,12 +56,6 @@ public class ListDto <T> {
         this.dataTitle = dataTitle;
     }
     /**
-     * @param messge the messge to set
-     */
-    public void setMessge(String message) {
-        this.message = message;
-    }
-    /**
      * @param pageNo the pageNo to set
      */
     public void setPageNo(Integer pageNo) {
@@ -88,12 +74,6 @@ public class ListDto <T> {
         this.title = title;
     }
     /**
-     * @return the code
-     */
-    public Integer getCode() {
-        return code;
-    }
-    /**
      * @return the count
      */
     public Integer getCount() {
@@ -106,12 +86,7 @@ public class ListDto <T> {
     public Map<String, String> getDataTitle() {
         return dataTitle;
     }
-    /**
-     * @return the messge
-     */
-    public String getMessage() {
-        return message;
-    }
+
     /**
      * @return the pageNo
      */

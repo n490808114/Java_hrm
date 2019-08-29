@@ -43,12 +43,13 @@ public class UserController {
         }
         if(user == null){
             map.put("code",404);
-            map.put("message","登录失败，请检查您的账号密码信息是否正确，请重新登录");
+            map.put("message","登录失败，请检查您的账号密码信息是否正确，重新登录");
         }else{
             session.setAttribute(TrainConstants.USER_SESSION, user);
             map.put("code",200);
             map.put("message","登陆成功");
         }
+        log.info(map);
         return map;
     }
 

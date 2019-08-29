@@ -48,6 +48,15 @@ public class HrmServiceImpl implements HrmService{
         return userDao.selectById(id);
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return userDao.selectByEmail(email);
+    }
+
+    @Override
+    public User getUserByName(String name) {
+        return userDao.selectByName(name);
+    }
 
     @Override
     public void removeUserById(int id){
@@ -262,4 +271,78 @@ public class HrmServiceImpl implements HrmService{
         noticeDao.modify(notice);
     }
 
+
+    /**
+     * @return the deptDao
+     */
+    public DeptDao getDeptDao() {
+        return deptDao;
+    }
+    /**
+     * @return the documentDao
+     */
+    public DocumentDao getDocumentDao() {
+        return documentDao;
+    }
+    /**
+     * @return the employeeDao
+     */
+    public EmployeeDao getEmployeeDao() {
+        return employeeDao;
+    }
+    /**
+     * @return the jobDao
+     */
+    public JobDao getJobDao() {
+        return jobDao;
+    }
+    /**
+     * @return the noticeDao
+     */
+    public NoticeDao getNoticeDao() {
+        return noticeDao;
+    }
+    /**
+     * @return the userDao
+     */
+    public UserDao getUserDao() {
+        return userDao;
+    }
+    /**
+     * @param deptDao the deptDao to set
+     */
+    public void setDeptDao(DeptDao deptDao) {
+        this.deptDao = deptDao;
+    }
+    /**
+     * @param documentDao the documentDao to set
+     */
+    public void setDocumentDao(DocumentDao documentDao) {
+        this.documentDao = documentDao;
+    }
+    /**
+     * @param employeeDao the employeeDao to set
+     */
+    public void setEmployeeDao(EmployeeDao employeeDao) {
+        this.employeeDao = employeeDao;
+    }
+    /**
+     * @param jobDao the jobDao to set
+     */
+    public void setJobDao(JobDao jobDao) {
+        this.jobDao = jobDao;
+    }
+    /**
+     * @param noticeDao the noticeDao to set
+     */
+    public void setNoticeDao(NoticeDao noticeDao) {
+        this.noticeDao = noticeDao;
+    }
+    /**
+     * @param userDao the userDao to set
+     */
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+    
 }

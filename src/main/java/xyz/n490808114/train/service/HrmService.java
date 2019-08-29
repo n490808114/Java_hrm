@@ -15,6 +15,9 @@ public interface HrmService {
 
     User loginByEmail(String email,String password);
 
+    User getUserByName(String name);
+    User getUserByEmail(String  email);
+
     /**
      * 根据id查询用户
      * @param id
