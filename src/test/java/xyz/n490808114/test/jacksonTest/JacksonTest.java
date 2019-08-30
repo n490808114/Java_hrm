@@ -1,4 +1,4 @@
-package xyz.n490808114.train.jacksonTest;
+package xyz.n490808114.test.jacksonTest;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -9,13 +9,13 @@ import org.apache.ibatis.jdbc.SQL;
 public class NoticeDynaSqlProvider{
     private static Log log = LogFactory.getLog(NoticeDynaSqlProvider.class);
 
-    public String  getNoticeListByParam(Map<String,Object> param){
-        int pageSize = (Integer) param.get("pageSize");
+    public String  getNoticeListByParam(Map<String,String> param){
+        int pageSize = Integer.parseInt( param.get("pageSize"));
         Object o =  param.get("title");
         final String[] list = (o != null)?((String) o).split(" "):null;
         String r = new SQL(){
             {
-                SELECT("id,title,create_date,user_id");
+                SELECT("id,title,create_date");
                 FROM("notice_inf");
                 WHERE("id>=("+ getSelectId(param)+")");
                 if( list != null ){
@@ -31,12 +31,12 @@ public class NoticeDynaSqlProvider{
         log.info(r);
         return  r;
     }
-    private String getSelectId(Map<String,Object> param){
-        int pageSize = (Integer) param.get("pageSize");
-        int start =pageSize * (((Integer) param.get("pageNo")) - 1);
+    private String getSelectId(Map<String,String> param){
+        int pageSize = Integer.parseInt(param.get("pageSize")) ;
+        int start =pageSize * (Integer.parseInt(param.get("pageNo")) - 1);
         Object o =  param.get("title");
         final String[] list = (o != null)?((String) o).split(" "):null;
-        return new SQL(){
+        String s = new SQL(){
             {
                 SELECT("id");
                 FROM("notice_inf");
@@ -50,9 +50,11 @@ public class NoticeDynaSqlProvider{
                 }
             }
         }.toString()+" limit "+start+",1";
+        log.info(s);
+        return s;
     }
     public String getCount(Map<String,String> param){
-        String str =  param.get("title");
+        String str = param.get("title");
         String r = new SQL(){
             {
                 SELECT("COUNT(id)");

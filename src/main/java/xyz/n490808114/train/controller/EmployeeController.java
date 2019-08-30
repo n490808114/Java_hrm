@@ -50,11 +50,11 @@ public class EmployeeController {
         ListDto<Employee> dto = null;
         if(data.size() == 0){
             dto = new ListDto<>(404,"找不到任何的员工");
-        }
+        }/*
         dto = new ListDto<>(200,"获取成功","employee",pageNo,pageSize,
                                     hrmService.getEmployeeCount(requestParam),
                                     TableTitle.EMPLOYEE_LIST_TITLE,
-                                    data);
+                                    data);*/
 
         return dto;
     }
@@ -110,9 +110,9 @@ public class EmployeeController {
                                         .title("employee")
                                         .dataTitle(TableTitle.EMPLOYEE_TITLE)
                                         .data(employee)
-                                        .addDataMap(beanDataCache.getDeptMap())
-                                        .addDataMap(beanDataCache.getJobMap())
-                                        .addDataMap(TableTitle.SEX_MAP)
+                                        .addDataMap("deptData",beanDataCache.getDeptMap())
+                                        .addDataMap("jobData",beanDataCache.getJobMap())
+                                        .addDataMap("sexData",TableTitle.SEX_MAP)
                                         .build();
         }
         log.info(dto);

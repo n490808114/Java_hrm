@@ -83,7 +83,7 @@ public class Notice implements Serializable {
         return "Notice [" + id +
                         ",'"+title +
                         "',+'"+content+
-                        "','"+createDate+
-                        "',"+user.getUserName()+"]";
+                        "','"+createDate
+                        +"]";
     }
 }

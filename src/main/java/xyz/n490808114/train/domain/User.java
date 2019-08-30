@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails,Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
-    private String userName;
-    private String loginName;
+    private String username;
+    private String name;
     private String password;
     private Integer status;
     private Date createDate;
@@ -24,10 +24,10 @@ public class User implements UserDetails,Serializable {
     public User(){
         createDate = new Date();
     }
-    public User(int id,String userName,String loginName,String password,Integer status,Date createDate,String email){
+    public User(int id,String username,String name,String password,Integer status,Date createDate,String email){
         this.id=id;
-        this.userName=userName;
-        this.loginName=loginName;
+        this.username = username;
+        this.name = name;
         this.password=password;
         this.status=status;
         this.createDate=createDate;
@@ -40,26 +40,40 @@ public class User implements UserDetails,Serializable {
         this.id = id;
     }
     
-    public String getUserName() {
-        return userName;
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    /**
+     * @return the grantedAuthorities
+     */
+    public List<GrantedAuthority> getGrantedAuthorities() {
+        return grantedAuthorities;
+    }
+    /**
+     * @param grantedAuthorities the grantedAuthorities to set
+     */
+    public void setGrantedAuthorities(List<GrantedAuthority> grantedAuthorities) {
+        this.grantedAuthorities = grantedAuthorities;
     }
 
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -93,8 +107,8 @@ public class User implements UserDetails,Serializable {
     @Override
     public String toString() {
         return "User [id="+id+
-                ",userName="+userName+
-                ",loginName="+loginName+
+                ",username="+username+
+                ",lname="+name+
                 ",password="+password+
                 ",status="+status+
                 ",createDate=" + createDate + ",email=" + email + "" + "]";
@@ -107,7 +121,11 @@ public class User implements UserDetails,Serializable {
 
     @Override
     public String getUsername() {
-        return loginName;
+        return username;
+    }
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override

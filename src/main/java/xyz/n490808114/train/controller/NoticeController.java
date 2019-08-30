@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.*;
 import xyz.n490808114.train.domain.Notice;
 import xyz.n490808114.train.util.TableTitle;
 import xyz.n490808114.train.domain.User;
+import xyz.n490808114.train.dto.TitleDto;
 import xyz.n490808114.train.dto.DetailDto;
 import xyz.n490808114.train.dto.ListDto;
 import xyz.n490808114.train.dto.SimpleDto;
 import xyz.n490808114.train.service.HrmService;
+import xyz.n490808114.train.service.RequestParamCheck;
 import xyz.n490808114.train.util.TrainConstants;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpSession;
 
 import java.util.*;
@@ -32,29 +33,11 @@ public class NoticeController {
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @GetMapping
-    public ListDto<Notice> getList(@RequestParam(value = "pageSize",defaultValue = "20") int pageSize,
-                        @RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
-                        @RequestParam Map<String,String> requestParam)
+    public ListDto<Notice> getList(@RequestParam Map<String,String> param)
     {
-
-        Map<String, Object> param = new HashMap<>(requestParam);
-        param.put("pageNo", pageNo);
-        param.put("pageSize", pageSize);
-
-        List<Notice> data = hrmService.getNoticeList(param);
-        ListDto<Notice> dto = null;
-        if(data.size() == 0){
-            dto = new ListDto<Notice>(404,"找不到任何的公告");
-        }
-        dto =  new ListDto<Notice>(200,
-                                "获取成功",
-                                "notice",
-                                pageNo,
-                                pageSize,
-                                hrmService.getNoticesCount(requestParam),
-                                TableTitle.NOTICE_LIST_TITLE,
-                                data);
-        log.info(dto);
+        RequestParamCheck.check(param);
+        log.info(param);
+        ListDto<Notice> dto = hrmService.getNoticeList(param);
         return dto;
     }
 
@@ -63,18 +46,12 @@ public class NoticeController {
      * @return 可填写的内容String
      */
     @GetMapping("/create")
-    public Map<String, Object> create() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("title","notice");
-        map.put("dataTitle",TableTitle.NOTICE_CREATE_TITLE);
-        return map;
+    public TitleDto create() {
+        return new TitleDto("notice",TableTitle.NOTICE_CREATE_TITLE);
     }
     @GetMapping("/search")
-    public Map<String,Object> search(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("title","notice");
-        map.put("dataTitle",TableTitle.NOTICE_SEARCH_TITLE);
-        return map;
+    public TitleDto search(){
+        return new TitleDto("notice",TableTitle.NOTICE_SEARCH_TITLE);
     }
 
     /**
@@ -113,13 +90,13 @@ public class NoticeController {
      * @return 指定id 的 Notice 转换为JSON字符串
      */
     @GetMapping("/{id}")
-    public DetailDto getDetail(@PathVariable("id") int id) {
-        DetailDto dto = null;
+    public DetailDto<Notice> getDetail(@PathVariable("id") int id) {
+        DetailDto<Notice> dto = null;
         Notice  notice = hrmService.findNoticeById(id);
         if(notice == null){
-            dto = new DetailDto().builder().code(404).message("找不到这个公告").build();
+            dto = new DetailDto<Notice>().builder().code(404).message("找不到这个公告").build();
         }else{
-            dto = new DetailDto().builder()
+            dto = new DetailDto<Notice>().builder()
                             .code(200)
                             .message("获取成功")
                             .title("notice")

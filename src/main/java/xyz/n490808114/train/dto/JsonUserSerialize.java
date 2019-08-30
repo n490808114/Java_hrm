@@ -12,7 +12,7 @@ public class JsonUserSerialize extends JsonSerializer<User> {
 
 	@Override
 	public void serialize(User value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-		gen.writeString(value.getUserName());
+		gen.writeString(value.getName());
 	}
 
 }

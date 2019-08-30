@@ -11,7 +11,7 @@ public class ListDto <T> extends SimpleDto{
     private Integer count;
 
     private Map<String,String> dataTitle;
-    private List<T> data;
+    private Map<Integer,T> data;
 
     public ListDto(){
 
@@ -22,7 +22,7 @@ public class ListDto <T> extends SimpleDto{
     }
 
     public ListDto(Integer code,Object message,String title,Integer pageNo,Integer pageSize,
-                        Integer count,Map<String,String> dataTitle,List<T> data)
+                        Integer count,Map<String,String> dataTitle,Map<Integer,T> data)
     {
         this.code = code;
         this.message = message;
@@ -40,21 +40,8 @@ public class ListDto <T> extends SimpleDto{
     public void setCount(Integer count) {
         this.count = count;
     }
-    /**
-     * @param data the data to set
-     */
-    /**
-     * @param data the data to set
-     */
-    public void setData(List<T> data) {
-        this.data = data;
-    }
-    /**
-     * @param dataTitle the dataTitle to set
-     */
-    public void setDataTitle(Map<String, String> dataTitle) {
-        this.dataTitle = dataTitle;
-    }
+
+
     /**
      * @param pageNo the pageNo to set
      */
@@ -80,12 +67,7 @@ public class ListDto <T> extends SimpleDto{
         return count;
     }
 
-    /**
-     * @return the dataTitle
-     */
-    public Map<String, String> getDataTitle() {
-        return dataTitle;
-    }
+
 
     /**
      * @return the pageNo
@@ -105,11 +87,48 @@ public class ListDto <T> extends SimpleDto{
     public String getTitle() {
         return title;
     }
+    @Override
+    public void setCode(Integer code) {
+        super.setCode(code);
+    }
+    @Override
+    public void setMessage(Object message) {
+        super.setMessage(message);
+    }
+
+    @Override
+    public Integer getCode() {
+        return super.getCode();
+    }
+    @Override
+    public Object getMessage() {
+        return super.getMessage();
+    }
+    /**
+     * @param data the data to set
+     */
+    public void setData(Map<Integer, T> data) {
+        this.data = data;
+    }
+    /**
+     * @param dataTitle the dataTitle to set
+     */
+    public void setDataTitle(Map<String, String> dataTitle) {
+        this.dataTitle = dataTitle;
+    }
     /**
      * @return the data
      */
-    public List<T> getData() {
+    public Map<Integer, T> getData() {
         return data;
     }
+    /**
+     * @return the dataTitle
+     */
+    public Map<String, String> getDataTitle() {
+        return dataTitle;
+    }
+    
+    
 
 }

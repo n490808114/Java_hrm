@@ -1,50 +1,14 @@
 package xyz.n490808114.train.service;
 
 import xyz.n490808114.train.domain.*;
+import xyz.n490808114.train.dto.ListDto;
 
 import java.util.*;
 
 public interface HrmService {
-    /**
-     * 用户登录
-     * @param loginName
-     * @param password
-     * @return User对象
-     */
-    User login(String loginName,String password);
 
-    User loginByEmail(String email,String password);
 
-    User getUserByName(String name);
-    User getUserByEmail(String  email);
 
-    /**
-     * 根据id查询用户
-     * @param id
-     * @return User对象
-     */
-    User findUserById(int id);
-
-    int registerCheckName(String name);
-    int registerCheckEmail(String email);
-
-    /**
-     * 根据id删除用户
-     * @param id
-     */
-    void removeUserById(int id);
-
-    /**
-     * 修改用户
-     * @param user
-     */
-    void modifyUser(User user);
-
-    /**
-     * 添加用户
-     * @param user
-     */
-    void register(User user);
 
     /**
      * 根据id查询员工
@@ -205,21 +169,12 @@ public interface HrmService {
     void modifyDocument(Document document);
 
 
-    /**
-     * 获取所有公告
-     * @return Notice List
-     */
-    List<Notice> findAllNotice();
 
-    /**
-     * 获取Notice的条目数
-     * @return Notice的条目数
-     */
-    int getNoticesCount(Map<String, String> param);
+
     /**
      * 需要提供key 为 pageNo 和 pageSize 的数据
      */
-    List<Notice> getNoticeList(Map<String,Object> param);
+    ListDto<Notice> getNoticeList(Map<String,String> param);
 
     /**
      * 根据id查询公告

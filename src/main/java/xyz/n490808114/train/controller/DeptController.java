@@ -57,13 +57,13 @@ public class DeptController{
                     }
                     count++;
                 }
-            }
+            }/*
             if(data.size() != 0){
                 dto = new ListDto<>(200,"获取成功","dept",
                                         pageNo,pageSize,count,
                                         TableTitle.DEPT_LIST_TITLE,
                                         data);
-            }
+            }*/
         }else{
             for(String key : cacheMap.keySet()){
                 if(mapCount == start && data.size() < pageSize){
@@ -73,13 +73,13 @@ public class DeptController{
                 }else{
                     mapCount++;
                 }
-            }
+            }/*
             if(data.size() != 0){
                 dto = new ListDto<>(200,"获取成功","dept",
                                         pageNo,pageSize,cacheMap.size(),
                                         TableTitle.DEPT_LIST_TITLE,
                                         data);
-            }
+            }*/
         }
         if(data.size() == 0){dto = new ListDto<>(404,"找不到任何的部门");}
         log.info(dto);

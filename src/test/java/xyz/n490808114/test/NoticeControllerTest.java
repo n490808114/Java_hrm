@@ -1,4 +1,4 @@
-package xyz.n490808114.train;
+package xyz.n490808114.test;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
