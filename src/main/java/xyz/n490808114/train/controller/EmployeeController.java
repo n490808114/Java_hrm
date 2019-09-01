@@ -29,7 +29,7 @@ public class EmployeeController {
     @Autowired
     BeanDataCache beanDataCache;
 
-    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @GetMapping
     public ListDto<Employee> getList(@RequestParam(value = "pageNo",defaultValue = "1") int pageNo,
@@ -85,27 +85,31 @@ public class EmployeeController {
             map.put("code",200);
             map.put("message","创建成功");
         }else{
-            Map<String,String> error = new LinkedHashMap<>();
-            for(ConstraintViolation<Employee> constraintViolation : set){
-                error.put(constraintViolation.getPropertyPath().toString()
-                , constraintViolation.getMessage());
-            }
-            map.put("code", 404);
-            map.put("message",error);
+            makeErrorToMap(set, map);
         }
         return map;
     }
 
+    private void makeErrorToMap(Set<ConstraintViolation<Employee>> set, Map<String, Object> map) {
+        Map<String,String> error = new LinkedHashMap<>();
+        for(ConstraintViolation<Employee> constraintViolation : set){
+            error.put(constraintViolation.getPropertyPath().toString()
+            , constraintViolation.getMessage());
+        }
+        map.put("code", 404);
+        map.put("message",error);
+    }
+
     @GetMapping("/{id}")
-    public DetailDto getDetail(@PathVariable("id") int id){
-        DetailDto dto = null;
+    public DetailDto<Employee> getDetail(@PathVariable("id") int id){
+        DetailDto<Employee> dto;
         Map<String,Object> map = new HashMap<>();
         map.put("title","employee");
         Employee employee = hrmService.findEmployeeById(id);
         if(employee == null){
-            dto = new DetailDto().builder().code(404).message("找不到这个员工信息!").build();
+            dto = new DetailDto<Employee>().builder().code(404).message("找不到这个员工信息!").build();
         }else{
-            dto = new DetailDto().builder().code(200)
+            dto = new DetailDto<Employee>().builder().code(200)
                                         .message("获取成功")
                                         .title("employee")
                                         .dataTitle(TableTitle.EMPLOYEE_TITLE)
@@ -133,13 +137,7 @@ public class EmployeeController {
             map.put("code",200);
             map.put("message","创建成功");
         }else{
-            Map<String,String> error = new LinkedHashMap<>();
-            for(ConstraintViolation<Employee> constraintViolation : set){
-                error.put(constraintViolation.getPropertyPath().toString()
-                , constraintViolation.getMessage());
-            }
-            map.put("code", 404);
-            map.put("message",error);
+            makeErrorToMap(set, map);
         }
         return map;
     }

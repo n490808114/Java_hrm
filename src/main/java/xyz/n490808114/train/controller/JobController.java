@@ -103,14 +103,14 @@ public class JobController{
         return map;
     }
     @GetMapping("/{id}")
-    public DetailDto getDetail(@PathVariable("id") int id){
-        DetailDto dto = null;
+    public DetailDto<Job> getDetail(@PathVariable("id") int id){
+        DetailDto<Job> dto;
 
         Job job = hrmService.findJobById(id);
         if(job == null){
-            dto = new DetailDto().builder().code(404).message("找不到这个部门").build();
+            dto = new DetailDto<Job>().builder().code(404).message("找不到这个部门").build();
         }else{
-            dto = new DetailDto().builder().code(200)
+            dto = new DetailDto<Job>().builder().code(200)
                                         .message("获取成功")
                                         .title("job")
                                         .dataTitle(TableTitle.JOB_TITLE)
@@ -122,10 +122,7 @@ public class JobController{
     }
     @PostMapping
     public Map<String,Object> create(@RequestParam Map<String,String> param){
-        Job job = new Job();
-        job.setName(param.get("name"));
-        job.setRemark(param.get("remark"));
-
+        Job job = createJob(param);
         Set<ConstraintViolation<Job>> set = validator.validate(job);
         Map<String,Object> map = new HashMap<>();
         if(set.size() == 0){
@@ -133,40 +130,44 @@ public class JobController{
             map.put("code",200);
             map.put("message","创建成功");
         }else{
-            Map<String,String> error = new LinkedHashMap<>();
-            for(ConstraintViolation<Job> constraintViolation : set){
-                error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
-            }
-            map.put("code", 404);
-            map.put("message",error);
+            makeErrorToMap(set, map);
         }
         log.info(map);
         return map;
     }
     @PutMapping("/{id}")
     public Map<String,Object> update(@PathVariable("id") int id,@RequestParam Map<String,String> param){
-        Job job = new Job();
-        job.setName(param.get("name"));
-        job.setRemark(param.get("remark"));
-
+        Job job = createJob(param);
         Set<ConstraintViolation<Job>> set = validator.validate(job);
         Map<String,Object> map = new HashMap<>();
         if(set.size() == 0){
             job.setId(id);
-            hrmService.modifyJob(job);;
+            hrmService.modifyJob(job);
             map.put("code",200);
             map.put("message","修改成功");
         }else{
-            Map<String,String> error = new LinkedHashMap<>();
-            for(ConstraintViolation<Job> constraintViolation : set){
-                error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
-            }
-            map.put("code", 404);
-            map.put("message",error);
+            makeErrorToMap(set, map);
         }
         log.info(map);
         return map;
     }
+    private Job createJob(Map<String, String> param){
+        Job job = new Job();
+        job.setName(param.get("name"));
+        job.setRemark(param.get("remark"));
+        return job;
+    }
+
+
+    private void makeErrorToMap(Set<ConstraintViolation<Job>> set, Map<String, Object> map) {
+        Map<String,String> error = new LinkedHashMap<>();
+        for(ConstraintViolation<Job> constraintViolation : set){
+            error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+        }
+        map.put("code", 404);
+        map.put("message",error);
+    }
+
     @DeleteMapping("/{id}")
     public Map<String,Object> delete(@PathVariable("id") int id){
         Map<String,Object> map = new HashMap<>();

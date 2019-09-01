@@ -11,8 +11,8 @@ public class NoticeDynaSqlProvider{
 
     public String  getNoticeListByParam(Map<String,String> param){
         int pageSize = Integer.parseInt( param.get("pageSize"));
-        Object o =  param.get("title");
-        final String[] list = (o != null)?((String) o).split(" "):null;
+        String o =  param.get("title");
+        final String[] list = (o != null)? o.split(" "):null;
         String r = new SQL(){
             {
                 SELECT("id,title,create_date");
@@ -34,8 +34,8 @@ public class NoticeDynaSqlProvider{
     private String getSelectId(Map<String,String> param){
         int pageSize = Integer.parseInt(param.get("pageSize")) ;
         int start =pageSize * (Integer.parseInt(param.get("pageNo")) - 1);
-        Object o =  param.get("title");
-        final String[] list = (o != null)?((String) o).split(" "):null;
+        String o =  param.get("title");
+        final String[] list = (o != null)? o.split(" "):null;
         String s = new SQL(){
             {
                 SELECT("id");

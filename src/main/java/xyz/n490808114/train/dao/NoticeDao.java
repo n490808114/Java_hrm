@@ -22,6 +22,7 @@ public interface NoticeDao {
         @ResultMap("noticeResult")
         List<Notice> selectAll();
 
+
         @SelectProvider(type = NoticeDynaSqlProvider.class,method = "getNoticeListByParam")
         @ResultType(Notice.class)
         @MapKey("id")
@@ -35,6 +36,7 @@ public interface NoticeDao {
 
         @Insert("INSERT INTO notice_inf(title,content,create_date,user_id) "
                         + "VALUES(#{title},#{content},#{createDate},#{user.id})")
+        @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
         void save(Notice notice);
 
         @Update("UPDATE notice_inf SET title = #{title},content = #{content} WHERE id = #{id}")

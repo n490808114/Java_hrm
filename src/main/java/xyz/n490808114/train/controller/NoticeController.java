@@ -37,8 +37,7 @@ public class NoticeController {
     {
         RequestParamCheck.check(param);
         log.info(param);
-        ListDto<Notice> dto = hrmService.getNoticeList(param);
-        return dto;
+        return hrmService.getNoticeList(param);
     }
 
     /**
@@ -91,7 +90,7 @@ public class NoticeController {
      */
     @GetMapping("/{id}")
     public DetailDto<Notice> getDetail(@PathVariable("id") int id) {
-        DetailDto<Notice> dto = null;
+        DetailDto<Notice> dto;
         Notice  notice = hrmService.findNoticeById(id);
         if(notice == null){
             dto = new DetailDto<Notice>().builder().code(404).message("找不到这个公告").build();
@@ -124,7 +123,7 @@ public class NoticeController {
         Set<ConstraintViolation<Notice>> set = validator.validate(notice);
         if(set.size() == 0){
             notice.setId(id);
-            hrmService.modifyNotice(notice);;
+            hrmService.modifyNotice(notice);
             return new SimpleDto(200,"创建成功");
         }else{
             Map<String,String> error = new LinkedHashMap<>();
