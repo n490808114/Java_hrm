@@ -2,6 +2,7 @@ package xyz.n490808114.train.dto;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -19,7 +20,7 @@ public class DetailSerializer<T> extends JsonSerializer<DetailDto<T>> {
 	@Override
 	public void serialize(DetailDto<T> value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         gen.writeStartObject();
-            gen.writeNumberField("code", value.getCode());;
+            gen.writeNumberField("code", value.getCode());
             gen.writeStringField("message", value.getMessage());
             gen.writeStringField("title", value.getTitle());
             gen.writeObjectField("dataTitle", value.getDataTitle());
@@ -40,13 +41,15 @@ public class DetailSerializer<T> extends JsonSerializer<DetailDto<T>> {
             selectModule.addSerializer(Job.class, new JobSelectSerializer());
             selectMapper.registerModule(selectModule);
 
-            for(String index : value.getDataSelectMaps().keySet()){
-                gen.writeFieldName(index);
-                selectMapper.writeValue(gen,value.getDataSelectMaps().get(index));
+            if(value.getDataSelectMaps() != null){
+                for(String index : value.getDataSelectMaps().keySet()){
+                    gen.writeFieldName(index);
+                    selectMapper.writeValue(gen,value.getDataSelectMaps().get(index));
+                }
             }
         gen.writeEndObject();
     }
-    class NoticeDetailSerializer extends JsonSerializer<Notice>{
+    static class NoticeDetailSerializer extends JsonSerializer<Notice>{
 
         @Override
         public void serialize(Notice value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -59,7 +62,7 @@ public class DetailSerializer<T> extends JsonSerializer<DetailDto<T>> {
         }
         
     }
-    class EmployeeDetailSerializer extends JsonSerializer<Employee>{
+    static class EmployeeDetailSerializer extends JsonSerializer<Employee>{
 
         @Override
         public void serialize(Employee value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -86,7 +89,7 @@ public class DetailSerializer<T> extends JsonSerializer<DetailDto<T>> {
         }
         
     }
-    class DeptDetailSerializer extends JsonSerializer<Dept>{
+    static class DeptDetailSerializer extends JsonSerializer<Dept>{
 
         @Override
         public void serialize(Dept value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -97,7 +100,7 @@ public class DetailSerializer<T> extends JsonSerializer<DetailDto<T>> {
         }
         
     }
-    class JobDetailSerializer extends JsonSerializer<Job>{
+    static class JobDetailSerializer extends JsonSerializer<Job>{
 
         @Override
         public void serialize(Job value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -108,7 +111,7 @@ public class DetailSerializer<T> extends JsonSerializer<DetailDto<T>> {
         }
         
     }
-    class DeptSelectSerializer extends JsonSerializer<Dept>{
+    static class DeptSelectSerializer extends JsonSerializer<Dept>{
 
         @Override
         public void serialize(Dept value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
@@ -118,7 +121,7 @@ public class DetailSerializer<T> extends JsonSerializer<DetailDto<T>> {
         }
         
     }
-    class JobSelectSerializer extends JsonSerializer<Job>{
+    static class JobSelectSerializer extends JsonSerializer<Job>{
 
         @Override
         public void serialize(Job value, JsonGenerator gen, SerializerProvider serializers) throws IOException {

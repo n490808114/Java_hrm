@@ -15,7 +15,7 @@ public class NoticeDynaSqlProvider{
         final String[] list = (o != null)? o.split(" "):null;
         String r = new SQL(){
             {
-                SELECT("id,title,create_date");
+                SELECT("id,title,create_date,user_id");
                 FROM("notice_inf");
                 WHERE("id>=("+ getSelectId(param)+")");
                 if( list != null ){

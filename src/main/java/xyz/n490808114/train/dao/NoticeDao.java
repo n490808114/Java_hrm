@@ -15,7 +15,7 @@ public interface NoticeDao {
                                                 @Result(column = "content", property = "content"),
                                                 @Result(column = "create_date", property = "createDate"),
                                                 @Result(column = "user_id", property = "user", 
-                                                one = @One(select = "xyz.n490808114.train.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
+                                                one = @One(select = "xyz.n490808114.train.dao.UserDao.findById", fetchType = FetchType.EAGER)) })
         Notice selectById(int id);
 
         @Select("SELECT * FROM notice_inf")
@@ -28,7 +28,9 @@ public interface NoticeDao {
         @MapKey("id")
         @Results(id = "noticeList",value = { @Result(id = true, column = "id", property = "id"), 
                                                 @Result(column = "title", property = "title"),
-                                                @Result(column = "create_date", property = "createDate")})
+                                                @Result(column = "create_date", property = "createDate"),
+                                                @Result(column = "user_id", property = "user",
+                        one = @One(select = "xyz.n490808114.train.dao.UserDao.findById", fetchType = FetchType.EAGER))})
         Map<Integer,Notice> getNoticeList(Map<String,String> param);
 
         @Delete("DELETE FROM notice_inf WHERE id = #{id}")

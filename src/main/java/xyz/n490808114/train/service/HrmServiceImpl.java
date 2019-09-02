@@ -202,6 +202,7 @@ public class HrmServiceImpl implements HrmService{
             dto.setPageSize(Integer.parseInt(param.get("pageSize")));
             dto.setTitle("notice");
         }
+        log.info(dto);
         return dto;
     }
 

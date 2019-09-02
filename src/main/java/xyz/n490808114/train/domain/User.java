@@ -1,87 +1,32 @@
 package xyz.n490808114.train.domain;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class User implements UserDetails,Serializable {
-    private static final long serialVersionUID = 1L;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
+
+public class User implements UserDetails{
     private Integer id;
-    private String username;
+    @JsonProperty("user")
     private String name;
-    private String password;
-    private Integer status;
-    private Date createDate;
     private String email;
-    @JsonIgnore
-    List<GrantedAuthority> grantedAuthorities;
-    public User(){
-        createDate = new Date();
+    private String username;
+    private String password;
+    private String roles;
+    private Date createDate;
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
-    public User(int id,String username,String name,String password,Integer status,Date createDate,String email){
-        this.id=id;
-        this.username = username;
-        this.name = name;
-        this.password=password;
-        this.status=status;
-        this.createDate=createDate;
-        this.email=email;
-    }
-    public Integer getId() {
-        return id;
-    }
-    public void setId(int id) {
+
+    public void setId(Integer id) {
         this.id = id;
-    }
-    
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    /**
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the grantedAuthorities
-     */
-    public List<GrantedAuthority> getGrantedAuthorities() {
-        return grantedAuthorities;
-    }
-    /**
-     * @param grantedAuthorities the grantedAuthorities to set
-     */
-    public void setGrantedAuthorities(List<GrantedAuthority> grantedAuthorities) {
-        this.grantedAuthorities = grantedAuthorities;
-    }
-
-
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public Date getCreateDate() {
-        return createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -92,59 +37,80 @@ public class User implements UserDetails,Serializable {
         this.email = email;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @JsonIgnore
+    public Integer getId() {
+        return id;
+    }
+    @JsonIgnore
+    public Date getCreateDate() {
+        return createDate;
+    }
+    @JsonIgnore
     public String getEmail() {
         return email;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public String getName() {
+        return name;
     }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    @Override
-    public String toString() {
-        return "User [id="+id+
-                ",username="+username+
-                ",lname="+name+
-                ",password="+password+
-                ",status="+status+
-                ",createDate=" + createDate + ",email=" + email + "" + "]";
+    @JsonIgnore
+    public String getRoles() {
+        return roles;
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorities;
+        return Arrays.stream(roles.split("#"))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public String getUsername() {
-        return username;
-    }
-    @Override
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
     @Override
+    @JsonIgnore
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
-		return false;
-	}
+        return true;
+    }
 }

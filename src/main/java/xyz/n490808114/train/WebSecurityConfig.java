@@ -5,28 +5,30 @@ package xyz.n490808114.train;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import xyz.n490808114.train.service.HrmService;
 
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true,jsr250Enabled = false)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
-    @Qualifier("hrmServiceImpl")
-    private HrmService hrmService;
+    UserDetailsService service;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         /* REST式的配置方法：关闭spring Security的全局验证登录，设置所有请求不做限制 */
         http.csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .authorizeRequests().anyRequest().permitAll();
+            .authorizeRequests()
+                .anyRequest().permitAll();
         /*  MVC的配置方法：
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
@@ -39,6 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .logout()
             .logoutSuccessUrl("/login.html");*/
+        /*禁用缓存
+        http.headers().cacheControl();*/
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(service).passwordEncoder(new BCryptPasswordEncoder());
     }
     /*
     @Override

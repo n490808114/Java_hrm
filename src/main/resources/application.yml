@@ -6,6 +6,3 @@ spring:
     password: admin
 mybatis:
   type-aliases-package: xyz.n490808114.train.dao
-server:
-  tomcat:
-    uri-encoding: utf-8

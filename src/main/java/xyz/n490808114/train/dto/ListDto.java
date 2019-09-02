@@ -1,6 +1,6 @@
 package xyz.n490808114.train.dto;
 
-import java.util.List;
+
 import java.util.Map;
 
 public class ListDto <T> extends SimpleDto{

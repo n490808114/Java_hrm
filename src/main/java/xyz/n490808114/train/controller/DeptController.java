@@ -102,14 +102,14 @@ public class DeptController{
         return map;
     }
     @GetMapping("/{id}")
-    public DetailDto getDetail(@PathVariable("id") int id){
-        DetailDto dto = null;
+    public DetailDto<Dept> getDetail(@PathVariable("id") int id){
+        DetailDto<Dept> dto;
 
         Dept dept = hrmService.findDeptById(id);
         if(dept == null){
-            dto = new DetailDto().builder().code(404).message("找不到这个部门").build();
+            dto = new DetailDto<Dept>().builder().code(404).message("找不到这个部门").build();
         }else{
-            dto = new DetailDto().builder().code(200)
+            dto = new DetailDto<Dept>().builder().code(200)
                                         .message("获取成功")
                                         .title("dept")
                                         .dataTitle(TableTitle.DEPT_TITLE)
@@ -152,7 +152,7 @@ public class DeptController{
         Map<String,Object> map = new HashMap<>();
         if(set.size() == 0){
             dept.setId(id);
-            hrmService.modifyDept(dept);;
+            hrmService.modifyDept(dept);
             map.put("code",200);
             map.put("message","修改成功");
         }else{
