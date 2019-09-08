@@ -329,7 +329,6 @@ function closePopUp() {
         if (divCover == null) { break };
         divCover.remove();
     }
-
 }
 
 

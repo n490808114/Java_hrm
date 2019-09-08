@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import xyz.n490808114.train.domain.Dept;
@@ -22,6 +23,7 @@ import xyz.n490808114.train.service.HrmService;
 
 @RestController
 @RequestMapping("/dept")
+@PreAuthorize("hasRole('ADMIN')")
 public class DeptController{
     private static Log log = LogFactory.getLog(DeptController.class);
     @Autowired

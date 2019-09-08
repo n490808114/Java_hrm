@@ -1,25 +1,26 @@
 package xyz.n490808114.train.controller;
 
-import java.util.*;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import xyz.n490808114.train.domain.*;
+import xyz.n490808114.train.domain.Employee;
 import xyz.n490808114.train.dto.DetailDto;
 import xyz.n490808114.train.dto.ListDto;
-import xyz.n490808114.train.service.*;
+import xyz.n490808114.train.service.BeanDataCache;
+import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.util.TableTitle;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.*;
 
 @RestController
 @RequestMapping("/employee")
+@PreAuthorize("hasRole('USER')")
 public class EmployeeController {
     private static Log log = LogFactory.getLog(EmployeeController.class);
     @Autowired

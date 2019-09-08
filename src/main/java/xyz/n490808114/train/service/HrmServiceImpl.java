@@ -4,14 +4,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import xyz.n490808114.train.dao.*;
 import xyz.n490808114.train.domain.*;
 import xyz.n490808114.train.dto.ListDto;
-import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.util.TableTitle;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @Service("hrmServiceImpl")
 public class HrmServiceImpl implements HrmService{
@@ -26,6 +25,8 @@ public class HrmServiceImpl implements HrmService{
     private DocumentDao documentDao;
     @Autowired
     private NoticeDao noticeDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public Employee findEmployeeById(int id){

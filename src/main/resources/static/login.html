@@ -10,17 +10,17 @@
 
 </head>
 <body>
-        <form id="form" method="post" action="j_spring_security_check">
+        <form id="form" method="post" action="login">
             <h1>登录</h1>
             <fieldset>
-                <p>
-                    <input type="text"  placeholder="用户名/邮箱" name="j_username"/>
-                </p>
-                <p>
-                    <input type="password"  placeholder="密码" name="j_password"/>
-                </p>
+                <label>
+                    <input type="text"  placeholder="用户名/邮箱" name="username"/>
+                </label>
+                <label>
+                    <input type="password"  placeholder="密码" name="password"/>
+                </label>
             </fieldset>
-            <div id="form_btn1" ><input type="submit" ></div>
+            <input type="submit" >
         </form>
         <button id="main_btn" type="button" onclick="location.href='register.html'">注册</button>
 </body>

@@ -2,11 +2,12 @@ package xyz.n490808114.train.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
+import org.springframework.stereotype.Repository;
 import xyz.n490808114.train.domain.Job;
 
 import java.util.List;
 
-
+@Repository
 public interface JobDao {
         @Select("SELECT id,name,remark FROM job_inf")
         @Results(id = "jobListResult",value = { @Result(id = true, column = "id", property = "id"),

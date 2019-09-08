@@ -1,4 +1,25 @@
-var page_size = 20;
+$(function () {
+    $(document).ajaxError(
+        function (event,xhr,options,exc) {
+            if(xhr.status == undefined){
+                return;
+            }
+            switch (xhr.status) {
+                case 403:
+                    alert("未登录或距离上次登录太久,请登录!");
+                    addCoverDiv();
+                    addLoginForm();
+                    break;
+            }
+        }
+    );
+    $(document).ajaxSend(
+        function (event,xhr,options) {
+
+            xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("token"));
+        }
+    )
+});
 $(document).ready(function () {
     $.each($("#aside > ul > li > a"),function (e,t) {
         $(t).click(function () {
@@ -6,7 +27,7 @@ $(document).ready(function () {
                 url:$(t).attr("href"),
                 async:false,
                 type:"get",
-                data:{"pageSize":page_size},
+                data:{"pageSize":(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size"))},
                 success:function(data){
                     if(data["code"] === 200){
                         setMainTable(data);
@@ -23,6 +44,65 @@ $(document).ready(function () {
         });
     });
 });
+
+//添加背景灰色遮挡
+function addCoverDiv() {
+    var body = document.getElementsByTagName("body")[0];
+
+    var divCover = document.createElement("div");
+    body.appendChild(divCover);
+    divCover.setAttribute("id", "divCover");
+    $("#divCover").click(function () {
+
+    });
+}
+function closeCoverDiv() {
+    document.getElementById("divCover").remove();
+    $("#login").remove();
+}
+function addLoginForm(){
+    var form = document.createElement("form");
+    form.setAttribute("id","login");
+    var h1 = document.createElement("h1");
+    h1.appendChild(document.createTextNode("登录"));
+    form.appendChild(h1);
+    var fieldSet = document.createElement("fieldset");
+    var username = document.createElement("input");
+    username.setAttribute("type","text");
+    username.setAttribute("placeholder","用户名/邮箱");
+    username.setAttribute("name","username");
+    var password = document.createElement("input");
+    password.setAttribute("type","password");
+    password.setAttribute("placeholder","密码");
+    password.setAttribute("name","password");
+    var usernameLabel = document.createElement("label");
+    usernameLabel.appendChild(username);
+    var passwordLabel = document.createElement("label");
+    passwordLabel.appendChild(password);
+    fieldSet.appendChild(usernameLabel);
+    fieldSet.appendChild(passwordLabel);
+    form.appendChild(fieldSet);
+    var submitButton = document.createElement("input");
+    submitButton.setAttribute("type","submit");
+    submitButton.setAttribute("id","loginButton");
+    var submitDiv = document.createElement("div");
+    submitDiv.appendChild(submitButton);
+    form.appendChild(submitDiv);
+    document.getElementsByTagName("body")[0].appendChild(form);
+    $("#loginButton").click(function () {
+        $("#login").ajaxSubmit({
+            url:"/login",
+            type:"post",
+            async:false,
+            success:function (data) {
+                localStorage.setItem("token",data["token"]);
+                alert("登陆成功");
+                closeCoverDiv();
+            }
+        });
+        return false;
+    })
+}
 function cleanMain() {
     var main = document.getElementsByTagName("main")[0];
     var body = document.getElementsByTagName("body")[0];
@@ -111,7 +191,7 @@ function setTable(json){
             })
         }
 
-    })
+    });
     setPageChooseBar(title,count, parseInt(page_no));
 }
 function getTableWidthList(name) {
@@ -154,12 +234,12 @@ function addSearchpanel(title){
     form.appendChild(searchButtonDiv);
     $("#searchButton > input").click(function(){
         $("#search").ajaxSubmit({
-            url:title,
+            url:title + "?pageSize="+(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size")),
             type:"get",
             success:function(data){
                 setTable(data);
             }
-        })
+        });
         return false;
     });
 
@@ -192,7 +272,7 @@ function addListButtonBar(title,page_no){
             }
         });
         return false;
-    })
+    });
     $("#mulitiDelete").click(function(){
         var message = "";
         $.each($(".checkbox > input"),function(a,b){
@@ -208,21 +288,16 @@ function addListButtonBar(title,page_no){
                         }else{
                             message +=("序号"+ $(b).attr("no") + data["message"]+". \n");
                         }
-                    },
+                    }
                 })
             }
-        })
+        });
         alert(message);
-        $.ajax({
-            url:title,
-            async:false,
+        $("#search").ajaxSubmit({
+            url:title + "?pageSize="+(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size")),
             type:"get",
-            success:function (dataY){
-                if(dataY["code"] === 200){
-                    setTable(dataY);
-                }else{
-                    alert(dataY["message"]);
-                }
+            success:function(data){
+                setTable(data);
             }
         });
     })
@@ -269,6 +344,7 @@ function setPageChooseBar(title,count, page_no) {
     countBar.appendChild(pageSizeChooser);
     countBar.appendChild(document.createTextNode("条"));
     //设置每页条数
+    var page_size = localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size");
     pageSizeChooser.value = page_size;
 
     //页码bar
@@ -332,25 +408,25 @@ function setPageChooseBar(title,count, page_no) {
     }
     $("#page_size").change(function(){
         var pageNo = page_no;
-        page_size = this.value;
-        var ajaxUrl = title + "?pageNo="+pageNo+"&pageSize="+page_size;
+        localStorage.setItem("page_size",this.value);
         $("#search").ajaxSubmit({
-            url : ajaxUrl,
+            url:title + "?pageSize="+(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size")),
             async:false,
             type:"get",
+            data:{"pageNo":pageNo,"pageSize":this.value},
             success:function (dataX) {
                 setTable(dataX);
             }
         });
         return false;
-    })
+    });
     $("#page_number_bar > a").click(function () {
         var pageNo = $(this).attr("value");
-        var ajaxUrl = title + "?pageNo="+pageNo+"&pageSize="+page_size;
         $("#search").ajaxSubmit({
-            url : ajaxUrl,
+            url:title + "?pageSize="+(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size")),
             async:false,
             type:"get",
+            data:{"pageNo":pageNo,"pageSize":(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size"))},
             success:function (dataX) {
                 setTable(dataX);
             }
@@ -385,7 +461,7 @@ function openCreator(data,title,page_no) {
                         url:title,
                         async:false,
                         type:"get",
-                        data:{"pageNo":page_no,"pageSize":page_size},
+                        data:{"pageNo":page_no,"pageSize":(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size"))},
                         success:function(dataY){
                             if(dataY["code"] === 200){
                                 setMainTable(dataY);
@@ -474,6 +550,7 @@ function openDetail(data,page_no,id) {
                         url:data["title"],
                         async:false,
                         type:"get",
+                        data:{"pageSize":(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size"))},
                         success:function (dataY){
                             if(dataY["code"] === 200){
                                 setMainTable(dataY);
@@ -494,6 +571,7 @@ function openDetail(data,page_no,id) {
             url:data["title"],
             async:false,
             type:"get",
+            data:{"pageSize":(localStorage.getItem("page_size")==null?20:localStorage.getItem("page_size"))},
             success:function (dataY){
                 if(dataY["code"] === 200){
                     setMainTable(dataY);
@@ -502,7 +580,7 @@ function openDetail(data,page_no,id) {
                 }
             }
         });
-    })
+    });
     $.each($("#detail textarea"),function (i,each) {
         $(each).css("height",each.scrollHeight + "px");
     })
@@ -551,7 +629,6 @@ function setList(parent,data){
         }
         textArea.setAttribute("name", b);
         textArea.setAttribute("class","content");
-
 
         var titleDiv = document.createElement("div");
         titleDiv.appendChild(label);

@@ -9,10 +9,12 @@ public class TrainConstants {
     public static final String DOCUMENT_TABLE = "document_inf";
 
     public static final String LOGIN = "loginForm";
-    public static final String USER_SESSION = "user_session";
+    public static final String USER_REQUEST = "user_request";
     public static int PAGE_DEFAULT_SIZE = 4;
     public static String DEFAULT_PAGESIZE = "20";
 
     public static final String USER_DEFAULT_NAME = "User";
+
+    public static final String JWT_SECRET = "FeiLiuZhiXiaSanQianChiYiShiYinHeLuoJiuTian";
 
 }

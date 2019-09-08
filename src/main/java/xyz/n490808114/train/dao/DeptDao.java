@@ -2,10 +2,11 @@ package xyz.n490808114.train.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
+import org.springframework.stereotype.Repository;
 import xyz.n490808114.train.domain.Dept;
 
 import java.util.*;
-
+@Repository
 public interface DeptDao {
 
         @Select("SELECT id,name,remark FROM dept_inf")

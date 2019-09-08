@@ -1,10 +1,12 @@
 package xyz.n490808114.train.service;
 
+import org.springframework.stereotype.Service;
 import xyz.n490808114.train.domain.*;
 import xyz.n490808114.train.dto.ListDto;
 
 import java.util.*;
 
+@Service
 public interface HrmService {
 
 

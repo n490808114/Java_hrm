@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import xyz.n490808114.train.domain.Notice;
 import xyz.n490808114.train.util.TableTitle;
@@ -16,6 +17,7 @@ import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.service.RequestParamCheck;
 import xyz.n490808114.train.util.TrainConstants;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -25,6 +27,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/notice")
+@PreAuthorize("hasRole('USER')")
 public class NoticeController {
     @Autowired
     @Qualifier("hrmServiceImpl")
@@ -57,16 +60,15 @@ public class NoticeController {
      * 收到前台填写的内容，并获取客户的User,使用当前日期，Mysql中id是自动递增的,所以不指定id
      * 
 
-     * @param session 会话，从中获取客户的User
      * @return 标题不为空，返回true,否则返回false
      */
     @PostMapping
-    public SimpleDto create(@RequestParam Map<String, String> param, HttpSession session) {
+    public SimpleDto create(@RequestParam Map<String, String> param, HttpServletRequest request) {
         Notice notice = new Notice();
         notice.setTitle(param.get("title"));
         notice.setContent(param.get("content"));
         notice.setCreateDate(new Date());
-        notice.setUser((User) session.getAttribute(TrainConstants.USER_SESSION));
+        notice.setUser((User) request.getAttribute(TrainConstants.USER_REQUEST));
 
         Set<ConstraintViolation<Notice>> set = validator.validate(notice);
         if(set.size() == 0){
@@ -124,7 +126,7 @@ public class NoticeController {
         if(set.size() == 0){
             notice.setId(id);
             hrmService.modifyNotice(notice);
-            return new SimpleDto(200,"创建成功");
+            return new SimpleDto(200,"更新成功");
         }else{
             Map<String,String> error = new LinkedHashMap<>();
             for(ConstraintViolation<Notice> constraintViolation : set){

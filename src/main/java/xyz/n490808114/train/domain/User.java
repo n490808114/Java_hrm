@@ -21,6 +21,19 @@ public class User implements UserDetails{
     private String roles;
     private Date createDate;
 
+
+    public User(){}
+    public User(Integer id, String name,String email,String username,String password,String roles,Date createDate){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.createDate = createDate;
+
+    }
+
     public void setRoles(String roles) {
         this.roles = roles;
     }

@@ -89,7 +89,7 @@ input[type="submit"],button{
     border: 0;
 }
 input[type="submit"]:hover,button:hover{
-    background-color:rgba(0, 76, 255, 0.575);
+    background-color:#4a74b6;
 }
 
 
@@ -170,4 +170,54 @@ textarea,select,input[type="date"]{
     width:100%;
     text-align:center;
 }
+#divCover{
+    position:absolute;
+    width:100%;
+    height:100%;
+    left:0%;
+    top:0%;
+    filter:opacity(50%);
+    background-color:  #000000;
+}
+#login{
+    position:absolute;
+    width:30%;
+    height:40%;
+    background-color:white;
+    left:35%;
+    top:20%;
+
+    border:2px solid green;
+}
+#login h1{
+    font-size: 40px;
+    font-family:'Times New Roman', Times, serif;
+    margin: 0px;
+    padding: 50px;
+    text-align: center;
+    color: white;
+    background-color: #4a74b6;
+}
+#login fieldset{
+    margin:20px 0 20px 0;
+    border: 0px;
+}
+#login fieldset label{
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    padding:10px 0 10px 0;
+}
+#login fieldset label input{
+    width:80%;
+    height:30px;
+}
+#login div{
+    text-align: center;
+}
+#login div input{
+    width:150px;
+    height:50px;
+}
+
 
