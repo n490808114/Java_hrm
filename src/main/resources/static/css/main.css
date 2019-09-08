@@ -179,17 +179,23 @@ textarea,select,input[type="date"]{
     filter:opacity(50%);
     background-color:  #000000;
 }
-#login{
+#login,#register{
     position:absolute;
     width:30%;
-    height:40%;
+
     background-color:white;
     left:35%;
     top:20%;
 
     border:2px solid green;
 }
-#login h1{
+#login{
+    height:40%;
+}
+#register{
+    height:60%;
+}
+#login h1,#register h1{
     font-size: 40px;
     font-family:'Times New Roman', Times, serif;
     margin: 0px;
@@ -198,26 +204,27 @@ textarea,select,input[type="date"]{
     color: white;
     background-color: #4a74b6;
 }
-#login fieldset{
+#login fieldset,#register fieldset{
     margin:20px 0 20px 0;
     border: 0px;
 }
-#login fieldset label{
+#login fieldset label,#register fieldset label{
     display:inline-block;
     width:100%;
     text-align:center;
     padding:10px 0 10px 0;
 }
-#login fieldset label input{
+#login fieldset label input,#register fieldset label input{
     width:80%;
     height:30px;
 }
-#login div{
+#login div,#register div{
     text-align: center;
 }
-#login div input{
+#login div input,#register div input{
     width:150px;
     height:50px;
 }
+
 
 

@@ -53,42 +53,139 @@ function addCoverDiv() {
     body.appendChild(divCover);
     divCover.setAttribute("id", "divCover");
     $("#divCover").click(function () {
-
+        closeCoverDiv();
     });
 }
 function closeCoverDiv() {
     document.getElementById("divCover").remove();
-    $("#login").remove();
+    $("#loginOrRegisterForm").remove();
+
 }
 function addLoginForm(){
-    var form = document.createElement("form");
-    form.setAttribute("id","login");
-    var h1 = document.createElement("h1");
-    h1.appendChild(document.createTextNode("登录"));
-    form.appendChild(h1);
-    var fieldSet = document.createElement("fieldset");
+    var loginForm = document.createElement("form");
+    loginForm.setAttribute("id","login");
+    var loginH1 = document.createElement("h1");
+    loginH1.appendChild(document.createTextNode("登录"));
+    loginForm.appendChild(loginH1);
+    var loginFieldSet = document.createElement("fieldset");
+
     var username = document.createElement("input");
     username.setAttribute("type","text");
     username.setAttribute("placeholder","用户名/邮箱");
     username.setAttribute("name","username");
+
     var password = document.createElement("input");
     password.setAttribute("type","password");
     password.setAttribute("placeholder","密码");
     password.setAttribute("name","password");
+
     var usernameLabel = document.createElement("label");
-    usernameLabel.appendChild(username);
     var passwordLabel = document.createElement("label");
+    usernameLabel.appendChild(username);
     passwordLabel.appendChild(password);
-    fieldSet.appendChild(usernameLabel);
-    fieldSet.appendChild(passwordLabel);
-    form.appendChild(fieldSet);
-    var submitButton = document.createElement("input");
-    submitButton.setAttribute("type","submit");
-    submitButton.setAttribute("id","loginButton");
-    var submitDiv = document.createElement("div");
-    submitDiv.appendChild(submitButton);
-    form.appendChild(submitDiv);
-    document.getElementsByTagName("body")[0].appendChild(form);
+
+    loginFieldSet.appendChild(usernameLabel);
+    loginFieldSet.appendChild(passwordLabel);
+
+    loginForm.appendChild(loginFieldSet);
+
+    var loginButton = document.createElement("input");
+    loginButton.setAttribute("type","submit");
+    loginButton.setAttribute("id","loginButton");
+    var loginDiv = document.createElement("div");
+    loginDiv.appendChild(loginButton);
+    loginForm.appendChild(loginDiv);
+
+    var registerForm = document.createElement("form");
+    registerForm.setAttribute("id","register");
+    var registerH1 = document.createElement("h1");
+    registerH1.appendChild(document.createTextNode("注册"));
+    registerForm.appendChild(registerH1);
+    var registerFieldSet = document.createElement("fieldset");
+
+    var registerUsername = document.createElement("input");
+    registerUsername.setAttribute("type","input");
+    registerUsername.setAttribute("placeholder","用户名");
+    registerUsername.setAttribute("name","username");
+
+    var registerEmail = document.createElement("input");
+    registerEmail.setAttribute("type","email");
+    registerEmail.setAttribute("placeholder","邮箱");
+    registerEmail.setAttribute("name","email");
+
+    var registerPassword = document.createElement("input");
+    registerPassword.setAttribute("type","password");
+    registerPassword.setAttribute("placeholder","请输入密码");
+    registerPassword.setAttribute("name","password");
+
+    var registerConfirmPassword = document.createElement("input");
+    registerConfirmPassword.setAttribute("type","password");
+    registerConfirmPassword.setAttribute("placeholder","请重复输入密码");
+    registerConfirmPassword.setAttribute("name","ConfirmPassword");
+
+    var registerUsernameLabel = document.createElement("label");
+    var registerEmailLabel = document.createElement("label");
+    var registerPasswordLabel = document.createElement("label");
+    var registerConfirmPasswordLabel = document.createElement("label");
+    registerUsernameLabel.appendChild(registerUsername);
+    registerEmailLabel.appendChild(registerEmail);
+    registerPasswordLabel.appendChild(registerPassword);
+    registerConfirmPasswordLabel.appendChild(registerConfirmPassword);
+
+    registerFieldSet.appendChild(registerUsernameLabel);
+    registerFieldSet.appendChild(registerEmailLabel);
+    registerFieldSet.appendChild(registerPasswordLabel);
+    registerFieldSet.appendChild(registerConfirmPasswordLabel);
+
+    registerForm.appendChild(registerFieldSet);
+
+    var registerButton = document.createElement("input");
+    registerButton.setAttribute("type","submit");
+    registerButton.setAttribute("id","loginButton");
+    var registerDiv = document.createElement("div");
+    registerDiv.appendChild(registerButton);
+    registerForm.appendChild(registerDiv);
+
+    var div = document.createElement("div");
+    div.setAttribute("id","loginOrRegisterForm");
+    div.appendChild(loginForm);
+    div.appendChild(registerForm);
+
+    var closeButton = document.createElement("button");
+    closeButton.setAttribute("id","loginOrRegisterFormCloseButton");
+    closeButton.appendChild(document.createTextNode("关闭"));
+    $("#loginOrRegisterFormCloseButton").click(function () {
+        closeCoverDiv();
+    });
+
+    var changeFormButton = document.createElement("button");
+    changeFormButton.setAttribute("id","loginOrRegisterFormChangeFormButton");
+    changeFormButton.appendChild(document.createTextNode("注册"));
+    registerForm.style.display = "none";
+    $("#loginOrRegisterFormChangeFormButton").click(function () {
+        if(registerForm.style.display == "none"){
+            registerForm.style.display = "";
+            loginForm.style.display = "none";
+            this.text().remove();
+            changeFormButton.appendChild(document.createTextNode("登录"));
+        }else if(loginForm.style.display == "none"){
+            loginForm.style.display = "";
+            registerForm.style.display = "none";
+            this.text().remove();
+            changeFormButton.appendChild(document.createTextNode("注册"));
+        }
+    });
+
+    var div = document.createElement("div");
+    div.setAttribute("id","loginOrRegisterForm");
+    div.appendChild(loginForm);
+    div.appendChild(registerForm);
+    div.appendChild(closeButton);
+    div.appendChild(changeFormButton);
+
+    document.getElementsByTagName("body")[0].appendChild(div);
+
+
     $("#loginButton").click(function () {
         $("#login").ajaxSubmit({
             url:"/login",
