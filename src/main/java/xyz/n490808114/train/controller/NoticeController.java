@@ -39,7 +39,6 @@ public class NoticeController {
     public ListDto<Notice> getList(@RequestParam Map<String,String> param)
     {
         RequestParamCheck.check(param);
-        log.info(param);
         return hrmService.getNoticeList(param);
     }
 
@@ -49,11 +48,11 @@ public class NoticeController {
      */
     @GetMapping("/create")
     public TitleDto create() {
-        return new TitleDto("notice",TableTitle.NOTICE_CREATE_TITLE);
+        return new TitleDto().setTitle("notice").setDataTitle(TableTitle.NOTICE_CREATE_TITLE);
     }
     @GetMapping("/search")
     public TitleDto search(){
-        return new TitleDto("notice",TableTitle.NOTICE_SEARCH_TITLE);
+        return new TitleDto().setTitle("notice").setDataTitle(TableTitle.NOTICE_SEARCH_TITLE);
     }
 
     /**

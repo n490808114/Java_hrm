@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import xyz.n490808114.train.domain.Job;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface JobDao {
@@ -21,6 +22,15 @@ public interface JobDao {
                                         @Result(column = "remark", property = "remark"),
                                         @Result(column = "id", property = "employees", many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByJobId", fetchType = FetchType.LAZY)) })
         Job selectById(int id);
+
+        @SelectProvider(type = JobDynaSqlProvider.class,method = "getListByParam")
+        @ResultType(Job.class)
+        @MapKey("id")
+        Map<Integer,Job> getList(Map<String,String> param);
+
+        @SelectProvider(type = JobDynaSqlProvider.class,method = "getCountByParam")
+        int getCountByParam(Map<String,String> param);
+        
 
         @Select("SELECT * FROM job_inf WHERE name = #{name}")
         Job selectByName(String name);

@@ -25,8 +25,6 @@ public class HrmServiceImpl implements HrmService{
     private DocumentDao documentDao;
     @Autowired
     private NoticeDao noticeDao;
-    @Autowired
-    private UserDao userDao;
 
     @Override
     public Employee findEmployeeById(int id){
@@ -42,8 +40,26 @@ public class HrmServiceImpl implements HrmService{
     }
 
     @Override
-    public List<Employee> getEmployeeList(Map<String,String> param){
-        return employeeDao.selectEmployeeListWithParam(param);
+    public ListDto<Employee> getEmployeeList(Map<String,String> param){
+        ListDto<Employee> dto = new ListDto<>();
+        dto.setTitle("notice");
+        dto.setData(employeeDao.getList(param));
+        if(dto.getData().size() == 0){
+            dto.setCode(404);
+            dto.setMessage("找不到任何的员工");
+            dto.setDataTitle(TableTitle.EMPLOYEE_LIST_TITLE);
+        }else{
+            dto.setCode(200);
+            dto.setMessage("获取成功");
+            dto.setDataTitle(TableTitle.EMPLOYEE_LIST_TITLE);
+            dto.setCount(employeeDao.getCount(param));
+            log.info("测试Param:"+param);
+            dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+            dto.setPageSize(Integer.parseInt(param.get("pageSize")));
+            dto.setTitle("employee");
+        }
+        log.info(dto);
+        return dto;
     }
 
     @Override
@@ -82,8 +98,26 @@ public class HrmServiceImpl implements HrmService{
     }
 
     @Override
-    public List<Dept> getDeptList(String pageNo,String pageSize){
-        return deptDao.getDeptList(pageNo,pageSize);
+    public ListDto<Dept> getDeptList(Map<String,String> param){
+        ListDto<Dept> dto = new ListDto<Dept>();
+        dto.setTitle("dept");
+        dto.setData(deptDao.getList(param));
+        if(dto.getData().size() == 0){
+            dto.setCode(404);
+            dto.setMessage("找不到任何的部门");
+            dto.setDataTitle(TableTitle.DEPT_LIST_TITLE);
+        }else{
+            dto.setCode(200);
+            dto.setMessage("获取成功");
+            dto.setDataTitle(TableTitle.DEPT_LIST_TITLE);
+            dto.setCount(deptDao.getCountByParam(param));
+            dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+            dto.setPageSize(Integer.parseInt(param.get("pageSize")));
+            dto.setTitle("dept");
+        }
+        log.info(dto);
+        return dto;
+
     }
 
     @Override
@@ -124,7 +158,27 @@ public class HrmServiceImpl implements HrmService{
     public List<Job> findAllJob(){
         return jobDao.selectAll();
     }
-
+    @Override
+    public ListDto<Job> getJobList(Map<String, String> param) {
+        ListDto<Job> dto = new ListDto<Job>();
+        dto.setTitle("job");
+        dto.setData(jobDao.getList(param));
+        if(dto.getData().size() == 0){
+            dto.setCode(404);
+            dto.setMessage("找不到任何的部门");
+            dto.setDataTitle(TableTitle.JOB_LIST_TITLE);
+        }else{
+            dto.setCode(200);
+            dto.setMessage("获取成功");
+            dto.setDataTitle(TableTitle.JOB_LIST_TITLE);
+            dto.setCount(jobDao.getCountByParam(param));
+            dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+            dto.setPageSize(Integer.parseInt(param.get("pageSize")));
+            dto.setTitle("job");
+        }
+        log.info(dto);
+        return dto;
+    }
     @Override
     public Job findJobById(int id){
         return jobDao.selectById(id);
@@ -142,7 +196,7 @@ public class HrmServiceImpl implements HrmService{
 
 
     @Override
-    public void removeJob(int id){
+    public void removeJobById(int id){
         jobDao.deleteById(id);
         BeanDataCache.setJobCacheExpired();
     }

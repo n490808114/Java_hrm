@@ -21,17 +21,17 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Null Integer id;
     @JsonSerialize(using = JsonDeptSerialize.class)
-    private Dept dept;
+    @NotNull private Dept dept;
     @JsonSerialize(using = JsonJobSerialize.class)
-    private Job job;
+    @NotNull private Job job;
     @NotNull @Size(min = 2,max = 20) private String name;
     @Size(min = 18,max = 18) private String cardId;
     private String address;
     private String postCode;
     private String tel;
-    @Size(min = 11,max = 11) private String phone;
+    @NotNull @Size(min = 11,max = 11) private String phone;
     private String qqNum;
-    @Email private String email;
+    @Size(min=1,message="Email不能为空") @Email private String email;
     private Integer sex;
     private String party;
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")

@@ -9,9 +9,6 @@ import java.util.*;
 @Service
 public interface HrmService {
 
-
-
-
     /**
      * 根据id查询员工
      * @param id
@@ -37,7 +34,7 @@ public interface HrmService {
      * 获得员工列表
      * @return employeeList
      */
-    List<Employee> getEmployeeList(Map<String,String> param);
+    ListDto<Employee> getEmployeeList(Map<String,String> param);
 
     /**
      * 获得Employee总数
@@ -67,7 +64,7 @@ public interface HrmService {
      */
     List<Dept> findAllDept();
 
-    List<Dept> getDeptList(String pageNo,String pageSize);
+    ListDto<Dept> getDeptList(Map<String,String> param);
 
     int getDeptCount();
 
@@ -108,6 +105,8 @@ public interface HrmService {
      */
     List<Job> findAllJob();
 
+    ListDto<Job> getJobList(Map<String,String> param);
+
     /**
      * 根据id查询职位
      * @param id
@@ -131,7 +130,7 @@ public interface HrmService {
      * 根据id删除职位
      * @param id
      */
-    void removeJob(int id);
+    void removeJobById(int id);
 
     /**
      * 修改职位

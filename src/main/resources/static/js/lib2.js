@@ -6,10 +6,12 @@ $(function () {
             }
             switch (xhr.status) {
                 case 403:
-                    alert("未登录或距离上次登录太久,请登录!");
+                    alert("可能失败的原因：\n1: 未登录\n2:上次登录超过1个小时,登录状态已过期\n3:您没有访问该链接的权限");
                     addCoverDiv();
                     addLoginForm();
                     break;
+                case 400:
+                    alert(JSON.parse(xhr.responseText)["message"]);
             }
         }
     );
@@ -117,11 +119,12 @@ function addLoginForm(){
     registerPassword.setAttribute("type","password");
     registerPassword.setAttribute("placeholder","请输入密码");
     registerPassword.setAttribute("name","password");
+    registerPassword.setAttribute("confirm","0");
 
     var registerConfirmPassword = document.createElement("input");
     registerConfirmPassword.setAttribute("type","password");
     registerConfirmPassword.setAttribute("placeholder","请重复输入密码");
-    registerConfirmPassword.setAttribute("name","ConfirmPassword");
+    registerConfirmPassword.setAttribute("confirm","1");
 
     var registerUsernameLabel = document.createElement("label");
     var registerEmailLabel = document.createElement("label");
@@ -141,7 +144,7 @@ function addLoginForm(){
 
     var registerButton = document.createElement("input");
     registerButton.setAttribute("type","submit");
-    registerButton.setAttribute("id","loginButton");
+    registerButton.setAttribute("id","registerButton");
     var registerDiv = document.createElement("div");
     registerDiv.appendChild(registerButton);
     registerForm.appendChild(registerDiv);
@@ -154,27 +157,13 @@ function addLoginForm(){
     var closeButton = document.createElement("button");
     closeButton.setAttribute("id","loginOrRegisterFormCloseButton");
     closeButton.appendChild(document.createTextNode("关闭"));
-    $("#loginOrRegisterFormCloseButton").click(function () {
-        closeCoverDiv();
-    });
+
 
     var changeFormButton = document.createElement("button");
     changeFormButton.setAttribute("id","loginOrRegisterFormChangeFormButton");
     changeFormButton.appendChild(document.createTextNode("注册"));
     registerForm.style.display = "none";
-    $("#loginOrRegisterFormChangeFormButton").click(function () {
-        if(registerForm.style.display == "none"){
-            registerForm.style.display = "";
-            loginForm.style.display = "none";
-            this.text().remove();
-            changeFormButton.appendChild(document.createTextNode("登录"));
-        }else if(loginForm.style.display == "none"){
-            loginForm.style.display = "";
-            registerForm.style.display = "none";
-            this.text().remove();
-            changeFormButton.appendChild(document.createTextNode("注册"));
-        }
-    });
+
 
     var div = document.createElement("div");
     div.setAttribute("id","loginOrRegisterForm");
@@ -192,11 +181,59 @@ function addLoginForm(){
             type:"post",
             async:false,
             success:function (data) {
-                localStorage.setItem("token",data["token"]);
-                alert("登陆成功");
-                closeCoverDiv();
+                if(data["token"] != undefined){
+                    localStorage.setItem("token",data["token"]);
+                    alert("登陆成功");
+                    closeCoverDiv();
+                }
+
             }
         });
+        return false;
+    })
+    $("#loginOrRegisterFormCloseButton").click(function(){
+        closeCoverDiv();return false;
+    })
+    $("#loginOrRegisterFormChangeFormButton").click(function () {
+        if(registerForm.style.display == "none"){
+            registerForm.style.display = "";
+            loginForm.style.display = "none";
+            $(this).text("登录");
+        }else if(loginForm.style.display == "none"){
+            loginForm.style.display = "";
+            registerForm.style.display = "none";
+            $(this).text("注册");
+        }
+        return false;
+    });
+    $("#registerButton").click(function(){
+        if($("#register input[confirm='0']").val() == "" ){
+            alert("密码为空,请输入密码！");
+        }else if($("#register input[confirm='0']").val() != $("#register input[confirm='1']").val()){
+            alert("密码输入不一致请重新输入");
+            $("[confirm='0']").val("");
+            $("[confirm='1']").val("");
+        }else if($("#register input[name='username']").val() == ""){
+            alert("用户名为空,请输入用户名");
+        }else{
+            $("#register").ajaxSubmit({
+                url:"register",
+                type:"post",
+                async:false,
+                success:function(data){
+                    if(data["token"] != undefined){
+                        localStorage.setItem("token",data["token"]);
+                        alert("注册成功,并自动登录!");
+                        closeCoverDiv();
+                    }
+                    if(data["message"] != undefined){
+                        alert(data["message"]);
+                    }
+
+                }
+            })
+        }
+        
         return false;
     })
 }
@@ -252,10 +289,10 @@ function setTable(json){
         table.appendChild(trtd);
         var selectTdInput = document.createElement("input");
         selectTdInput.setAttribute("type","checkbox");
-        selectTdInput.setAttribute("no",data[childData]["id"]);
+        selectTdInput.setAttribute("no",childData);
         var selectTd = document.createElement("td");
         selectTd.setAttribute("class","checkbox");
-        selectTd.setAttribute("title", data[childData]["id"])
+        selectTd.setAttribute("title", childData);
         selectTd.appendChild(selectTdInput);
         trtd.appendChild(selectTd);
         var titleName = document.getElementById("main_table").firstElementChild.childNodes;
@@ -263,7 +300,7 @@ function setTable(json){
             var td = document.createElement("td");
             var name = titleName[x].getAttribute("name");
             td.appendChild(document.createTextNode(data[childData][name]));
-            td.setAttribute("title", data[childData]["id"])
+            td.setAttribute("title", childData)
             td.setAttribute("name", name);
             trtd.appendChild(td);
         }

@@ -168,8 +168,68 @@ public class EmployeeDynaSqlProvider {
             }
         }.toString();
     }
+    public String modifyByEmployee(Employee employee){
+        if(employee.getId() == null ){return "";}
+        return new SQL(){
+            {
+                UPDATE("employee_inf");
+                if(employee.getName()!=null){
+                    SET("name = #{name}");
+                }
+                if (employee.getCardId() != null){
+                    SET("card_id = #{cardId}");
+                }
+                if (employee.getAddress() != null){
+                    SET("address = #{address}");
+                }
+                if (employee.getPostCode() != null){
+                    SET("post_code = #{postCode} ");
+                }
+                if (employee.getTel() != null){
+                    SET("tel = #{tel}");
+                }
+                if (employee.getPhone() != null){
+                    SET("phone = #{phone}");
+                }
+                if (employee.getQqNum() != null){
+                    SET("qq_num = #{qqNum}");
+                }
+                if (employee.getEmail() != null){
+                    SET("email = #{email}");
+                }
+                if (employee.getSex() != null){
+                    SET("sex = #{sex}");
+                }
+                if (employee.getParty() != null){
+                    SET("party = #{party}");
+                }
+                if (employee.getBirthday() != null){
+                    SET("birthday = #{birthday}");
+                }
+                if (employee.getRace() != null){
+                    SET("race = #{race}");
+                }
+                if (employee.getEducation() != null){
+                    SET("education = #{education}");
+                }
+                if (employee.getSpeciality() != null){
+                    SET("speciality = #{speciality}");
+                }
+                if (employee.getHobby() != null){
+                    SET("hobby = #{hobby}");
+                }
+                if (employee.getRemark() != null){
+                    SET("remark = #{remark}");
+                }
+                if (employee.getCreateDate() != null){
+                    SET("create_date = #{createDate}");
+                }
+                WHERE("id = #{id}");
+            }
+        }.toString();
+    }
 
-    public String modify(Map<String,String> param){
+    public String modifyByParam(Map<String,String> param){
         log.info(param);
         if(param.get("id").equals("")){return "";}
         Map<String,String> sqlMapping = TableTitle.EMPLOYEE_SQL_MAPPING;
@@ -210,11 +270,9 @@ public class EmployeeDynaSqlProvider {
             {
                 SELECT("id,name,dept_id,job_id,phone");
                 FROM("employee_inf");
-                WHERE("id>=("+ getSelectId(new HashMap<String,String>(param))+")");
-                param.remove("pageNo");
-                param.remove("pageSize");
+                WHERE("id>=("+ getSelectId(param)+")");
                 for(String key : param.keySet()){
-                    if(!param.get(key).equals("")){
+                    if(!key.equals("pageNo") && !key.equals("pageSize") && !param.get(key).equals("")){
                         AND();
                         WHERE(TableTitle.EMPLOYEE_SQL_MAPPING.get(key) + " LIKE '%"+ param.get(key) +"%'");
                     }
@@ -231,10 +289,8 @@ public class EmployeeDynaSqlProvider {
             {
                 SELECT("id");
                 FROM("notice_inf");
-                param.remove("pageNo");
-                param.remove("pageSize");
                 for(String key : param.keySet()){
-                    if(!param.get(key).equals("")){
+                    if(!key.equals("pageNo") && !key.equals("pageSize") && !param.get(key).equals("")){
                         AND();
                         WHERE(TableTitle.EMPLOYEE_SQL_MAPPING.get(key) + " LIKE '%"+ param.get(key) +"%'");
                     }

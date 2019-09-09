@@ -18,6 +18,10 @@ public interface DeptDao {
         @Select("SELECT COUNT(id) FROM dept_inf")
         int getCount();
 
+        @SelectProvider(type = DeptDynaSqlProvider.class,method = "getCountByParam")
+        int getCountByParam(Map<String,String> param);
+
+
         @Select("SELECT * FROM dept_inf WHERE id = #{id}")
         @Results(id = "deptResult",value = { @Result(id = true, column = "id", property = "id"),
                                         @Result(column = "name", property = "name"),
@@ -26,9 +30,10 @@ public interface DeptDao {
                                                         many = @Many(select = "xyz.n490808114.train.dao.EmployeeDao.selectEmployeesByDeptId", fetchType = FetchType.LAZY)) })
         Dept selectById(int id);
 
-        @SelectProvider(type = DeptDynaSqlProvider.class,method = "getDeptListByPageNoAndPageSize")
-        @ResultMap("deptResult")
-        List<Dept> getDeptList(String pageNo,String pageSize);
+        @SelectProvider(type = DeptDynaSqlProvider.class,method = "getListByParam")
+        @ResultType(Dept.class)
+        @MapKey("id")
+        Map<Integer,Dept> getList(Map<String,String> param);
 
         @Select("SELECT * FROM dept_inf WHERE name =#{name}")
         Dept selectByName(String name);

@@ -13,7 +13,8 @@ public class TableTitle {
     public static final Map<String,String> EMPLOYEE_TITLE = new LinkedHashMap<>();
     public static final Map<String,String> EMPLOYEE_LIST_TITLE = new LinkedHashMap<>();
     public static final Map<String,String> EMPLOYEE_CREATE_TITLE = new LinkedHashMap<>();
-    public static final Map<String,Object> SEX_MAP = new LinkedHashMap<>();
+    public static final Map<String,String> EMPLOYEE_SEARCH_TITLE = new LinkedHashMap<>();
+    public static final Map<String,Sex> SEX_MAP = new LinkedHashMap<>();
     public static final Map<String,String> EMPLOYEE_SQL_MAPPING = new HashMap<>();
 
     public static final Map<String,String> DEPT_TITLE = new LinkedHashMap<>();
@@ -43,7 +44,6 @@ public class TableTitle {
         NOTICE_SEARCH_TITLE.put("title","标题");
     }
     static{
-        EMPLOYEE_TITLE.put("id", "序号");
         EMPLOYEE_TITLE.put("name", "姓名");
         EMPLOYEE_TITLE.put("sex","性别");
         EMPLOYEE_TITLE.put("dept", "部门");
@@ -62,6 +62,15 @@ public class TableTitle {
         EMPLOYEE_TITLE.put("speciality","特长");
         EMPLOYEE_TITLE.put("hobby","爱好");
         EMPLOYEE_TITLE.put("remark","备注");
+
+        EMPLOYEE_SEARCH_TITLE.put("id","序号");
+        EMPLOYEE_SEARCH_TITLE.put("name", "姓名");
+        EMPLOYEE_SEARCH_TITLE.put("sex","性别");
+        EMPLOYEE_SEARCH_TITLE.put("dept", "部门");
+        EMPLOYEE_SEARCH_TITLE.put("job","职位");
+        EMPLOYEE_SEARCH_TITLE.put("cardId","身份证号");
+        EMPLOYEE_SEARCH_TITLE.put("phone", "手机号码");
+        EMPLOYEE_SEARCH_TITLE.put("email","邮箱地址");
 
 
         EMPLOYEE_LIST_TITLE.put("id", "员工号");

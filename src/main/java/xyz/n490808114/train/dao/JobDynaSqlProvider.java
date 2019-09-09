@@ -4,8 +4,7 @@ import java.util.Map;
 
 import org.apache.ibatis.jdbc.SQL;
 
-public class DeptDynaSqlProvider {
-    
+public class JobDynaSqlProvider {
     public String getListByParam(Map<String,String> param){
         int pageSize = Integer.parseInt(param.get("pageSize"));
         String name = param.get("name");
@@ -13,7 +12,7 @@ public class DeptDynaSqlProvider {
         return new SQL(){
             {
                 SELECT("id,name,remark");
-                FROM("dept_inf");
+                FROM("job_inf");
                 WHERE("id>=("+getSelectId(param)+")");
                 if(name !=null && "".equals(name)){
                     WHERE("name  LIKE '%" + name +"%'");
@@ -29,7 +28,7 @@ public class DeptDynaSqlProvider {
         return new SQL(){
             {
                 SELECT("id");
-                FROM("dept_inf");
+                FROM("job_inf");
                 if(name !=null && "".equals(name)){
                     WHERE("name  LIKE '%" + name +"%'");
                 }
@@ -41,7 +40,7 @@ public class DeptDynaSqlProvider {
         return new SQL(){
             {
                 SELECT("COUNT(id)");
-                FROM("dept_inf");
+                FROM("job_inf");
                 if(name !=null && "".equals(name)){
                     WHERE("name  LIKE '%" + name +"%'");
                 }

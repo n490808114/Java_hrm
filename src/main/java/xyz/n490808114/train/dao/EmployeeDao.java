@@ -11,7 +11,7 @@ import java.util.Map;
 @Repository
 public interface EmployeeDao {
         @InsertProvider(type = EmployeeDynaSqlProvider.class,method = "insert")
-        /*@Options(useGeneratedKeys = true, keyProperty = "id")*/
+        @Options(useGeneratedKeys = true, keyProperty = "id")
         int save(Employee employee);
 
         @InsertProvider(type = EmployeeDynaSqlProvider.class,method = "insertByParam")
@@ -20,15 +20,10 @@ public interface EmployeeDao {
         @Delete("DELETE FROM employee_inf WHERE id =#{id}")
         int deleteById(@Param("id") int id);
 
-        @Update("UPDATE employee_inf SET dept_id = #{dept.id}," + "job_id = #{job.id}," + "name = #{name},"
-                        + "card_id = #{cardId}," + "address = #{address}," + "post_code = #{postCode},"
-                        + "tel = #{tel}," + "phone = #{phone}," + "qq_num = #{qqNum}," + "email = #{email},"
-                        + "sex = #{sex}," + "party = #{party}," + "birthday = #{birthday}," + "race = #{race},"
-                        + "education = #{education}," + "speciality = #{speciality}," + "hobby = #{hobby},"
-                        + "remark = #{remark}," + "create_date = #{createDate} " + "WHERE id = #{id}")
+        @UpdateProvider(type = EmployeeDynaSqlProvider.class,method = "modifyByEmployee")
         void modify(Employee employee);
 
-        @UpdateProvider(type = EmployeeDynaSqlProvider.class,method = "modify")
+        @UpdateProvider(type = EmployeeDynaSqlProvider.class,method = "modifyByParam")
         void modifyByParam(Map<String,String> param);
 
         @Select("SELECT * FROM employee_inf WHERE id = #{id}")
@@ -82,7 +77,9 @@ public interface EmployeeDao {
                 @Result(column = "job_id", property = "job", one = @One(select = "xyz.n490808114.train.dao.JobDao.selectById", fetchType = FetchType.EAGER)),
                 @Result(column = "phone", property = "phone")
         })
-        List<Employee> selectEmployeeListWithParam(Map<String,String> param);
+        @ResultType(Employee.class)
+        @MapKey("id")
+        Map<Integer,Employee> getList(Map<String,String> param);
 
         @SelectProvider(type = EmployeeDynaSqlProvider.class,method = "getCount")
         int getCount(Map<String, String> param);

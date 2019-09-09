@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import xyz.n490808114.train.domain.Job;
 import xyz.n490808114.train.dto.DetailDto;
 import xyz.n490808114.train.dto.ListDto;
+import xyz.n490808114.train.dto.SimpleDto;
+import xyz.n490808114.train.dto.TitleDto;
 import xyz.n490808114.train.service.*;
 import xyz.n490808114.train.util.TableTitle;
 import xyz.n490808114.train.service.HrmService;
@@ -37,72 +39,19 @@ public class JobController{
 
 
     @GetMapping
-    public ListDto<Job> getList(@RequestParam(value = "pageNo",defaultValue = "1")int pageNo,
-                          @RequestParam(value = "pageSize",defaultValue = "20")int pageSize,
-                          @RequestParam Map<String,String> requestParam){
-
-        ListDto<Job> dto = null;
-
-        Map<String,Job> cacheMap = beanDataCache.getJobMap();
-        List<Job> data = new LinkedList<>();
-        int mapCount = 0;
-        int start = (pageNo - 1) * pageSize;
-        String name = requestParam.get("name");
-        if(name != null && !name.equals("")){
-            int count = 0;
-            for(String key : cacheMap.keySet()){
-                if(cacheMap.get(key).getName().contains(name)){
-                    if(mapCount == start && data.size() < pageSize){
-                        data.add(cacheMap.get(key));
-                    }else{
-                        mapCount++;
-                    }
-                    count++;
-                }
-            }
-            /*
-            if(data.size() != 0){
-                dto = new ListDto<>(200,"获取成功","job",
-                                        pageNo,pageSize,count,
-                                        TableTitle.JOB_LIST_TITLE,
-                                        data);
-            }*/
-        }else{
-            for(String key : cacheMap.keySet()){
-                if(mapCount == start && data.size() < pageSize){
-                    data.add(cacheMap.get(key));
-                }else if(data.size() == pageSize){
-                    break;
-                }else{
-                    mapCount++;
-                }
-            }/*
-            if(data.size() != 0){
-                dto = new ListDto<>(200,"获取成功","job",
-                                        pageNo,pageSize,cacheMap.size(),
-                                        TableTitle.JOB_LIST_TITLE,
-                                        data);
-            }*/
-        }
-        if(data.size() == 0){dto = new ListDto<>(404,"找不到任何的部门");}
-        log.info(dto);
-        return dto;
+    public ListDto<Job> getList(@RequestParam Map<String,String> param){
+        RequestParamCheck.check(param);
+        return hrmService.getJobList(param);
+        
     }
     @GetMapping("/create")
-    public Map<String,Object> create(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("title","job");
-        map.put("dataTitle",TableTitle.JOB_CREATE_TITLE);
-        log.info(map);
-        return map;
+    public TitleDto create(){
+        return new TitleDto().setTitle("job").setDataTitle(TableTitle.JOB_CREATE_TITLE);
+
     }
     @GetMapping("/search")
-    public Map<String,Object> search(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("title","job");
-        map.put("dataTitle",TableTitle.JOB_SEARCH_TITLE);
-        log.info(map);
-        return map;
+    public TitleDto search(){
+        return new TitleDto().setTitle("job").setDataTitle(TableTitle.JOB_SEARCH_TITLE);
     }
     @GetMapping("/{id}")
     public DetailDto<Job> getDetail(@PathVariable("id") int id){
@@ -123,69 +72,53 @@ public class JobController{
         return dto;
     }
     @PostMapping
-    public Map<String,Object> create(@RequestParam Map<String,String> param){
-        Job job = createJob(param);
-        Set<ConstraintViolation<Job>> set = validator.validate(job);
-        Map<String,Object> map = new HashMap<>();
-        if(set.size() == 0){
-            hrmService.addJob(job);
-            map.put("code",200);
-            map.put("message","创建成功");
-        }else{
-            makeErrorToMap(set, map);
-        }
-        log.info(map);
-        return map;
-    }
-    @PutMapping("/{id}")
-    public Map<String,Object> update(@PathVariable("id") int id,@RequestParam Map<String,String> param){
-        Job job = createJob(param);
-        Set<ConstraintViolation<Job>> set = validator.validate(job);
-        Map<String,Object> map = new HashMap<>();
-        if(set.size() == 0){
-            job.setId(id);
-            hrmService.modifyJob(job);
-            map.put("code",200);
-            map.put("message","修改成功");
-        }else{
-            makeErrorToMap(set, map);
-        }
-        log.info(map);
-        return map;
-    }
-    private Job createJob(Map<String, String> param){
+    public SimpleDto create(@RequestParam Map<String,String> param){
         Job job = new Job();
         job.setName(param.get("name"));
         job.setRemark(param.get("remark"));
-        return job;
-    }
 
-
-    private void makeErrorToMap(Set<ConstraintViolation<Job>> set, Map<String, Object> map) {
-        Map<String,String> error = new LinkedHashMap<>();
-        for(ConstraintViolation<Job> constraintViolation : set){
-            error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
-        }
-        map.put("code", 404);
-        map.put("message",error);
-    }
-
-    @DeleteMapping("/{id}")
-    public Map<String,Object> delete(@PathVariable("id") int id){
-        Map<String,Object> map = new HashMap<>();
-        if(beanDataCache.getJobMap().get(""+id) == null){
-            map.put("code","404");
-            map.put("message","错误的部门序号");
-        }else if(hrmService.countEmployeesByJobId(id) > 0){
-            map.put("code","404");
-            map.put("message","该部门内还有员工,请先调整他们的部门后再进行删除");
+        Set<ConstraintViolation<Job>> set = validator.validate(job);
+        if(set.size() == 0){
+            hrmService.addJob(job);
+            return new SimpleDto(200,"创建成功");
         }else{
-            hrmService.removeJob(id);
-            map.put("code","200");
-            map.put("message","删除成功");
+            Map<String,String> error = new LinkedHashMap<>();
+            for(ConstraintViolation<Job> constraintViolation : set){
+                error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+            }
+            return new SimpleDto(404,error);
+
         }
-        log.info(map);
-        return map;
+    }
+    @PutMapping("/{id}")
+    public SimpleDto update(@PathVariable("id") int id,@RequestParam Map<String,String> param){
+        Job job = new Job();
+        job.setName(param.get("name"));
+        job.setRemark(param.get("remark"));
+
+        Set<ConstraintViolation<Job>> set = validator.validate(job);
+        if(set.size() == 0){
+            job.setId(id);
+            hrmService.modifyJob(job);
+            return new SimpleDto(200,"修改成功");
+        }else{
+            Map<String,String> error = new LinkedHashMap<>();
+            for(ConstraintViolation<Job> constraintViolation : set){
+                error.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
+            }
+            return new SimpleDto(404,error);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public SimpleDto delete(@PathVariable("id") int id){
+        if(beanDataCache.getJobMap().get(""+id) == null){
+            return new SimpleDto(404,"错误的部门序号");
+        }else if(hrmService.countEmployeesByJobId(id) > 0){
+            return new SimpleDto(404,"该部门内还有员工,请先调整他们的部门后再进行删除");
+        }else{
+            hrmService.removeJobById(id);
+            return new SimpleDto(200,"删除成功");
+        }
     }
 
 }

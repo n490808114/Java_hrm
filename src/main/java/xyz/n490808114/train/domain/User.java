@@ -12,6 +12,10 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 public class User implements UserDetails{
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private Integer id;
     @JsonProperty("user")
     private String name;
