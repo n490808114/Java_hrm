@@ -207,7 +207,7 @@ function addLoginForm(){
         return false;
     });
     $("#registerButton").click(function(){
-        if($("#register input[confirm='0']").val() == "" ){
+        if($("#register input[confirm='0']").val() === "" ){
             alert("密码为空,请输入密码！");
         }else if($("#register input[confirm='0']").val() != $("#register input[confirm='1']").val()){
             alert("密码输入不一致请重新输入");
@@ -233,7 +233,7 @@ function addLoginForm(){
                 }
             })
         }
-        
+
         return false;
     })
 }
@@ -273,7 +273,7 @@ function setTable(json){
     table.appendChild(trth);
     var a = 0;
     var mulitiSelectTh = document.createElement("th");
-    mulitiSelectTh.setAttribute("class","checkbox");    
+    mulitiSelectTh.setAttribute("class","checkbox");
     trth.appendChild(mulitiSelectTh);
     for (var childTitle in dataTitle) {
         var th = document.createElement("th");
@@ -305,6 +305,7 @@ function setTable(json){
             trtd.appendChild(td);
         }
     }
+    if(Object.getOwnPropertyNames(data).length == 0){alert(json.message);}
     $.each($("#main_table > tr > td"),function(a,b){
         if($(b).attr("class") != "checkbox"){
             $(b).click(function(){
@@ -337,6 +338,8 @@ function getTableWidthList(name) {
         return ["25%","70%"];
     }else if(name === "job"){
         return ["25%","70%"];
+    }else if(name === "document"){
+        return ["5%", "60%", "15%", "15%"];
     }
 }
 function addSearchpanel(title){
@@ -394,7 +397,7 @@ function addListButtonBar(title,page_no){
     mulitiDelete.setAttribute("type","button");
     mulitiDelete.appendChild(document.createTextNode("批量删除"));
     bar.appendChild(mulitiDelete);
-    
+
 
     $("#addButton").click(function(){
         $.ajax({
@@ -736,6 +739,14 @@ function setList(parent,data){
                 if(data["data"] != undefined){
                     textArea.setAttribute("value",data["data"][b]);
                 }
+            }else if(b == "file"){
+                if(data["data"] != undefined){
+                    textArea = document.createElement("a");
+                    textArea.setAttribute("href",data["data"][b]);
+                }else{
+                    textArea = document.createElement("input");
+                    textArea.setAttribute("type","file");
+                }
             }else{
                 textArea = document.createElement("textarea");
                 if(data["data"] != undefined){
@@ -770,6 +781,5 @@ function setList(parent,data){
         p.appendChild(titleDiv);
         p.appendChild(textArea);
         p.setAttribute("title",b)
-        
     }
 }

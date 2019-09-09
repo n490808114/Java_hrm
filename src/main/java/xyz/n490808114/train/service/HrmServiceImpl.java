@@ -42,21 +42,19 @@ public class HrmServiceImpl implements HrmService{
     @Override
     public ListDto<Employee> getEmployeeList(Map<String,String> param){
         ListDto<Employee> dto = new ListDto<>();
-        dto.setTitle("notice");
+        dto.setCode(200);
+        dto.setTitle("employee");
+        dto.setDataTitle(TableTitle.EMPLOYEE_LIST_TITLE);
+        dto.setCount(employeeDao.getCount(param));
+        log.info("测试Param:"+param);
+        dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+        dto.setPageSize(Integer.parseInt(param.get("pageSize")));
         dto.setData(employeeDao.getList(param));
+
         if(dto.getData().size() == 0){
-            dto.setCode(404);
             dto.setMessage("找不到任何的员工");
-            dto.setDataTitle(TableTitle.EMPLOYEE_LIST_TITLE);
         }else{
-            dto.setCode(200);
             dto.setMessage("获取成功");
-            dto.setDataTitle(TableTitle.EMPLOYEE_LIST_TITLE);
-            dto.setCount(employeeDao.getCount(param));
-            log.info("测试Param:"+param);
-            dto.setPageNo(Integer.parseInt(param.get("pageNo")));
-            dto.setPageSize(Integer.parseInt(param.get("pageSize")));
-            dto.setTitle("employee");
         }
         log.info(dto);
         return dto;
@@ -99,25 +97,22 @@ public class HrmServiceImpl implements HrmService{
 
     @Override
     public ListDto<Dept> getDeptList(Map<String,String> param){
-        ListDto<Dept> dto = new ListDto<Dept>();
-        dto.setTitle("dept");
-        dto.setData(deptDao.getList(param));
-        if(dto.getData().size() == 0){
-            dto.setCode(404);
-            dto.setMessage("找不到任何的部门");
-            dto.setDataTitle(TableTitle.DEPT_LIST_TITLE);
-        }else{
-            dto.setCode(200);
-            dto.setMessage("获取成功");
-            dto.setDataTitle(TableTitle.DEPT_LIST_TITLE);
-            dto.setCount(deptDao.getCountByParam(param));
-            dto.setPageNo(Integer.parseInt(param.get("pageNo")));
-            dto.setPageSize(Integer.parseInt(param.get("pageSize")));
-            dto.setTitle("dept");
-        }
-        log.info(dto);
-        return dto;
+        ListDto<Dept> dto = new ListDto<>();
 
+        dto.setCode(200);
+        dto.setTitle("dept");
+        dto.setDataTitle(TableTitle.DEPT_LIST_TITLE);
+        dto.setCount(deptDao.getCountByParam(param));
+        dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+        dto.setPageSize(Integer.parseInt(param.get("pageSize")));
+        dto.setData(deptDao.getList(param));
+
+        if(dto.getData().size() == 0){
+            dto.setMessage("找不到任何的部门");
+        }else{
+            dto.setMessage("获取成功");
+        }
+        return dto;
     }
 
     @Override
@@ -160,21 +155,20 @@ public class HrmServiceImpl implements HrmService{
     }
     @Override
     public ListDto<Job> getJobList(Map<String, String> param) {
-        ListDto<Job> dto = new ListDto<Job>();
+        ListDto<Job> dto = new ListDto<>();
+
+        dto.setCode(200);
         dto.setTitle("job");
+        dto.setDataTitle(TableTitle.JOB_LIST_TITLE);
+        dto.setCount(jobDao.getCountByParam(param));
+        dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+        dto.setPageSize(Integer.parseInt(param.get("pageSize")));
         dto.setData(jobDao.getList(param));
+
         if(dto.getData().size() == 0){
-            dto.setCode(404);
-            dto.setMessage("找不到任何的部门");
-            dto.setDataTitle(TableTitle.JOB_LIST_TITLE);
+            dto.setMessage("找不到任何的职位");
         }else{
-            dto.setCode(200);
             dto.setMessage("获取成功");
-            dto.setDataTitle(TableTitle.JOB_LIST_TITLE);
-            dto.setCount(jobDao.getCountByParam(param));
-            dto.setPageNo(Integer.parseInt(param.get("pageNo")));
-            dto.setPageSize(Integer.parseInt(param.get("pageSize")));
-            dto.setTitle("job");
         }
         log.info(dto);
         return dto;
@@ -214,6 +208,25 @@ public class HrmServiceImpl implements HrmService{
         return documentDao.selectAll();
     }
 
+    @Override
+    public ListDto<Document> getDocumentList(Map<String, String> param) {
+        ListDto<Document> dto = new ListDto<>();
+        dto.setCode(200);
+        dto.setTitle("document");
+        dto.setData(documentDao.getList(param));
+        dto.setDataTitle(TableTitle.DOCUMENT_LIST_TITLE);
+        dto.setCount(documentDao.getCount(param));
+        dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+        dto.setPageSize(Integer.parseInt(param.get("pageSize")));
+
+        if(dto.getData().size() == 0){
+            dto.setMessage("找不到任何的文件");
+        }else{
+            dto.setMessage("获取成功");
+        }
+        log.info(dto);
+        return dto;
+    }
 
     @Override
     public Document findDocumentById(int id){
@@ -242,20 +255,17 @@ public class HrmServiceImpl implements HrmService{
     @Override
     public ListDto<Notice> getNoticeList(Map<String,String> param){
         ListDto<Notice> dto = new ListDto<>();
+        dto.setCode(200);
         dto.setTitle("notice");
+        dto.setDataTitle(TableTitle.NOTICE_LIST_TITLE);
+        dto.setCount(noticeDao.getCount(param));
+        dto.setPageNo(Integer.parseInt(param.get("pageNo")));
+        dto.setPageSize(Integer.parseInt(param.get("pageSize")));
         dto.setData(noticeDao.getNoticeList(param));
         if(dto.getData().size() == 0){
-            dto.setCode(404);
             dto.setMessage("找不到任何的公告");
-            dto.setDataTitle(TableTitle.NOTICE_LIST_TITLE);
         }else{
-            dto.setCode(200);
             dto.setMessage("获取成功");
-            dto.setDataTitle(TableTitle.NOTICE_LIST_TITLE);
-            dto.setCount(noticeDao.getCount(param));
-            dto.setPageNo(Integer.parseInt(param.get("pageNo")));
-            dto.setPageSize(Integer.parseInt(param.get("pageSize")));
-            dto.setTitle("notice");
         }
         log.info(dto);
         return dto;

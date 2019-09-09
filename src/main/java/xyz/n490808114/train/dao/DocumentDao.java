@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import xyz.n490808114.train.domain.Document;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface DocumentDao {
@@ -32,4 +33,16 @@ public interface DocumentDao {
         @Update("UPDATE document_inf SET title = #{title}," + "filename = #{fileName}," + "remark = #{remark},"
                         + "create_date = #{createDate}," + "user_id = #{user.id}")
         void modify(Document document);
+
+        @SelectProvider(type = DocumentDynaSqlProvider.class,method = "getListByParam")
+        @Results(id = "documentListResult",value = { @Result(id = true, column = "id", property = "id"),
+                @Result(column = "title", property = "title"),
+                @Result(column = "create_date", property = "createDate"),
+                @Result(column = "user_id", property = "user", one = @One(select = "xyz.n490808114.dao.UserDao.selectById", fetchType = FetchType.EAGER)) })
+        @ResultType(Document.class)
+        @MapKey("id")
+        Map<Integer, Document> getList(Map<String, String> param);
+
+        @SelectProvider(type = DocumentDynaSqlProvider.class,method = "getCountByParam")
+        int getCount(Map<String, String> param);
 }

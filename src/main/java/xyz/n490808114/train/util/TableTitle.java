@@ -1,8 +1,10 @@
 package xyz.n490808114.train.util;
 
-import java.util.*;
-
 import xyz.n490808114.train.domain.Sex;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 public class TableTitle {
 
     public static final Map<String,String> NOTICE_TITLE = new LinkedHashMap<>();
@@ -26,6 +28,11 @@ public class TableTitle {
     public static final Map<String,String> JOB_LIST_TITLE = new LinkedHashMap<>();
     public static final Map<String,String> JOB_CREATE_TITLE = new LinkedHashMap<>();
     public static final Map<String,String> JOB_SEARCH_TITLE = new LinkedHashMap<>();
+
+    public static final Map<String,String> DOCUMENT_TITLE  = new LinkedHashMap<>();
+    public static final Map<String,String> DOCUMENT_LIST_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> DOCUMENT_CREATE_TITLE = new LinkedHashMap<>();
+    public static final Map<String,String> DOCUMENT_SEARCH_TITLE = new LinkedHashMap<>();
 
     static {
         NOTICE_TITLE.put("id","序号");
@@ -146,5 +153,22 @@ public class TableTitle {
         JOB_CREATE_TITLE.put("remark", "介绍");
 
         JOB_SEARCH_TITLE.put("name", "职位名称");
+    }
+    static{
+        DOCUMENT_TITLE.put("title","文件名");
+        DOCUMENT_TITLE.put("file","文件内容");
+        DOCUMENT_TITLE.put("remark","备注");
+
+        DOCUMENT_LIST_TITLE.put("id","序号");
+        DOCUMENT_LIST_TITLE.put("title","文件名");
+        DOCUMENT_LIST_TITLE.put("createDate","创建日期");
+        DOCUMENT_LIST_TITLE.put("user","创建人");
+
+        DOCUMENT_CREATE_TITLE.put("title","文件名");
+        DOCUMENT_CREATE_TITLE.put("file","文件内容");
+        DOCUMENT_CREATE_TITLE.put("remark","备注");
+
+        DOCUMENT_SEARCH_TITLE.put("id","序号");
+        DOCUMENT_SEARCH_TITLE.put("title","文件名");
     }
 }
