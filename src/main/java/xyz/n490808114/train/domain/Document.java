@@ -4,16 +4,25 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.TimeZone;
+
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class Document implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer id;
-    private String title;
+    @Null private Integer id;
+    @Size(min = 1,message = "title不能为空") String title;
     private String fileName;
     private MultipartFile file;
     private String remark;
-    private Date createDate;
-    private User user;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Null private Date createDate;
+    @JsonUnwrapped
+    @Null private User user;
 
     public void setUser(User user) {
         this.user = user;

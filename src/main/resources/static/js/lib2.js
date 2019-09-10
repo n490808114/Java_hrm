@@ -642,7 +642,7 @@ function openDetail(data,page_no,id) {
     form.appendChild(deleteButton);
     form.appendChild(returnButton);
 
-    setList(form,data);
+    setList(form,data,id);
 
     $("#update").click(function () {
         $("#detail").ajaxSubmit({
@@ -723,7 +723,7 @@ function openDetail(data,page_no,id) {
     })
 }
 
-function setList(parent,data){
+function setList(parent,data,id){
     for (var b in data["dataTitle"]) {
         var p = document.createElement("p");
         parent.appendChild(p);
@@ -742,7 +742,9 @@ function setList(parent,data){
             }else if(b == "file"){
                 if(data["data"] != undefined){
                     textArea = document.createElement("a");
-                    textArea.setAttribute("href",data["data"][b]);
+                    textArea.appendChild(document.createTextNode("点击链接,下载文件"));
+                    textArea.setAttribute("id","detailFileLink");
+                    textArea.setAttribute("href",data["title"]+"/"+id + "/file");
                 }else{
                     textArea = document.createElement("input");
                     textArea.setAttribute("type","file");
@@ -782,4 +784,15 @@ function setList(parent,data){
         p.appendChild(textArea);
         p.setAttribute("title",b)
     }
+    $("#detailFileLink").click(function(){
+        $.ajax({
+            url:this.getAttribute("href"),
+            type:"get",
+            async:false,
+            success:function(data){
+                alert(data);
+            }
+        })
+        return false;
+    })
 }

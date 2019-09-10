@@ -203,10 +203,6 @@ public class HrmServiceImpl implements HrmService{
     }
 
 
-    @Override
-    public List<Document> findAllDocument(){
-        return documentDao.selectAll();
-    }
 
     @Override
     public ListDto<Document> getDocumentList(Map<String, String> param) {

@@ -59,8 +59,6 @@ public interface HrmService {
 
     void modifyJob(Job job);
 
-    List<Document> findAllDocument();
-
     Document findDocumentById(int id);
 
     void removeDocument(int id);
