@@ -6,11 +6,16 @@
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/jquery.form.min.js"></script>
   <script src="js/json2.js"></script>
-  <script src="js/lib2.js"></script>
+  <script src="js/lib.js"></script>
   <link href="css/main.css" type="text/css" rel="stylesheet">
 </head>
 <header>
   <h1>人事管理系统</h1>
+  <div id="userController">
+    <p>用户名：<strong id=userName>未登录</strong></p>
+    <p>权限等级：<strong id="userRole">无</strong></p>
+    <p><button id="userControllerLoginButton">登录</button></p>
+  </div>
 </header>
 <main>
   <h1 id="main_title" name="notice">欢迎进入人事管理系统</h1>
@@ -22,7 +27,6 @@
     <li><a href="dept">部门管理</a></li>
     <li><a href="job">职位管理</a></li>
     <li><a href="document">文档管理</a></li>
-    <li><a href="user">用户管理</a></li>
   </ul>
 </aside>
 <body>

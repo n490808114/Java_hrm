@@ -82,17 +82,27 @@ public class TokenService {
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",user.getId());
         claims.put("username",user.getUsername());
+        String[] roles = user.getRoles().split("#");
+        int maxLevel = 0;
+        String resultRole = "无任何权限";
+        for(String s : roles){
+            if(TrainConstants.ROLE_LEVELS.get(s) > maxLevel){
+                resultRole = s;
+                maxLevel = TrainConstants.ROLE_LEVELS.get(s);
+            }
+        }
+        claims.put("roles", resultRole.split("_")[1]);
         
         return Jwts.builder()
-                        .setId(""+user.getId())                          // JWT_ID
-                        .setAudience("")                                // 接受者
-                        .setClaims(claims)                                // 自定义属性
-                        .setSubject("")                                 // 主题
-                        .setIssuer("JAVA_HRM")                         // 签发者
-                        .setIssuedAt(start)                            // 签发时间
-                        .setNotBefore(start)                        // 失效时间
-                        .setExpiration(end)                      // 过期时间
-                        .signWith(algorithm, secretKey)// 签名算法以及密匙
+                        .setId(""+user.getId())          // JWT_ID
+                        .setAudience("")                 // 接受者
+                        .setClaims(claims)               // 自定义属性
+                        .setSubject("")                  // 主题
+                        .setIssuer("JAVA_HRM")           // 签发者
+                        .setIssuedAt(start)              // 签发时间
+                        .setNotBefore(start)             // 生效时间
+                        .setExpiration(end)              // 过期时间
+                        .signWith(algorithm, secretKey)  // 签名算法以及密匙
                         .compact();
     }
 }

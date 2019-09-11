@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.validation.constraints.Null;

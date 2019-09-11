@@ -28,8 +28,8 @@ public interface DocumentDao {
         @Options(useGeneratedKeys = true,keyColumn = "id",keyProperty = "id")
         void save(Document document);
 
-        @Update("UPDATE document_inf SET title = #{title}," + "filename = #{fileName}," + "remark = #{remark},"
-                        + "create_date = #{createDate}," + "user_id = #{user.id}")
+        @Update("UPDATE document_inf SET title = #{title}," + "remark = #{remark},"
+                        + "create_date = #{createDate}, " + "user_id = #{user.id}" + " WHERE id = #{id}")
         void modify(Document document);
 
         @SelectProvider(type = DocumentDynaSqlProvider.class,method = "getListByParam")

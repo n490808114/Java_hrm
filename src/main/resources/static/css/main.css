@@ -14,6 +14,21 @@ header h1{
     text-align: left;
     margin:15px 0 0 20px;
 }
+#userController{
+    top:0;
+    right:0;
+    position:absolute;
+    width:30%;
+    height:80px;
+    color:#d4dbe7;
+    font-family:Microsoft YaHei;
+    text-align:right;
+    font-family: STzhongsong, serif;
+}
+#userController p{
+    margin:0px 10px 0 0;
+}
+
 main{
     position:fixed;
     box-sizing: border-box;
@@ -52,12 +67,22 @@ aside ul{
 }
 aside ul li{
     margin:15px 0 15px 0;
-    width:15%;
+    width:18%;;
     float:left;
     text-align:center;
     list-style-type:none;
 }
-
+#errorMsg{
+    font-family: STzhongsong, serif;
+    position: absolute;
+    color:rgb(0, 76, 255);
+    background-color: #cbcbcb;
+    padding:10px;
+    border-left:1px solid green;
+    border-top:1px solid green;
+    border-bottom:1px solid green;
+    border-right:7px solid #c73a48;
+}
 a{
     padding:2px 2px 2px 2px;
 }
@@ -82,16 +107,18 @@ a:active{
 }
 
 
-input[type="submit"],button{
+input[type="submit"],button,#userControllerLoginButton{
     height: 30px;
     width: 100px;
     margin: 2px;
     border: 0;
 }
-input[type="submit"]:hover,button:hover{
-    background-color:#4a74b6;
+input[type="submit"]:hover,button:hover,#userControllerLoginButton:hover{
+    background-color:#235eb9;
 }
-
+input[type="submit"]:active,button:active,#userControllerLoginButton:active{
+    background-color:#a9a9a9;
+}
 
 #main_table{
     table-layout: fixed;
@@ -248,7 +275,3 @@ textarea,select,input[type="date"]{
     background-color:#c73a48;
     color:#FFFFFF;
 }
-
-
-
-

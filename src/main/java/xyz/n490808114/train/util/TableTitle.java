@@ -156,8 +156,8 @@ public class TableTitle {
     }
     static{
         DOCUMENT_TITLE.put("title","文件名");
-        DOCUMENT_TITLE.put("file","文件内容");
         DOCUMENT_TITLE.put("remark","备注");
+        DOCUMENT_TITLE.put("file","文件内容");
 
         DOCUMENT_LIST_TITLE.put("id","序号");
         DOCUMENT_LIST_TITLE.put("title","文件名");
@@ -165,8 +165,8 @@ public class TableTitle {
         DOCUMENT_LIST_TITLE.put("user","创建人");
 
         DOCUMENT_CREATE_TITLE.put("title","文件名");
-        DOCUMENT_CREATE_TITLE.put("file","文件内容");
         DOCUMENT_CREATE_TITLE.put("remark","备注");
+        DOCUMENT_CREATE_TITLE.put("file","文件内容");
 
         DOCUMENT_SEARCH_TITLE.put("id","序号");
         DOCUMENT_SEARCH_TITLE.put("title","文件名");

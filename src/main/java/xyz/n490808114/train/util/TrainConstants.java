@@ -1,5 +1,8 @@
 package xyz.n490808114.train.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TrainConstants {
     public static final String USER_TABLE="user_inf";
     public static final String DEPT_TABLE = "dept_inf";
@@ -17,4 +20,10 @@ public class TrainConstants {
 
     public static final String JWT_SECRET = "FeiLiuZhiXiaSanQianChiYiShiYinHeLuoJiuTian";
 
+    public static final Map<String,Integer> ROLE_LEVELS;
+    static{
+        ROLE_LEVELS = new HashMap<>();
+        ROLE_LEVELS.put("ROLE_ADMIN",2);
+        ROLE_LEVELS.put("ROLE_USER",1);
+    }
 }

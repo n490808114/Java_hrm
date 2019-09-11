@@ -67,6 +67,15 @@
 			<version>2.3.1</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/eu.medsea.mimeutil/mime-util -->
+		<!-- 根据文件获得mime -->
+		<dependency>
+			<groupId>eu.medsea.mimeutil</groupId>
+			<artifactId>mime-util</artifactId>
+			<version>2.1.3</version>
+		</dependency>
+
+
         <dependency><!-- mybatis 包 -->
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
