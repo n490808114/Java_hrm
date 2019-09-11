@@ -38,9 +38,7 @@ public class UserAuthenticationTokenFilter extends OncePerRequestFilter {
         if(requestHeader != null && requestHeader.startsWith("Bearer ")){
             authToken = requestHeader.substring(7);
         }
-        log.info("out:"+authToken);
         if(authToken != null && authToken.split("\\.").length == 3){
-            log.info("inner"+authToken);
             User user =null;
             //如果获取到token,通过token获取到对应的用户类
             user = tokenService.getUserFromToken(authToken);
