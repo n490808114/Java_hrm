@@ -5,7 +5,6 @@ import org.apache.ibatis.mapping.FetchType;
 import org.springframework.stereotype.Repository;
 import xyz.n490808114.train.domain.Document;
 
-import java.util.List;
 import java.util.Map;
 
 @Repository

@@ -1,7 +1,5 @@
 package xyz.n490808114.train.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,19 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import xyz.n490808114.train.domain.User;
-import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.service.TokenService;
 import xyz.n490808114.train.util.TrainConstants;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class LoginController {
-    private final static Log log = LogFactory.getLog(LoginController.class);
     @Autowired
     private TokenService tokenService;
 

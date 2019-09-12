@@ -2,7 +2,6 @@ package xyz.n490808114.train.dto;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

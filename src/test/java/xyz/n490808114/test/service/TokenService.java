@@ -9,11 +9,9 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import org.springframework.test.context.junit4.SpringRunner;
 import xyz.n490808114.train.dao.UserDao;

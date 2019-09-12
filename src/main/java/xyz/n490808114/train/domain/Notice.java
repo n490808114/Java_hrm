@@ -9,9 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import xyz.n490808114.train.dto.JsonUserSerialize;
 
 import javax.validation.constraints.Null;
 @JsonInclude(Include.NON_NULL)
