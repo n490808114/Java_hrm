@@ -81,7 +81,7 @@ public class TokenService {
         Date end = new Date(endTime);
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",user.getId());
-        claims.put("username",user.getUsername());
+        claims.put("username",user.getName());
         String[] roles = user.getRoles().split("#");
         int maxLevel = 0;
         String resultRole = "无任何权限";

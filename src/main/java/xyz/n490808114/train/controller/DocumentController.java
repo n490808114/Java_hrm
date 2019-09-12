@@ -60,7 +60,6 @@ public class DocumentController {
             log.info(1);
             String fileName = "documents/"+date.getTime()+ "#"+document.getFile().getOriginalFilename();
             log.info(2);
-            fileName = toUnicode(fileName);
             fileOutputStream = new FileOutputStream(new File(fileName));
             log.info(3);
             fileOutputStream.write(document.getFile().getBytes());
@@ -165,12 +164,5 @@ public class DocumentController {
         }
         hrmService.removeDocument(id);
         return new SimpleDto(200,"删除成功");
-    }
-    private String toUnicode(String s){
-        StringBuilder builder = new StringBuilder();
-        for(char c:s.toCharArray()){
-            builder.append("\\n").append(Integer.toString(c, 16));
-        }
-        return builder.toString();
     }
 }

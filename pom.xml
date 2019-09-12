@@ -33,12 +33,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
 		<!-- spring boot 开发包 可以自动刷新 -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional>
+			<version>2.1.8.RELEASE</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>

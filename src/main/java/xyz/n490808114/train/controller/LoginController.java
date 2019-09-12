@@ -5,26 +5,30 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import xyz.n490808114.train.domain.User;
 import xyz.n490808114.train.service.HrmService;
 import xyz.n490808114.train.service.TokenService;
+import xyz.n490808114.train.util.TrainConstants;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
+
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 public class LoginController {
     private final static Log log = LogFactory.getLog(LoginController.class);
     @Autowired
     private TokenService tokenService;
 
-    @RequestMapping("/login")
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<Map<String,Object>> loginIn(@RequestParam Map<String,String> userInfo){
         String username = userInfo.get("username");
         String password = userInfo.get("password");
@@ -47,8 +51,7 @@ public class LoginController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    @RequestMapping("/register")
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Map<String,Object>> register(@RequestParam Map<String,String> param){
 
         Map<String,String> map = checkRegisterParam(param);
@@ -82,5 +85,14 @@ public class LoginController {
         }
         param.put("message", result);
         return param;
+    }
+    @RequestMapping("user/{id}/name")
+    public ResponseEntity<String> getMyselvesName(@PathVariable int id,HttpServletRequest request){
+        User user =(User) request.getAttribute(TrainConstants.USER_REQUEST);
+        if(user == null || id != user.getId()){
+            return new ResponseEntity<String>("null", HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<String>(user.getName(), HttpStatus.OK);
+        }
     }
 }

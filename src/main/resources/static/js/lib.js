@@ -37,8 +37,16 @@ function showErrorMessage(message){
 }
 function setLogined(){
     var payload = JSON.parse(base64decode(localStorage.getItem("token").split(".")[1]));
+    $.ajax({
+        url:"user/" + payload["id"] + "/name",
+        type:"get",
+        async:false,
+        success:function(data){
+            $("#userName").text(data);
+        }
+    })
     $("#userControllerLoginButton").attr("go","loginOut");
-    $("#userName").text(payload["username"]);
+    
     $("#userRole").text(payload["roles"]);
     $("#userControllerLoginButton").text("注销");
     if(localStorage.getItem("loginStatusTimeOutClock") != null){
